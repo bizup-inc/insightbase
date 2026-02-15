@@ -1,0 +1,63 @@
+
+/* ===== スライダー ===== */
+.work__slider {
+  overflow: hidden;
+  padding:30px 0;
+}
+
+.work__track {
+  display: flex;
+  gap: 40px;
+  width: max-content;
+  animation: work-slide 88s linear infinite;
+}
+
+@keyframes work-slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.work__item {
+  position: relative;
+  width: 350px;
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin-bottom:20px;
+  }
+}
+
+/* ラベル */
+.work__label {
+  width:80%;
+  position: absolute;
+  bottom: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  text-align:center;
+}
+
+/* ラベル色 */
+.work__label.is-product {
+  background: #23b16a;
+}
+
+.work__label.is-corporate {
+  background: #23b1b1;
+}
+
+.work__label.is-service {
+  background: #236ab1;
+}

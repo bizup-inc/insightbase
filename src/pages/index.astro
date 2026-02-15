@@ -1,0 +1,148 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import Work from "../components/Work.astro";
+import Custom from "../components/Custom.astro";
+import Cta from "../components/Cta.astro";
+import Footer from "../components/Footer.astro";
+
+// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
+// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+---
+
+<Layout title="完全買切り Looker Studioテンプレート｜GA4・Google広告対応｜InsightBase Light">
+  <Hero
+    hasBg={true}
+    title={`毎月のレポート作成を、10分で終わらせる。`}
+    image="/assets/img/hero/hero-image.svg"
+    ctaText="今すぐ購入する"
+    ctaLink="#cta"
+    description="GA4・Google広告のアカウントを接続するだけでプロ仕様のレポートが即完成。"
+  />
+</Layout>
+
+<section class="section__bg_w">
+  <div class="content__inner">
+
+        <div class="solution">
+      <img src="/assets/img/logo/ib_logo.svg" alt="InsightBase Logo" />
+          <h2 class="section__title">レポート作成の課題、解決します。</h2>
+      <p>
+        InsightBase
+        lightは、そんなレポート作成の「非効率」を仕組みで解決する、Looker
+        Studio用のテンプレートです。<br />
+        InsightBase Lightを導入することで、以下のような課題を即座に解決し、レポート作成に奪われていた時間を改善提案の時間へと変えます。
+      </p>
+    </div>
+    <div class="lead__features --pt20">
+      <div class="lead__feature">
+        <img src="/assets/img/nayami01.svg" alt="デザイン" />
+        <h3>レポート作成に時間がとられすぎ</h3>
+        <p>レポート作成にかなりの時間がかかり、本来の業務に手が回らない。</p>
+      </div>
+
+      <div class="lead__feature">
+        <img src="/assets/img/nayami02.svg" alt="マーケティング" />
+        <h3>数字だけのレポートでは刺さらない</h3>
+        <p>
+          せっかくまとめた集計データも、数字の羅列だけでクライアントの反応が薄い。
+        </p>
+      </div>
+
+      <div class="lead__feature">
+        <img src="/assets/img/nayami03.svg" alt="低価格" />
+        <h3>レポートの体裁を整えるのが大変</h3>
+        <p>レイアウト調整に時間がかかり、中身より見た目に労力を使っている。</p>
+      </div>
+
+      <div class="lead__feature">
+        <img src="/assets/img/nayami04.svg" alt="低価格" />
+        <h3>案件ごとにフォーマットがバラバラ</h3>
+        <p>クライアントごとに形式が違い、毎回ゼロから作り直している。</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section__bg_lgreen">
+  <div class="content__inner">
+    <p class="section__title_en">High Time Performance</p>
+    <h2 class="section__title">タイパ重視のプロ仕様レポート</h2>
+    <div class="lead__text">
+      <p>
+        GA4・Google広告のGoogleアカウントを接続するだけで、今まで何時間もかかっていたレポートが即完成。<br
+        />
+        完成したレポートはPDFデータ、共有リンク、メール配信でクライアント様と共有が可能。
+      </p>
+
+      <p class="notice">
+        ※ 共有機能はLooker Studioの基本機能に搭載されています。
+      </p>
+    </div>
+
+    <Work />
+  </div>
+</section>
+
+<section class="section__bg_w">
+  <div class="content__inner">
+    <p class="section__title_en">High Cost Performance</p>
+    <h2 class="section__title">完全買切り。ずっと使える。</h2>
+    <div class="lead__text">
+      <p>
+        本テンプレートは、Google Looker Studio（無料）で利用可能。<br />
+        一度導入すれば追加費用不要で、すべてのクライアント様に活用できます。
+      </p>
+    </div>
+
+    <div class="lead__features3 --pt20">
+      <div class="lead__feature">
+        <img src="/assets/img/point.svg" alt="完全買切り" />
+        <h3>完全買切り</h3>
+        <p class="text-center">
+          初期費用や月額費用は一切不要。 費用はテンプレート購入費用のみ。
+        </p>
+      </div>
+
+      <div class="lead__feature3">
+        <img src="/assets/img/point.svg" alt="追加費用無し" />
+        <h3>追加費用なし</h3>
+        <p>
+          テンプレートは複製可能。
+          追加費用不要ですべてのクライアント様に活用が可能。
+        </p>
+      </div>
+
+      <div class="lead__feature3">
+        <img src="/assets/img/point.svg" alt="無料で継続利用" />
+        <h3>無料で継続利用</h3>
+        <p>Looker Studioは無料で使用可能。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section__bg_lgreen_bottom">
+  <div class="content__inner">
+    <p class="section__title_en">High Quality Report Template</p>
+    <h2 class="section__title">現場で使われている、実務仕様</h2>
+    <div class="lead__text">
+      <p>
+        本テンプレートは、ウェブ解析士が実際のクライアントワークで使用しているレポート構成をもとに設計。<br
+        />
+        流入分析からコンバージョンまで、改善提案につながるストーリーで構成されています。<br
+        />
+        “数字を並べるだけ”ではない、 提出前提の実務レベルレポートです。
+      </p>
+    </div>
+    <div class="image-l">
+      <img src="/assets/img/pc-image.png" />
+    </div>
+  </div>
+</section>
+
+<Custom />
+<Cta />
+
+<Footer />

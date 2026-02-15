@@ -1,0 +1,46 @@
+---
+const works = [
+  { img: "/assets/img/screenshot/image01.jpg",  },
+  { img: "/assets/img/screenshot/image02.jpg", },
+  {
+    img: "/assets/img/screenshot/image03.jpg",
+
+  },
+  {
+    img: "/assets/img/screenshot/image04.jpg",
+
+  },
+  { img: "/assets/img/screenshot/image05.jpg", },
+  { img: "/assets/img/screenshot/image06.jpg", },
+  { img: "/assets/img/screenshot/image07.jpg", },
+  { img: "/assets/img/screenshot/image08.jpg", },
+  {
+    img: "/assets/img/screenshot/image09.jpg",
+
+  },
+  { img: "/assets/img/screenshot/image10.jpg", },
+ { img: "/assets/img/screenshot/image11.jpg",  },
+  {
+    img: "/assets/img/screenshot/image13.jpg",
+
+  },
+
+];
+---
+
+
+
+  <!-- スライダー -->
+  <div class="work__slider">
+    <div class="work__track">
+      {
+        [...works, ...works].map((item) => (
+          <div class="work__item">
+            <img src={item.img} alt="" />
+            <span class={`work__label is-${item.type}`}>{item.label}</span>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+

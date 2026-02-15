@@ -1,0 +1,162 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import Work from "../components/Work.astro";
+import Custom from "../components/Custom.astro";
+import Cta from "../components/Cta.astro";
+import Footer from "../components/Footer.astro";
+
+// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
+// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+---
+
+<Layout
+  title="GA4レポートテンプレート（完全買切り）｜Looker Studio対応・レポート自動化"
+>
+  <Hero
+    hasBg={true}
+    title={`GA4<br>レポートテンプレート`}
+    image="/assets/img/pc-image.png"
+    ctaText="今すぐ購入する"
+    ctaLink="#cta"
+    description="全15ページのGA4レポートを、接続するだけで即時に出力できます。"
+  />
+</Layout>
+
+<section class="section__bg">
+  <div class="content__inner">
+    <h3 class="text-left">GA4レポートテンプレートの特長</h3>
+    <div class="colum-2">
+      <div class="colum-text">
+        <div class="feature__list">
+          <li>全15ページのレポート（表紙・説明ページ含む）</li>
+          <li>日本語表記でわかりやすい</li>
+          <li>単なるデータでは無く、報告用に設計されたレポート内容</li>
+        </div>
+      </div>
+
+      <div class="colum-img">
+        <div class="feature__list">
+          <li>実務で使えるGA4レポート構成</li>
+          <li>期間指定で簡単集計（前期比表示）</li>
+          <li>独自デザインに変更可能</li>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section__bg_w">
+  <div class="content__inner">
+    <div class="colum-2">
+      <div class="page-content">
+        <div class="colum-text">
+          <h3>レポート構成</h3>
+          <div class="feature__list">
+            <li>P01. 表紙</li>
+            <li>P02. 用語解説</li>
+            <li>P03. サマリー</li>
+            <li>P04. 主要KPIのトレンド</li>
+            <li>P05. 日別データ</li>
+            <li>P06. 曜日別データ</li>
+            <li>P07. 時間別データ</li>
+            <li>P08. チャネル別サマリー</li>
+            <li>P09. 参照元 / メディア詳細</li>
+            <li>P10. ランディングページ</li>
+            <li>P11. ページパフォーマンス</li>
+            <li>P12. デバイス別データ</li>
+            <li>P13. 地域別データ</li>
+            <li>P14. 新規 / リピーター</li>
+            <li>P15. コンバージョンデータ</li>
+          </div>
+        </div>
+      </div>
+
+      <div class="colum-img">
+        <img src="/assets/img/screenshot/scsho.png" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section__bg">
+  <div class="content__inner">
+    <div class="colum-2">
+      <div class="colum-text">
+        <h3 class="section__title_h3">独自デザインに変更可能</h3>
+        <img src="/assets/img/screenshot/point01.jpg" />
+        <p class="--pt20">
+          Looker
+          Studioの基本機能を使用すれば、あらかじめ用意された表紙データを、自社ロゴの配置、タイトル変更、スクリーンショットの張り付けなど自由にデザインすることが可能です。
+        </p>
+      </div>
+
+      <div class="colum-img">
+        <h3 class="section__title_h3">期間指定で簡単レポート集計</h3>
+        <img src="/assets/img/screenshot/point02.jpg" />
+        <p class="--pt20">
+          任意の期間（「開始日」「終了日」）を指定するだけで、主要KPI・トレンド・比較データ等、全ページに即時反映。期間を指定するだけでレポートが完成します。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section__bg_w">
+  <div class="content__inner">
+    <div class="colum-2">
+      <div class="colum-text">
+        <h3 class="section__title_h3">読み手に優しい日本語設計</h3>
+        <img src="/assets/img/screenshot/point03.jpg" />
+        <p class="--pt20">
+          Looker
+          Studio標準の英語表記を、日本語に最適化。クライアント先への提出を前提に、伝わるレポート表記へ設計しています。
+        </p>
+      </div>
+
+      <div class="colum-img">
+        <h3 class="section__title_h3">Looker Studioの共有機能</h3>
+        <img src="/assets/img/screenshot/point04.jpg" />
+        <p class="--pt20">
+          レポートデータは、Looker
+          Studioの共有機能を使用してクライアント様と共有が可能。
+          PDFデータでの共有も、Looker Studioの基本機能で簡単に出力できます。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section__bg_lgreen_bottom">
+  <div class="content__inner">
+    <p class="section__title_en">High Quality Report Template</p>
+    <h2 class="section__title">現場で使われている、実務仕様</h2>
+    <div class="lead__text">
+      <p>
+        本テンプレートは、ウェブ解析士が実際のクライアントワークで使用しているレポート構成をもとに設計。<br
+        />
+        流入分析からコンバージョンまで、改善提案につながるストーリーで構成されています。<br
+        />
+        “数字を並べるだけ”ではない、 提出前提の実務レベルレポートです。
+      </p>
+    </div>
+    <div class="image-l">
+      <img src="/assets/img/pc-image.png" />
+    </div>
+  </div>
+</section>
+<section class="section__bg_lgreen">
+  <div class="content__inner">
+    <div class="cta-btn">
+      <p>17,600円（税込）</p>
+      <a href="#" class="herobtn btn--green btn--cubic-green">今すぐ購入する</a>
+    </div>
+    <div class="cta-btn --pt20">
+        <p class="--pt20">GA4＋Google広告レポートテンプレート</p>
+      <p>29,800円（税込）</p>
+      <a href="#" class="herobtn btn--blue btn--cubic-blue">今すぐ購入する</a>
+    </div>
+  </div>
+</section>
+
+<Footer />

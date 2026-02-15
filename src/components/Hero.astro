@@ -1,0 +1,48 @@
+---
+interface Props {
+  title?: string;
+  image?: string;
+  ctaText?: string;
+  ctaLink?: string;
+  ctaClass?: string;
+  description?: string;
+  hasBg?: boolean;
+}
+
+const {
+  title = "毎月のレポート作成を、<br>10分で終わらせる。",
+  image = "/assets/img/hero/hero-fv.svg",
+  ctaText = "今すぐ導入する",
+  ctaLink = "#cta",
+  ctaClass = "herobtn btn--green btn--cubic-green",
+  description = "GA4・Google広告のアカウントを接続するだけでプロ仕様のレポートが即完成。",
+  hasBg = true
+} = Astro.props as Props;
+
+const hasTitle = title.trim().length > 0;
+const hasDescription = description.trim().length > 0;
+const hasCta = ctaText.trim().length > 0 && ctaLink.trim().length > 0;
+const hasImage = image.trim().length > 0;
+---
+
+<section class:list={["hero", hasBg && "hero--bg"]}>
+  <div class="hero__inner">
+    <div class="hero__content">
+      {hasTitle && <h1 class="hero__title" set:html={title} />}
+      {hasDescription && (
+        <p class="hero__description">
+          {description}
+        </p>
+      )}
+      {hasCta && <a href={ctaLink} class={ctaClass}>{ctaText}</a>}
+    </div>
+
+    {hasImage && (
+      <div class="hero__media">
+        <img src={image} alt="" loading="eager" decoding="async" />
+        <p class="notice text-right --pt20">本テンプレートは、Google Looker Studio用のテンプレートです。</p>
+      </div>
+    )}
+    
+  </div>
+</section>

@@ -1,0 +1,52 @@
+---
+import "../styles/main.scss";
+
+interface Props {
+  title?: string;
+}
+
+const { title = "InsightBase" } = Astro.props as Props;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" href="/assets/img/logo/favicon.png" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="brand">
+          <a href="/"><img src="/assets/img/logo/ib_logo.svg" alt="InsightBase Lite" /></a>
+        </div>
+        <input class="nav-toggle" type="checkbox" id="nav-toggle" />
+        <label
+          class="nav-toggle-btn"
+          for="nav-toggle"
+          aria-label="メニューを開閉"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </label>
+        <nav class="site-nav" id="site-nav">
+          <a class="" href="/ga4-report-template">GA4レポート</a>
+          <a class="" href="/googlead-report-template">Google広告レポート</a>
+          <a class="" href="/faq">よくあるお問い合わせ</a>
+          <a class="" href="https://manual.insightbase.jp/" target="_blank">導入マニュアル</a>
+          <a class="btn primary" href="https://bizup-inc.co.jp/inquiry/" target="_blank">お問い合わせ</a>
+        </nav>
+      </div>
+    </header>
+	<main>
+    <slot />
+	</main>
+
+    <a href="#" class="back-to-top" aria-label="ページ先頭へ">トップへ</a>
+    <script src="/assets/js/main.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,75 @@
+/* ========================================
+   Modern Reset CSS (Custom)
+   ======================================== */
+
+/* 1. すべての要素のマージンとパディングをリセット */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* 2. 一貫性のあるフォントサイズと行の高さを設定 */
+  html {
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  
+  /* 3. リストスタイルを削除 */
+  ul, ol {
+    list-style: none;
+  }
+  
+  /* 4. 画像の挙動を統一 */
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  /* 5. フォーム要素のリセット */
+  button, input, textarea, select {
+    font: inherit;
+    border: none;
+    background: none;
+    outline: none;
+  }
+  
+  button {
+    cursor: pointer;
+  }
+  
+  /* 6. リンクのデフォルトスタイルを削除 */
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  /* 7. 要素のデフォルトスタイルを削除 */
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+  
+  /* 8. アクセシビリティ対応（フォーカスリング） */
+  :focus-visible {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+  }
+  
+  /* 9. ユーザーが選択できる範囲を調整 */
+  body {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* 10. スクロールのスムーズ化 */
+  html {
+    scroll-behavior: smooth;
+  }
