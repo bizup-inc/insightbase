@@ -1,0 +1,127 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Footer from "../components/Footer.astro";
+
+const siteKey = "6LcuAlssAAAAADFlPt-zyluHhc3o4q754lq5mrTJ";
+const errorParam = Astro.url.searchParams.get("error");
+
+const errorMessages: Record<string, string> = {
+  required: "必須項目が未入力です。",
+  email: "メールアドレスの形式をご確認ください。",
+  recaptcha: "送信に失敗しました。時間をおいて再度お試しください。",
+  server: "送信に失敗しました。時間をおいて再度お試しください。"
+};
+
+const errorMessage = errorParam ? errorMessages[errorParam] : "";
+---
+
+<Layout title="お問い合わせ | InsightBase">
+  <section class="section__bg_w inquiry">
+    <div class="content__inner inquiry__inner">
+      <div class="inquiry__header">
+        <p class="section__title_en">Contact</p>
+        <h1 class="section__title">お問い合わせ</h1>
+        <p class="inquiry__lead">
+          サービスに関するご質問や導入相談はこちらからご連絡ください。原則2営業日以内に担当者よりご返信いたします。
+        </p>
+      </div>
+
+      <div class="inquiry__grid">
+        <div class="inquiry__panel">
+          <h2 class="inquiry__panel-title">必要事項のご入力</h2>
+          <p class="inquiry__panel-text">
+            内容を確認のうえ、入力内容をお送りください。担当者より折り返しご連絡いたします。
+          </p>
+          <ul class="inquiry__notes">
+            <li>営業目的のご連絡はご遠慮ください。</li>
+            <li>お問い合わせ内容によっては回答にお時間をいただく場合があります。</li>
+          </ul>
+        </div>
+
+        <form id="inquiry-form" class="inquiry__form" method="post" action="/api/inquiry">
+          <div class="inquiry__row">
+            <label for="inquiryType">お問い合わせ種別<span class="inquiry__required">必須</span></label>
+            <select id="inquiryType" name="inquiryType" required>
+              <option value="">選択してください</option>
+              <option value="導入・購入の相談">導入・購入の相談</option>
+              <option value="機能・仕様の質問">機能・仕様の質問</option>
+              <option value="不具合・トラブル">不具合・トラブル</option>
+              <option value="その他">その他</option>
+            </select>
+          </div>
+
+          <div class="inquiry__row">
+            <label for="company">会社名</label>
+            <input id="company" name="company" type="text" autocomplete="organization" />
+          </div>
+
+          <div class="inquiry__row">
+            <label for="name">お名前<span class="inquiry__required">必須</span></label>
+            <input id="name" name="name" type="text" autocomplete="name" required />
+          </div>
+
+          <div class="inquiry__row">
+            <label for="email">メールアドレス<span class="inquiry__required">必須</span></label>
+            <input id="email" name="email" type="email" autocomplete="email" required />
+          </div>
+
+          <div class="inquiry__row">
+            <label for="message">お問い合わせ内容<span class="inquiry__required">必須</span></label>
+            <textarea id="message" name="message" rows="6" required></textarea>
+          </div>
+
+          <input type="hidden" name="recaptchaToken" id="recaptchaToken" />
+          <input type="hidden" name="recaptchaAction" id="recaptchaAction" value="inquiry_submit" />
+
+          <p class="inquiry__privacy">
+            送信により、<a href="/terms">利用規約</a>に同意したものとみなします。
+          </p>
+
+          {errorMessage && <p class="inquiry__error" role="alert">{errorMessage}</p>}
+
+          <button type="submit" class="btn primary inquiry__submit">送信する</button>
+          <p class="inquiry__recaptcha">
+            This site is protected by reCAPTCHA and the Google
+            <a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer">Privacy Policy</a> and
+            <a href="https://policies.google.com/terms" target="_blank" rel="noreferrer">Terms of Service</a> apply.
+          </p>
+          <noscript>
+            <p class="inquiry__error" role="alert">
+              このフォームの送信にはJavaScriptが必要です。
+            </p>
+          </noscript>
+        </form>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<Footer />
+
+<script src={`https://www.google.com/recaptcha/api.js?render=${siteKey}`} defer></script>
+<script is:inline>
+  const form = document.getElementById("inquiry-form");
+  const submitButton = form?.querySelector("button[type='submit']");
+  const tokenField = document.getElementById("recaptchaToken");
+
+  if (form && submitButton && tokenField) {
+    form.addEventListener("submit", async (event) => {
+      if (form.dataset.submitting === "true") return;
+      event.preventDefault();
+
+      submitButton.disabled = true;
+      submitButton.textContent = "送信中...";
+
+      try {
+        const token = await grecaptcha.execute("${siteKey}", { action: "inquiry_submit" });
+        tokenField.value = token;
+        form.dataset.submitting = "true";
+        form.submit();
+      } catch (error) {
+        submitButton.disabled = false;
+        submitButton.textContent = "送信する";
+        alert("送信に失敗しました。時間をおいて再度お試しください。");
+      }
+    });
+  }
+</script>
