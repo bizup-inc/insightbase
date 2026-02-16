@@ -23,6 +23,12 @@ const hasTitle = title.trim().length > 0;
 const hasDescription = description.trim().length > 0;
 const hasCta = ctaText.trim().length > 0 && ctaLink.trim().length > 0;
 const hasImage = image.trim().length > 0;
+const productMap: Record<string, string> = {
+  "/": "tophero",
+  "/ga4-report-template": "ga4hero",
+  "/googlead-report-template": "gadhero"
+};
+const product = productMap[Astro.url.pathname];
 ---
 
 <section class:list={["hero", hasBg && "hero--bg"]}>
@@ -34,7 +40,16 @@ const hasImage = image.trim().length > 0;
           {description}
         </p>
       )}
-      {hasCta && <a href={ctaLink} class={ctaClass}>{ctaText}</a>}
+      {hasCta && (
+        <a
+          href={ctaLink}
+          class={ctaClass}
+          data-event="purchase_click"
+          data-product={product}
+        >
+          {ctaText}
+        </a>
+      )}
     </div>
 
     {hasImage && (
