@@ -7,6 +7,7 @@ const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY!, {
 });
 
 const resend = new Resend(import.meta.env.RESEND_API_KEY);
+const PURCHASE_NOTICE_EMAIL = "suzuki@bizup-inc.co.jp";
 
 const INQUIRY_URL = "https://insightbase.jp/inquiry";
 
@@ -179,12 +180,23 @@ export const POST: APIRoute = async ({ request }) => {
       const result = await resend.emails.send({
         from: resendFrom,
         to: email,
+        bcc: [PURCHASE_NOTICE_EMAIL],
         subject: mail.subject,
         text: mail.text,
         html: mail.html,
       });
 
-      console.log("✅ mail sent", { to: email, productKey, id: result?.data?.id });
+      if (result.error) {
+        console.error("❌ mail send failed:", result.error);
+        return new Response("ok", { status: 200 });
+      }
+
+      console.log("✅ mail sent", {
+        to: email,
+        bcc: PURCHASE_NOTICE_EMAIL,
+        productKey,
+        id: result?.data?.id
+      });
     } catch (err: any) {
       console.error("❌ mail send failed:", err?.message || err);
       return new Response("ok", { status: 200 });
