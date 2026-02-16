@@ -174,8 +174,11 @@ const errorMessage = errorParam ? errorMessages[errorParam] : "";
         } catch (error) {
           console.error("reCAPTCHA error:", error);
           if (recaptchaError) {
+            const message =
+              error instanceof Error ? error.message : "unknown error";
             recaptchaError.textContent =
-              "reCAPTCHAの読み込みに失敗しました。広告ブロック拡張やトラッキング防止設定を確認してください。";
+              `reCAPTCHAエラー: ${message}。` +
+              "広告ブロック拡張やトラッキング防止設定を確認してください。";
             recaptchaError.hidden = false;
           }
           setButtonState(false, "送信する");
