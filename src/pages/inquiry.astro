@@ -102,50 +102,52 @@ const errorMessage = errorParam ? errorMessages[errorParam] : "";
 
 <script src={`https://www.google.com/recaptcha/api.js?render=${siteKey}`} defer></script>
 <script is:inline>
-  const form = document.getElementById("inquiry-form");
-  const submitButton = form?.querySelector("[data-submit]");
-  const tokenField = document.getElementById("recaptchaToken");
-  const actionField = document.getElementById("recaptchaAction");
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("inquiry-form");
+    const submitButton = form?.querySelector("[data-submit]");
+    const tokenField = document.getElementById("recaptchaToken");
+    const actionField = document.getElementById("recaptchaAction");
 
-  const setButtonState = (disabled, label) => {
-    if (!submitButton) return;
-    submitButton.disabled = disabled;
-    if (label) submitButton.textContent = label;
-  };
+    const setButtonState = (disabled, label) => {
+      if (!submitButton) return;
+      submitButton.disabled = disabled;
+      if (label) submitButton.textContent = label;
+    };
 
-  if (form && submitButton && tokenField && actionField) {
-    setButtonState(true, "読み込み中...");
+    if (form && submitButton && tokenField && actionField) {
+      setButtonState(true, "読み込み中...");
 
-    const readyRecaptcha = () =>
-      new Promise((resolve, reject) => {
-        if (typeof grecaptcha === "undefined") {
-          reject(new Error("recaptcha not loaded"));
-          return;
+      const readyRecaptcha = () =>
+        new Promise((resolve, reject) => {
+          if (typeof grecaptcha === "undefined") {
+            reject(new Error("recaptcha not loaded"));
+            return;
+          }
+          grecaptcha.ready(resolve);
+        });
+
+      readyRecaptcha()
+        .then(() => setButtonState(false, "送信する"))
+        .catch(() => setButtonState(true, "送信できません"));
+
+      form.addEventListener("submit", async (event) => {
+        if (form.dataset.submitting === "true") return;
+        event.preventDefault();
+
+        setButtonState(true, "送信中...");
+
+        try {
+          await readyRecaptcha();
+          const action = actionField.value || "inquiry_submit";
+          const token = await grecaptcha.execute("${siteKey}", { action });
+          tokenField.value = token;
+          form.dataset.submitting = "true";
+          form.submit();
+        } catch (error) {
+          setButtonState(false, "送信する");
+          alert("送信に失敗しました。時間をおいて再度お試しください。");
         }
-        grecaptcha.ready(resolve);
       });
-
-    readyRecaptcha()
-      .then(() => setButtonState(false, "送信する"))
-      .catch(() => setButtonState(true, "送信できません"));
-
-    form.addEventListener("submit", async (event) => {
-      if (form.dataset.submitting === "true") return;
-      event.preventDefault();
-
-      setButtonState(true, "送信中...");
-
-      try {
-        await readyRecaptcha();
-        const action = actionField.value || "inquiry_submit";
-        const token = await grecaptcha.execute("${siteKey}", { action });
-        tokenField.value = token;
-        form.dataset.submitting = "true";
-        form.submit();
-      } catch (error) {
-        setButtonState(false, "送信する");
-        alert("送信に失敗しました。時間をおいて再度お試しください。");
-      }
-    });
-  }
+    }
+  });
 </script>
