@@ -3,10 +3,40 @@ import Stripe from "stripe";
 import { Resend } from "resend";
 
 const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2026-01-28.clover", // StripeダッシュボードのAPIバージョンに合わせる
+  apiVersion: "2026-01-28.clover",
 });
 
 const resend = new Resend(import.meta.env.RESEND_API_KEY);
+
+const INQUIRY_URL = "https://insightbase.jp/inquiry?";
+
+// 送信専用注記（一般的な表現）
+const NO_REPLY_NOTE_TEXT = "※本メールは送信専用のため、ご返信いただいてもお答えできませんのでご了承ください。";
+
+const SIGNATURE_TEXT = `◆◇───────────────────────────◇◆
+　　ビザップ株式会社
+　　　https://bizup-inc.co.jp
+
+　　InsightBase
+　　　https://insightbase.jp
+　・………・………・………・………・………・
+　　〒272-0111　千葉県市川市妙典5-13-33 A＆Yビル3F
+　　Email:info@bizup-inc.co.jp
+　　Tel:047-718-3017
+◆◇───────────────────────────◇◆`;
+
+function escapeHtml(s: string) {
+  return s
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function nl2br(text: string) {
+  return escapeHtml(text).replace(/\n/g, "<br>");
+}
 
 function buildMail(params: {
   productKey: string;
@@ -16,57 +46,79 @@ function buildMail(params: {
 }) {
   const { productKey, ga4Pass, adsPass, setPass } = params;
 
-  // URLは必要に応じてあなたの構成に合わせて変更してください
   const ga4Url = "https://manual.insightbase.jp/";
   const adsUrl = "https://manual.insightbase.jp/";
   const setUrl = "https://manual.insightbase.jp/";
 
-  const inquiryText = `
+  // ★ここがご希望の「丁寧な案内文」
+  const introText = `この度はInsightBaseのテンプレートをご購入いただき、誠にありがとうございます。
+テンプレートの導入手順は、以下のマニュアルサイトにてご案内しております。
+下記URLへアクセスのうえ、記載のパスワードでログインしてご確認ください。`;
+
+  const footerText = `
 
 ご不明な点がございましたらお問い合わせフォームよりご連絡ください。
-https://insightbase.jp/inquiry`;
+${INQUIRY_URL}
+
+${NO_REPLY_NOTE_TEXT}
+
+${SIGNATURE_TEXT}`;
+
+  let subject = "【InsightBase】導入マニュアルのご案内";
+  let manualBlock = "";
 
   if (productKey === "ga4") {
-    return {
-      subject: "【InsightBase】GA4レポートテンプレート：導入マニュアルのご案内",
-      text: `ご購入ありがとうございます。
-
-▼ GA4レポートテンプレート 導入マニュアル
+    subject = "【InsightBase】GA4レポートテンプレート：導入マニュアルのご案内";
+    manualBlock = `▼ GA4レポートテンプレート 導入マニュアル
 URL: ${ga4Url}
-パスワード: ${ga4Pass}${inquiryText}`,
-    };
-  }
-
-  if (productKey === "ads") {
-    return {
-      subject: "【InsightBase】Google広告レポートテンプレート：導入マニュアルのご案内",
-      text: `ご購入ありがとうございます。
-
-▼ Google広告レポートテンプレート 導入マニュアル
+パスワード: ${ga4Pass}`;
+  } else if (productKey === "ads") {
+    subject = "【InsightBase】Google広告レポートテンプレート：導入マニュアルのご案内";
+    manualBlock = `▼ Google広告レポートテンプレート 導入マニュアル
 URL: ${adsUrl}
-パスワード: ${adsPass}${inquiryText}`,
-    };
-  }
-
-  if (productKey === "set") {
-    return {
-      subject: "【InsightBase】セット購入：導入マニュアルのご案内",
-      text: `ご購入ありがとうございます。
-
-▼ GA4＋Google広告レポートテンプレート 導入マニュアル
+パスワード: ${adsPass}`;
+  } else if (productKey === "set") {
+    subject = "【InsightBase】セット購入：導入マニュアルのご案内";
+    manualBlock = `▼ GA4＋Google広告レポートテンプレート導入マニュアル
 URL: ${setUrl}
-パスワード: ${setPass}${inquiryText}`,
-    };
+パスワード: ${setPass}`;
+  } else {
+    // 想定外
+    manualBlock = `購入情報の識別ができませんでした。
+恐れ入りますが、お問い合わせフォームよりご連絡ください。
+${INQUIRY_URL}`;
   }
 
-  // 想定外の値はフォールバック（運用上の事故を防ぐ）
-  return {
-    subject: "【InsightBase】導入マニュアルのご案内",
-    text: `ご購入ありがとうございます。
+  const text = `${introText}
 
-購入情報の識別ができませんでした。
-お手数ですが、本メールへご返信ください（確認のうえご案内いたします）。${inquiryText}`,
-  };
+${manualBlock}${footerText}`;
+
+  // HTML（最低限の装飾）
+  const html = `
+  <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Hiragino Kaku Gothic ProN','Hiragino Sans','Noto Sans JP',Arial,sans-serif; line-height:1.7; color:#111;">
+    <p style="margin:0 0 14px;">${nl2br(
+      "この度はInsightBaseのテンプレートをご購入いただき、誠にありがとうございます。"
+    )}</p>
+    <p style="margin:0 0 16px;">${nl2br(
+      "テンプレートの導入手順は、以下のマニュアルサイトにてご案内しております。<br>下記URLへアクセスのうえ、記載のパスワードでログインしてご確認ください。"
+    )}</p>
+
+    <div style="border:1px solid #e5e7eb; border-radius:12px; padding:16px; background:#fafafa; margin:0 0 16px;">
+      ${nl2br(manualBlock)}
+    </div>
+
+    <p style="margin:0 0 8px;">ご不明な点がございましたらお問い合わせフォームよりご連絡ください。<br>
+      <a href="${INQUIRY_URL}" style="color:#2563eb; text-decoration:underline;">${INQUIRY_URL}</a>
+    </p>
+
+    <p style="margin:0 0 16px; color:#6b7280; font-size:13px;">${escapeHtml(NO_REPLY_NOTE_TEXT)}</p>
+
+    <pre style="margin:0; padding:12px 14px; background:#111827; color:#f9fafb; border-radius:12px; font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono','Courier New',monospace; font-size:12px; overflow:auto;">${escapeHtml(
+      SIGNATURE_TEXT
+    )}</pre>
+  </div>`.trim();
+
+  return { subject, text, html };
 }
 
 export const POST: APIRoute = async ({ request }) => {
@@ -76,7 +128,6 @@ export const POST: APIRoute = async ({ request }) => {
   const webhookSecret = import.meta.env.STRIPE_WEBHOOK_SECRET;
   if (!webhookSecret) return new Response("Missing STRIPE_WEBHOOK_SECRET", { status: 500 });
 
-  // 署名検証は raw body が必要
   const body = await request.text();
 
   let event: Stripe.Event;
@@ -100,13 +151,12 @@ export const POST: APIRoute = async ({ request }) => {
     console.log("email:", email);
     console.log("session.id:", session.id);
 
-    // 必要情報が揃っていない場合はここで終了（Stripeには200を返す）
     if (!productKey || !email) {
       console.log("⚠️ Missing product_key or email", { productKey, email });
       return new Response("ok", { status: 200 });
     }
 
-    const resendFrom = import.meta.env.RESEND_FROM;
+    const resendFrom = import.meta.env.RESEND_FROM; // 例: "ビザップ株式会社 <no-reply@bizup-inc.co.jp>"
     const ga4Pass = import.meta.env.GA4_MANUAL_PASSWORD;
     const adsPass = import.meta.env.ADS_MANUAL_PASSWORD;
     const setPass = import.meta.env.SET_MANUAL_PASSWORD;
@@ -125,15 +175,15 @@ export const POST: APIRoute = async ({ request }) => {
       const mail = buildMail({ productKey, ga4Pass, adsPass, setPass });
 
       const result = await resend.emails.send({
-        from: resendFrom, // 例: "Bizup <no-reply@bizup-inc.co.jp>"
+        from: resendFrom,
         to: email,
         subject: mail.subject,
         text: mail.text,
+        html: mail.html,
       });
 
       console.log("✅ mail sent", { to: email, productKey, id: result?.data?.id });
     } catch (err: any) {
-      // 失敗してもStripeには200返す（再送ループを防ぐ）
       console.error("❌ mail send failed:", err?.message || err);
       return new Response("ok", { status: 200 });
     }
