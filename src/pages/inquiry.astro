@@ -177,7 +177,40 @@ const errorMessage = errorParam ? errorMessages[errorParam] : "";
           const token = await grecaptcha.execute(siteKey, { action });
           tokenField.value = token;
           form.dataset.submitting = "true";
-          form.submit();
+          const formData = new FormData(form);
+          const body = new URLSearchParams(formData);
+          const response = await fetch(form.action, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body,
+            credentials: "same-origin"
+          });
+
+          if (response.ok) {
+            window.location.href = "/inquiry/thanks";
+            return;
+          }
+
+          let errorCode = "server";
+          try {
+            const json = await response.json();
+            if (json?.error) errorCode = json.error;
+          } catch (_) {
+            // ignore
+          }
+
+          if (recaptchaError) {
+            recaptchaError.textContent =
+              errorCode === "recaptcha"
+                ? "reCAPTCHAの検証に失敗しました。時間をおいて再度お試しください。"
+                : "送信に失敗しました。時間をおいて再度お試しください。";
+            recaptchaError.hidden = false;
+          }
+
+          setButtonState(false, "送信する");
         } catch (error) {
           console.error("reCAPTCHA error:", error);
           const message =
