@@ -8,10 +8,10 @@ const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY!, {
 
 const resend = new Resend(import.meta.env.RESEND_API_KEY);
 
-const INQUIRY_URL = "https://insightbase.jp/inquiry?";
+const INQUIRY_URL = "https://insightbase.jp/inquiry";
 
 // 送信専用注記（一般的な表現）
-const NO_REPLY_NOTE_TEXT = "※本メールは送信専用のため、ご返信いただいてもお答えできませんのでご了承ください。";
+const NO_REPLY_NOTE_TEXT = "※ 本メールは送信専用のため、ご返信いただいてもお答えできませんのでご了承ください。";
 
 const SIGNATURE_TEXT = `◆◇───────────────────────────◇◆
 　　ビザップ株式会社
@@ -100,7 +100,10 @@ ${manualBlock}${footerText}`;
       "この度はInsightBaseのテンプレートをご購入いただき、誠にありがとうございます。"
     )}</p>
     <p style="margin:0 0 16px;">${nl2br(
-      "テンプレートの導入手順は、以下のマニュアルサイトにてご案内しております。<br>下記URLへアクセスのうえ、記載のパスワードでログインしてご確認ください。"
+      "テンプレートの導入手順は、以下のマニュアルサイトにてご案内しております。"
+    )}</p>
+        <p style="margin:0 0 14px;">${nl2br(
+      "下記URLへアクセスのうえ、記載のパスワードでログインしてご確認ください。"
     )}</p>
 
     <div style="border:1px solid #e5e7eb; border-radius:12px; padding:16px; background:#fafafa; margin:0 0 16px;">
@@ -113,7 +116,7 @@ ${manualBlock}${footerText}`;
 
     <p style="margin:0 0 16px; color:#6b7280; font-size:13px;">${escapeHtml(NO_REPLY_NOTE_TEXT)}</p>
 
-    <pre style="margin:0; padding:12px 14px; background:#111827; color:#f9fafb; border-radius:12px; font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono','Courier New',monospace; font-size:12px; overflow:auto;">${escapeHtml(
+    <pre style="margin:0; padding:12px 14px; background:#424242; color:#ffffff; font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono','Courier New',monospace; font-size:12px; overflow:auto;">${escapeHtml(
       SIGNATURE_TEXT
     )}</pre>
   </div>`.trim();
