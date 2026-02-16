@@ -84,6 +84,7 @@ const errorMessage = errorParam ? errorMessages[errorParam] : "";
           </p>
 
           {errorMessage && <p class="inquiry__error" role="alert">{errorMessage}</p>}
+          <p id="recaptcha-error" class="inquiry__error" role="alert" hidden></p>
 
           <button type="submit" class="btn primary inquiry__submit" data-submit>
             送信する
@@ -106,13 +107,30 @@ const errorMessage = errorParam ? errorMessages[errorParam] : "";
 
 <Footer />
 
-<script src={`https://www.google.com/recaptcha/api.js?render=${siteKey}`} defer></script>
+<script
+  src={`https://www.google.com/recaptcha/api.js?render=${siteKey}&onload=onRecaptchaLoad`}
+  defer
+></script>
 <script is:inline>
+  let recaptchaReadyResolve;
+  const recaptchaReady = new Promise((resolve) => {
+    recaptchaReadyResolve = resolve;
+  });
+
+  window.onRecaptchaLoad = () => {
+    if (typeof grecaptcha !== "undefined") {
+      grecaptcha.ready(() => recaptchaReadyResolve());
+    } else {
+      recaptchaReadyResolve();
+    }
+  };
+
   document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("inquiry-form");
     const submitButton = form?.querySelector("[data-submit]");
     const tokenField = document.getElementById("recaptchaToken");
     const actionField = document.getElementById("recaptchaAction");
+    const recaptchaError = document.getElementById("recaptcha-error");
 
     const setButtonState = (disabled, label) => {
       if (!submitButton) return;
@@ -123,14 +141,17 @@ const errorMessage = errorParam ? errorMessages[errorParam] : "";
     if (form && submitButton && tokenField && actionField) {
       setButtonState(true, "読み込み中...");
 
-      const readyRecaptcha = () =>
-        new Promise((resolve, reject) => {
-          if (typeof grecaptcha === "undefined") {
-            reject(new Error("recaptcha not loaded"));
-            return;
-          }
-          grecaptcha.ready(resolve);
-        });
+      const readyRecaptcha = async () => {
+        await Promise.race([
+          recaptchaReady,
+          new Promise((_, reject) =>
+            setTimeout(() => reject(new Error("recaptcha timeout")), 8000)
+          )
+        ]);
+        if (typeof grecaptcha === "undefined") {
+          throw new Error("recaptcha not loaded");
+        }
+      };
 
       readyRecaptcha()
         .then(() => setButtonState(false, "送信する"))
@@ -141,6 +162,7 @@ const errorMessage = errorParam ? errorMessages[errorParam] : "";
         event.preventDefault();
 
         setButtonState(true, "送信中...");
+        if (recaptchaError) recaptchaError.hidden = true;
 
         try {
           await readyRecaptcha();
@@ -150,6 +172,12 @@ const errorMessage = errorParam ? errorMessages[errorParam] : "";
           form.dataset.submitting = "true";
           form.submit();
         } catch (error) {
+          console.error("reCAPTCHA error:", error);
+          if (recaptchaError) {
+            recaptchaError.textContent =
+              "reCAPTCHAの読み込みに失敗しました。広告ブロック拡張やトラッキング防止設定を確認してください。";
+            recaptchaError.hidden = false;
+          }
           setButtonState(false, "送信する");
           alert("送信に失敗しました。時間をおいて再度お試しください。");
         }
