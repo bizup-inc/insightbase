@@ -67,7 +67,13 @@ const errorMessage = errorParam ? errorMessages[errorParam] : "";
 
           <div class="inquiry__row">
             <label for="message">お問い合わせ内容<span class="inquiry__required">必須</span></label>
-            <textarea id="message" name="message" rows="6" required></textarea>
+            <textarea
+              id="message"
+              name="message"
+              rows="6"
+              placeholder="お問い合わせ内容をご記入ください。"
+              required
+            ></textarea>
           </div>
 
           <input type="hidden" name="recaptchaToken" id="recaptchaToken" />
