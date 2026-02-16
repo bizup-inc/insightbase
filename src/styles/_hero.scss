@@ -27,6 +27,9 @@
   line-height: 1.25;
   letter-spacing: 0.02em;
   font-weight: 700;
+  @media(max-width: 767px) {
+    font-size: 41px;
+  }
 }
 
 .hero__description {
@@ -91,7 +94,16 @@
   .hero__media {
     min-height: 220px;
   }
+  
 }
+
+@media (max-width: 767px) {
+
+.hero__content .herobtn{
+  font-size:20px;
+}}
+
+
 
 @media (prefers-reduced-motion: reduce) {
   .hero__content,

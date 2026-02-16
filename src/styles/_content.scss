@@ -39,6 +39,9 @@
 .content__inner {
   max-width: 1300px;
   margin: 0 auto;
+  @media (max-width: 767px) {
+    padding: 0 20px;
+  }
 }
 
 .section__title_en {
@@ -132,11 +135,15 @@
   }
 }
 
+.image-l {
+  padding-bottom: 50px;
+}
+
 .image-l img {
   position: relative;
   width: 100%;
   max-width: 800px;
-  bottom: -50px;
+  transform: translateY(50px);
   margin: 0 auto;
 }
 
@@ -198,6 +205,9 @@
     max-width: 400px;
     margin: 0 auto;
     padding: 0px 0 50px 0;
+    @media (max-width: 767px) {
+      max-width: 300px;
+    }
   }
 }
 
