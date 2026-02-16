@@ -22,7 +22,6 @@ const SIGNATURE_TEXT = `◆◇────────────────�
 　・………・………・………・………・………・
 　　〒272-0111　千葉県市川市妙典5-13-33 A＆Yビル3F
 　　Email:info@bizup-inc.co.jp
-　　Tel:047-718-3017
 ◆◇───────────────────────────◇◆`;
 
 function escapeHtml(s: string) {
