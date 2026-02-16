@@ -46,9 +46,16 @@ export const POST: APIRoute = async ({ request }) => {
       : redirectWithError("server");
   }
 
-  let formData: FormData;
+  const contentType = request.headers.get("content-type") ?? "";
+  let data: Record<string, unknown> = {};
+
   try {
-    formData = await request.formData();
+    if (contentType.includes("application/json")) {
+      data = (await request.json()) ?? {};
+    } else {
+      const formData = await request.formData();
+      data = Object.fromEntries(formData.entries());
+    }
   } catch (error) {
     return wantsJson(request)
       ? new Response(JSON.stringify({ ok: false, error: "required" }), {
@@ -58,13 +65,13 @@ export const POST: APIRoute = async ({ request }) => {
       : redirectWithError("required");
   }
 
-  const inquiryType = String(formData.get("inquiryType") ?? "").trim();
-  const company = String(formData.get("company") ?? "").trim();
-  const name = String(formData.get("name") ?? "").trim();
-  const email = String(formData.get("email") ?? "").trim();
-  const message = String(formData.get("message") ?? "").trim();
-  const recaptchaToken = String(formData.get("recaptchaToken") ?? "").trim();
-  const recaptchaAction = String(formData.get("recaptchaAction") ?? "").trim();
+  const inquiryType = String(data.inquiryType ?? "").trim();
+  const company = String(data.company ?? "").trim();
+  const name = String(data.name ?? "").trim();
+  const email = String(data.email ?? "").trim();
+  const message = String(data.message ?? "").trim();
+  const recaptchaToken = String(data.recaptchaToken ?? "").trim();
+  const recaptchaAction = String(data.recaptchaAction ?? "").trim();
 
   if (!inquiryType || !name || !email || !message || !recaptchaToken) {
     return wantsJson(request)

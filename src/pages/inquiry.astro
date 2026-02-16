@@ -178,14 +178,14 @@ const errorMessage = errorParam ? errorMessages[errorParam] : "";
           tokenField.value = token;
           form.dataset.submitting = "true";
           const formData = new FormData(form);
-          const body = new URLSearchParams(formData);
+          const body = Object.fromEntries(formData.entries());
           const response = await fetch(form.action, {
             method: "POST",
             headers: {
               Accept: "application/json",
-              "Content-Type": "application/x-www-form-urlencoded"
+              "Content-Type": "application/json"
             },
-            body,
+            body: JSON.stringify(body),
             credentials: "same-origin"
           });
 
