@@ -16,6 +16,7 @@ const { title = "InsightBase" } = Astro.props as Props;
     <link rel="icon" href="/assets/img/logo/favicon.png" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <slot name="head" />
   </head>
   <body>
     <header class="site-header">
