@@ -32,6 +32,25 @@ main {
   padding: 20px;
 }
 
+section {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  section {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 a {
   color: var(--link);
   text-decoration: none;

@@ -1,6 +1,9 @@
 .hero {
   width: 100%;
   padding: 48px 24px;
+  opacity: 1;
+  transform: none;
+  transition: none;
 }
 
 .hero--bg {
@@ -30,6 +33,24 @@
   margin: 20px 0 28px;
   color: #555;
   line-height: 1.6;
+}
+
+.hero__content {
+  opacity: 0;
+  transform: translateX(-24px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.hero__media {
+  opacity: 0;
+  transform: translateX(24px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.hero.is-visible .hero__content,
+.hero.is-visible .hero__media {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 
@@ -69,5 +90,14 @@
 
   .hero__media {
     min-height: 220px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__content,
+  .hero__media {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }
