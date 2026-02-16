@@ -20,8 +20,9 @@ const {
   ogType = "website"
 } = Astro.props as Props;
 
-const canonicalUrl = Astro.url.toString();
-const ogImageUrl = new URL(ogImage, Astro.url).toString();
+const baseUrl = Astro.site ?? Astro.url;
+const canonicalUrl = new URL(Astro.url.pathname, baseUrl).toString();
+const ogImageUrl = new URL(ogImage, baseUrl).toString();
 ---
 
 <!doctype html>
