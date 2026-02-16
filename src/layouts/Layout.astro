@@ -3,9 +3,25 @@ import "../styles/main.scss";
 
 interface Props {
   title?: string;
+  description?: string;
+  ogImage?: string;
+  ogType?: string;
 }
 
-const { title = "InsightBase" } = Astro.props as Props;
+const defaultTitle = "InsightBase";
+const defaultDescription =
+  "InsightBase Lightは、GA4・Google広告のレポート作成を効率化するLooker Studioテンプレートです。";
+const defaultOgImage = "/assets/img/logo/ogp.jpg";
+
+const {
+  title = defaultTitle,
+  description = defaultDescription,
+  ogImage = defaultOgImage,
+  ogType = "website"
+} = Astro.props as Props;
+
+const canonicalUrl = Astro.url.toString();
+const ogImageUrl = new URL(ogImage, Astro.url).toString();
 ---
 
 <!doctype html>
@@ -16,6 +32,19 @@ const { title = "InsightBase" } = Astro.props as Props;
     <link rel="icon" href="/assets/img/logo/favicon.png" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:site_name" content="InsightBase" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
     <slot name="head" />
   </head>
   <body>
