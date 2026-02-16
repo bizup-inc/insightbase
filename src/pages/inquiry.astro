@@ -79,7 +79,9 @@ const errorMessage = errorParam ? errorMessages[errorParam] : "";
 
           {errorMessage && <p class="inquiry__error" role="alert">{errorMessage}</p>}
 
-          <button type="submit" class="btn primary inquiry__submit">送信する</button>
+          <button type="submit" class="btn primary inquiry__submit" data-submit>
+            送信する
+          </button>
           <p class="inquiry__recaptcha">
             This site is protected by reCAPTCHA and the Google
             <a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer">Privacy Policy</a> and
@@ -101,25 +103,47 @@ const errorMessage = errorParam ? errorMessages[errorParam] : "";
 <script src={`https://www.google.com/recaptcha/api.js?render=${siteKey}`} defer></script>
 <script is:inline>
   const form = document.getElementById("inquiry-form");
-  const submitButton = form?.querySelector("button[type='submit']");
+  const submitButton = form?.querySelector("[data-submit]");
   const tokenField = document.getElementById("recaptchaToken");
+  const actionField = document.getElementById("recaptchaAction");
 
-  if (form && submitButton && tokenField) {
+  const setButtonState = (disabled, label) => {
+    if (!submitButton) return;
+    submitButton.disabled = disabled;
+    if (label) submitButton.textContent = label;
+  };
+
+  if (form && submitButton && tokenField && actionField) {
+    setButtonState(true, "読み込み中...");
+
+    const readyRecaptcha = () =>
+      new Promise((resolve, reject) => {
+        if (typeof grecaptcha === "undefined") {
+          reject(new Error("recaptcha not loaded"));
+          return;
+        }
+        grecaptcha.ready(resolve);
+      });
+
+    readyRecaptcha()
+      .then(() => setButtonState(false, "送信する"))
+      .catch(() => setButtonState(true, "送信できません"));
+
     form.addEventListener("submit", async (event) => {
       if (form.dataset.submitting === "true") return;
       event.preventDefault();
 
-      submitButton.disabled = true;
-      submitButton.textContent = "送信中...";
+      setButtonState(true, "送信中...");
 
       try {
-        const token = await grecaptcha.execute("${siteKey}", { action: "inquiry_submit" });
+        await readyRecaptcha();
+        const action = actionField.value || "inquiry_submit";
+        const token = await grecaptcha.execute("${siteKey}", { action });
         tokenField.value = token;
         form.dataset.submitting = "true";
         form.submit();
       } catch (error) {
-        submitButton.disabled = false;
-        submitButton.textContent = "送信する";
+        setButtonState(false, "送信する");
         alert("送信に失敗しました。時間をおいて再度お試しください。");
       }
     });
