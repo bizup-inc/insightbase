@@ -1,7 +1,12 @@
 import type { APIContext } from 'astro';
 
 const pageModules = import.meta.glob('/src/pages/**/*.astro');
-const excludedRoutes = new Set(['/inquiry/thanks']);
+const excludedRoutes = new Set([
+  '/inquiry/thanks',
+  '/checkout/thanks-ga4',
+  '/checkout/thanks-gad',
+  '/checkout/thanks-set'
+]);
 
 function normalizeRoute(filePath: string): string | null {
   let route = filePath
