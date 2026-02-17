@@ -1,6 +1,7 @@
 import type { APIContext } from 'astro';
 
 const pageModules = import.meta.glob('/src/pages/**/*.astro');
+const excludedRoutes = new Set(['/inquiry/thanks']);
 
 function normalizeRoute(filePath: string): string | null {
   let route = filePath
@@ -25,7 +26,13 @@ function normalizeRoute(filePath: string): string | null {
   }
 
   route = route.replace(/\/+$/, '');
-  return route === '' ? '/' : route;
+  const normalizedRoute = route === '' ? '/' : route;
+
+  if (excludedRoutes.has(normalizedRoute)) {
+    return null;
+  }
+
+  return normalizedRoute;
 }
 
 export function GET(context: APIContext) {
