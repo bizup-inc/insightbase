@@ -1,0 +1,45 @@
+---
+import Author from "./Author.astro";
+import Sidebar from "./Sidebar.astro";
+import type { ColumnContent } from "../lib/microcms";
+import { formatDateJa, getCategoryLabel } from "../lib/microcms";
+
+interface Props {
+  article: ColumnContent;
+  isPreview?: boolean;
+}
+
+const { article, isPreview = false } = Astro.props as Props;
+
+const categoryLabel = getCategoryLabel(article.category);
+const publishedDate = formatDateJa(article.publishedAt || article.createdAt);
+---
+
+<section class="column-page">
+  <div class="content__inner column-page__inner">
+    <article class="column-article">
+      <header class="column-article__header">
+        {isPreview && <p class="column-article__preview">プレビュー表示中</p>}
+        {categoryLabel && <p class="column-article__category">{categoryLabel}</p>}
+        <h1>{article.title}</h1>
+        {publishedDate && (
+          <div class="column-article__meta">
+            <time datetime={article.publishedAt || article.createdAt}>{publishedDate}</time>
+          </div>
+        )}
+      </header>
+
+      {article.eyecatch?.url && (
+        <figure class="column-article__hero">
+          <img src={article.eyecatch.url} alt={article.title} />
+        </figure>
+      )}
+
+      <div class="column-article__body" set:html={article.content} />
+
+      <Author />
+    </article>
+
+    <Sidebar />
+  </div>
+</section>

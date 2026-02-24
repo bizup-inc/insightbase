@@ -1,0 +1,45 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Sidebar from "../../components/Sidebar.astro";
+import Footer from "../../components/Footer.astro";
+import { formatDateJa, getCategoryLabel, getPublishedColumns } from "../../lib/microcms";
+
+const columns = await getPublishedColumns().catch(() => []);
+---
+
+<Layout
+  title="コラム一覧 | InsightBase"
+  description="InsightBaseのコラム一覧です。"
+>
+  <section class="column-page">
+    <div class="content__inner column-page__inner">
+      <article class="column-article">
+        <header class="column-article__header">
+          <h1>コラム一覧</h1>
+        </header>
+
+        <div class="column-list">
+          {columns.map((item) => (
+            <a href={`/column/${item.slug}`} class="column-list__item">
+              {item.eyecatch?.url && (
+                <figure class="column-list__thumb">
+                  <img src={item.eyecatch.url} alt={item.title} loading="lazy" />
+                </figure>
+              )}
+              <div class="column-list__meta">
+                <p class="column-list__category">{getCategoryLabel(item.category)}</p>
+                <time datetime={item.publishedAt || item.createdAt}>
+                  {formatDateJa(item.publishedAt || item.createdAt)}
+                </time>
+              </div>
+              <h2>{item.title}</h2>
+            </a>
+          ))}
+        </div>
+      </article>
+
+      <Sidebar />
+    </div>
+  </section>
+</Layout>
+<Footer />

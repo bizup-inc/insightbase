@@ -1,0 +1,32 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Footer from "../../components/Footer.astro";
+import ColumnArticle from "../../components/ColumnArticle.astro";
+import { getColumnBySlug } from "../../lib/microcms";
+
+const slug = Astro.params.slug;
+const draftKey = Astro.url.searchParams.get("draftKey") ?? undefined;
+
+if (!slug) {
+  return Astro.redirect("/column");
+}
+
+const article = await getColumnBySlug(slug, draftKey);
+
+if (!article) {
+  return new Response("Not Found", { status: 404 });
+}
+
+const pageTitle = `${article.title} | InsightBase コラム`;
+const pageDescription = article.excerpt || "InsightBaseのコラム記事です。";
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  ogType="article"
+  ogImage={article.eyecatch?.url}
+>
+  <ColumnArticle article={article} isPreview={Boolean(draftKey)} />
+</Layout>
+<Footer />

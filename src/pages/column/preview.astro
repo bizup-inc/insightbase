@@ -1,0 +1,35 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Footer from "../../components/Footer.astro";
+import ColumnArticle from "../../components/ColumnArticle.astro";
+import { getColumnById } from "../../lib/microcms";
+
+const contentId = Astro.url.searchParams.get("contentId") || Astro.url.searchParams.get("id");
+const draftKey = Astro.url.searchParams.get("draftKey");
+
+if (!contentId || !draftKey) {
+  return new Response("Missing contentId or draftKey", { status: 400 });
+}
+
+const article = await getColumnById(contentId, draftKey).catch(() => null);
+
+if (!article) {
+  return new Response("Preview not found", { status: 404 });
+}
+
+const pageTitle = `[Preview] ${article.title} | InsightBase コラム`;
+const pageDescription = article.excerpt || "InsightBaseのコラム記事プレビューです。";
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  ogType="article"
+  ogImage={article.eyecatch?.url}
+>
+  <Fragment slot="head">
+    <meta name="robots" content="noindex, nofollow" />
+  </Fragment>
+  <ColumnArticle article={article} isPreview={true} />
+</Layout>
+<Footer />
