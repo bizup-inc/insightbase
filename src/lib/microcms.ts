@@ -2,6 +2,7 @@ const serviceDomain = import.meta.env.MICROCMS_SERVICE_DOMAIN;
 const apiKey = import.meta.env.MICROCMS_API_KEY;
 
 const endpoint = "column";
+const categoryEndpoint = "category";
 
 type QueryValue = string | number | boolean | undefined;
 
@@ -30,6 +31,13 @@ export type ColumnContent = {
   createdAt: string;
   updatedAt: string;
   revisedAt: string;
+};
+
+export type CategoryContent = {
+  id: string;
+  name?: string;
+  title?: string;
+  label?: string;
 };
 
 type ListResponse<T> = {
@@ -73,6 +81,11 @@ export const getCategoryLabel = (category?: ColumnContent["category"]) => {
   return category.name ?? category.title ?? category.label ?? category.id ?? "";
 };
 
+export const getCategoryId = (category?: ColumnContent["category"]) => {
+  if (!category || typeof category === "string" || Array.isArray(category)) return "";
+  return category.id ?? "";
+};
+
 export const getEyecatchUrl = (eyecatch: unknown) => {
   if (!eyecatch) return "";
   if (typeof eyecatch === "string") return eyecatch;
@@ -97,6 +110,20 @@ export const getPublishedColumns = async () => {
     depth: 1
   });
   return data.contents;
+};
+
+export const getPublishedColumnsByCategory = async (categoryId: string) => {
+  const data = await request<ListResponse<ColumnContent>>(endpoint, {
+    orders: "-publishedAt",
+    limit: 100,
+    depth: 1,
+    filters: `category[equals]${categoryId}`
+  });
+  return data.contents;
+};
+
+export const getCategoryById = async (categoryId: string) => {
+  return request<CategoryContent>(`${categoryEndpoint}/${categoryId}`);
 };
 
 export const getColumnBySlug = async (slug: string, draftKey?: string) => {
