@@ -3,6 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import Footer from "../../components/Footer.astro";
 import {
   formatDateJa,
+  getCategoryId,
   getCategoryLabel,
   getTagLabel,
   getEyecatchUrl,
@@ -18,9 +19,14 @@ const columns = await getPublishedColumns().catch((error) => {
   return [];
 });
 
-const categories = Array.from(
-  new Set(columns.map((item) => getCategoryLabel(item.category)).filter(Boolean))
-);
+const categoryMap = new Map<string, string>();
+columns.forEach((item) => {
+  const categoryId = getCategoryId(item.category);
+  const categoryLabel = getCategoryLabel(item.category);
+  if (!categoryId || !categoryLabel || categoryMap.has(categoryId)) return;
+  categoryMap.set(categoryId, categoryLabel);
+});
+const categories = Array.from(categoryMap, ([id, label]) => ({ id, label }));
 
 const tags = Array.from(
   new Set(
@@ -51,7 +57,7 @@ const tags = Array.from(
           <h2>CATEGORY <small>カテゴリ</small></h2>
           <div class="column-filter-panel__chips">
             {categories.map((category) => (
-              <span>{category}</span>
+              <a href={`/column/category/${encodeURIComponent(category.id)}`}>{category.label}</a>
             ))}
           </div>
         </section>

@@ -1,0 +1,71 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import Sidebar from "../../../components/Sidebar.astro";
+import Footer from "../../../components/Footer.astro";
+import {
+  formatDateJa,
+  getCategoryById,
+  getCategoryLabel,
+  getEyecatchUrl,
+  getPublishedColumnsByCategory
+} from "../../../lib/microcms";
+
+const rawCategoryId = Astro.params.categoryId;
+
+if (!rawCategoryId) {
+  return new Response("Not Found", { status: 404 });
+}
+
+const categoryId = decodeURIComponent(rawCategoryId);
+
+const categoryName = await getCategoryById(categoryId)
+  .then((category) => getCategoryLabel(category))
+  .catch(() => categoryId);
+
+const columns = await getPublishedColumnsByCategory(categoryId).catch((error) => {
+  console.error("[column] failed to fetch category list", {
+    categoryId,
+    hasServiceDomain: Boolean(import.meta.env.MICROCMS_SERVICE_DOMAIN),
+    hasApiKey: Boolean(import.meta.env.MICROCMS_API_KEY),
+    error
+  });
+  return [];
+});
+---
+
+<Layout
+  title={`${categoryName}の記事一覧 | InsightBase コラム`}
+  description={`「${categoryName}」カテゴリの記事一覧です。`}
+>
+  <section class="column-page">
+    <div class="content__inner column-page__inner">
+      <article class="column-article">
+        <header class="column-article__header">
+          <h1>{categoryName}の記事一覧</h1>
+        </header>
+
+        <div class="column-list">
+          {columns.map((item) => (
+            <a href={`/column/${item.slug}`} class="column-list__item">
+              {getEyecatchUrl(item.eyecatch) && (
+                <figure class="column-list__thumb">
+                  <img src={getEyecatchUrl(item.eyecatch)} alt={item.title} loading="lazy" />
+                </figure>
+              )}
+              <div class="column-list__meta">
+                <p class="column-list__category">{getCategoryLabel(item.category)}</p>
+                <time datetime={item.publishedAt || item.createdAt}>
+                  {formatDateJa(item.publishedAt || item.createdAt)}
+                </time>
+              </div>
+              <h2>{item.title}</h2>
+            </a>
+          ))}
+        </div>
+      </article>
+
+      <Sidebar />
+    </div>
+  </section>
+</Layout>
+<Footer />
