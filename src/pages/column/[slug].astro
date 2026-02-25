@@ -11,7 +11,18 @@ if (!slug) {
   return Astro.redirect("/column");
 }
 
-const article = await getColumnBySlug(slug, draftKey);
+let article = null;
+
+try {
+  article = await getColumnBySlug(slug, draftKey);
+} catch (error) {
+  console.error("[column] failed to fetch article", {
+    slug,
+    hasServiceDomain: Boolean(import.meta.env.MICROCMS_SERVICE_DOMAIN),
+    hasApiKey: Boolean(import.meta.env.MICROCMS_API_KEY),
+    error
+  });
+}
 
 if (!article) {
   return new Response("Not Found", { status: 404 });

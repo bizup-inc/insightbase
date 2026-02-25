@@ -9,7 +9,14 @@ import {
   getPublishedColumns
 } from "../../lib/microcms";
 
-const columns = await getPublishedColumns().catch(() => []);
+const columns = await getPublishedColumns().catch((error) => {
+  console.error("[column] failed to fetch list", {
+    hasServiceDomain: Boolean(import.meta.env.MICROCMS_SERVICE_DOMAIN),
+    hasApiKey: Boolean(import.meta.env.MICROCMS_API_KEY),
+    error
+  });
+  return [];
+});
 ---
 
 <Layout
