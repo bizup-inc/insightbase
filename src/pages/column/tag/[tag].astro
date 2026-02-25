@@ -29,14 +29,14 @@ const columns = await getPublishedColumnsByTag(tag).catch((error) => {
 ---
 
 <Layout
-  title={`[${tag}]の記事一覧 | InsightBase コラム`}
+  title={`${tag}の記事一覧 | InsightBase コラム`}
   description={`「${tag}」タグの記事一覧です。`}
 >
   <section class="column-page">
     <div class="content__inner column-page__inner">
       <article class="column-article">
         <header class="column-article__header">
-          <h1>[{tag}]の記事一覧</h1>
+          <h1>{tag}の記事一覧</h1>
         </header>
 
         <div class="column-list">

@@ -176,6 +176,12 @@
   font-weight: 700;
   color: var(--accent);
   background: #fff;
+  transition: 0.3s;
+
+  &:hover{
+    background:var(--accent);
+    color:#fff;
+  }
 }
 
 .column-article__hero {
