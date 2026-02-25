@@ -52,7 +52,7 @@ const columns = await getPublishedColumnsByCategory(categoryId).catch((error) =>
       </header>
 
       <section class="column-hub__latest">
-        <h2>記事一覧</h2>
+
         <div class="column-hub__cards">
           {columns.map((item) => (
             <a href={`/column/${item.slug}`} class="column-hub-card">
