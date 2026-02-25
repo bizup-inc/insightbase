@@ -3,7 +3,6 @@ import Layout from "../../../layouts/Layout.astro";
 import Footer from "../../../components/Footer.astro";
 import {
   formatDateJa,
-  getCategoryById,
   getCategoryLabel,
   getEyecatchUrl,
   getPublishedColumnsByCategory
@@ -17,10 +16,6 @@ if (!rawCategoryId) {
 
 const categoryId = decodeURIComponent(rawCategoryId);
 
-const categoryName = await getCategoryById(categoryId)
-  .then((category) => getCategoryLabel(category))
-  .catch(() => categoryId);
-
 const columns = await getPublishedColumnsByCategory(categoryId).catch((error) => {
   console.error("[column] failed to fetch category list", {
     categoryId,
@@ -30,6 +25,8 @@ const columns = await getPublishedColumnsByCategory(categoryId).catch((error) =>
   });
   return [];
 });
+
+const categoryName = getCategoryLabel(columns[0]?.category) || categoryId;
 ---
 
 <Layout
