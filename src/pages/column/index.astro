@@ -2,7 +2,12 @@
 import Layout from "../../layouts/Layout.astro";
 import Sidebar from "../../components/Sidebar.astro";
 import Footer from "../../components/Footer.astro";
-import { formatDateJa, getCategoryLabel, getPublishedColumns } from "../../lib/microcms";
+import {
+  formatDateJa,
+  getCategoryLabel,
+  getEyecatchUrl,
+  getPublishedColumns
+} from "../../lib/microcms";
 
 const columns = await getPublishedColumns().catch(() => []);
 ---
@@ -21,9 +26,9 @@ const columns = await getPublishedColumns().catch(() => []);
         <div class="column-list">
           {columns.map((item) => (
             <a href={`/column/${item.slug}`} class="column-list__item">
-              {item.eyecatch?.url && (
+              {getEyecatchUrl(item.eyecatch) && (
                 <figure class="column-list__thumb">
-                  <img src={item.eyecatch.url} alt={item.title} loading="lazy" />
+                  <img src={getEyecatchUrl(item.eyecatch)} alt={item.title} loading="lazy" />
                 </figure>
               )}
               <div class="column-list__meta">

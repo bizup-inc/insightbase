@@ -2,7 +2,7 @@
 import Author from "./Author.astro";
 import Sidebar from "./Sidebar.astro";
 import type { ColumnContent } from "../lib/microcms";
-import { formatDateJa, getCategoryLabel } from "../lib/microcms";
+import { formatDateJa, getCategoryLabel, getEyecatchUrl } from "../lib/microcms";
 
 interface Props {
   article: ColumnContent;
@@ -13,6 +13,7 @@ const { article, isPreview = false } = Astro.props as Props;
 
 const categoryLabel = getCategoryLabel(article.category);
 const publishedDate = formatDateJa(article.publishedAt || article.createdAt);
+const eyecatchUrl = getEyecatchUrl(article.eyecatch);
 ---
 
 <section class="column-page">
@@ -29,9 +30,9 @@ const publishedDate = formatDateJa(article.publishedAt || article.createdAt);
         )}
       </header>
 
-      {article.eyecatch?.url && (
+      {eyecatchUrl && (
         <figure class="column-article__hero">
-          <img src={article.eyecatch.url} alt={article.title} />
+          <img src={eyecatchUrl} alt={article.title} />
         </figure>
       )}
 

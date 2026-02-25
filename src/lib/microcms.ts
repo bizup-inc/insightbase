@@ -69,7 +69,18 @@ const request = async <T>(path: string, query?: Record<string, QueryValue>) => {
 export const getCategoryLabel = (category?: ColumnContent["category"]) => {
   if (!category) return "";
   if (typeof category === "string") return category;
+  if (Array.isArray(category)) return "";
   return category.name ?? category.title ?? category.label ?? category.id ?? "";
+};
+
+export const getEyecatchUrl = (eyecatch: unknown) => {
+  if (!eyecatch) return "";
+  if (typeof eyecatch === "string") return eyecatch;
+  if (typeof eyecatch === "object" && "url" in eyecatch) {
+    const candidate = (eyecatch as { url?: unknown }).url;
+    return typeof candidate === "string" ? candidate : "";
+  }
+  return "";
 };
 
 export const formatDateJa = (date: string | undefined) => {
@@ -83,20 +94,30 @@ export const getPublishedColumns = async () => {
   const data = await request<ListResponse<ColumnContent>>(endpoint, {
     orders: "-publishedAt",
     limit: 100,
-    depth: 1,
-    fields: "id,title,slug,eyecatch,category,publishedAt"
+    depth: 1
   });
   return data.contents;
 };
 
 export const getColumnBySlug = async (slug: string, draftKey?: string) => {
-  const data = await request<ListResponse<ColumnContent>>(endpoint, {
-    filters: `slug[equals]${slug}`,
-    limit: 1,
+  try {
+    const data = await request<ListResponse<ColumnContent>>(endpoint, {
+      filters: `slug[equals]${slug}`,
+      limit: 1,
+      depth: 1,
+      draftKey
+    });
+    if (data.contents[0]) return data.contents[0];
+  } catch {
+    // Fall through to a broader fetch when filters fail (field mismatch etc.)
+  }
+
+  const fallback = await request<ListResponse<ColumnContent>>(endpoint, {
+    limit: 100,
     depth: 1,
     draftKey
   });
-  return data.contents[0] ?? null;
+  return fallback.contents.find((item) => item.slug === slug) ?? null;
 };
 
 export const getColumnById = async (contentId: string, draftKey: string) => {

@@ -2,7 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import Footer from "../../components/Footer.astro";
 import ColumnArticle from "../../components/ColumnArticle.astro";
-import { getColumnBySlug } from "../../lib/microcms";
+import { getColumnBySlug, getEyecatchUrl } from "../../lib/microcms";
 
 const slug = Astro.params.slug;
 const draftKey = Astro.url.searchParams.get("draftKey") ?? undefined;
@@ -19,13 +19,14 @@ if (!article) {
 
 const pageTitle = `${article.title} | InsightBase コラム`;
 const pageDescription = article.excerpt || "InsightBaseのコラム記事です。";
+const ogImage = getEyecatchUrl(article.eyecatch) || undefined;
 ---
 
 <Layout
   title={pageTitle}
   description={pageDescription}
   ogType="article"
-  ogImage={article.eyecatch?.url}
+  ogImage={ogImage}
 >
   <ColumnArticle article={article} isPreview={Boolean(draftKey)} />
 </Layout>
