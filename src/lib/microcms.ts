@@ -19,13 +19,21 @@ export type ColumnCategory = {
   label?: string;
 };
 
+export type ColumnTag = {
+  id: string;
+  name?: string;
+  title?: string;
+  label?: string;
+  slug?: string;
+};
+
 export type ColumnContent = {
   id: string;
   title: string;
   content: string;
   eyecatch?: MicroCMSImage;
   category?: ColumnCategory | string | null;
-  tag?: string;
+  tag?: ColumnTag[] | ColumnTag | string | null;
   slug: string;
   excerpt?: string;
   publishedAt?: string;
@@ -92,6 +100,42 @@ export const getTagLabel = (tag?: string) => {
   return tag.trim();
 };
 
+const getTagLabelFromObject = (tag: ColumnTag) => {
+  return tag.name ?? tag.title ?? tag.label ?? tag.slug ?? tag.id ?? "";
+};
+
+export const getTagEntries = (tagField?: ColumnContent["tag"]) => {
+  if (!tagField) return [] as { id: string; label: string }[];
+
+  if (typeof tagField === "string") {
+    return tagField
+      .split(/[、,]/)
+      .map((raw) => raw.trim())
+      .filter(Boolean)
+      .map((value) => ({ id: value, label: value }));
+  }
+
+  if (Array.isArray(tagField)) {
+    return tagField
+      .map((tag) => {
+        const id = tag?.id ?? "";
+        const label = getTagLabelFromObject(tag);
+        if (!id || !label) return null;
+        return { id, label };
+      })
+      .filter((item): item is { id: string; label: string } => Boolean(item));
+  }
+
+  const id = tagField.id ?? "";
+  const label = getTagLabelFromObject(tagField);
+  if (!id || !label) return [];
+  return [{ id, label }];
+};
+
+export const getTagLabels = (tagField?: ColumnContent["tag"]) => {
+  return getTagEntries(tagField).map((tag) => tag.label);
+};
+
 export const getEyecatchUrl = (eyecatch: unknown) => {
   if (!eyecatch) return "";
   if (typeof eyecatch === "string") return eyecatch;
@@ -143,7 +187,7 @@ export const getPublishedColumnsByTag = async (tag: string) => {
     orders: "-publishedAt",
     limit: 100,
     depth: 1,
-    filters: `tag[equals]${tag}`
+    filters: `tag[contains]${tag}`
   });
   return data.contents;
 };

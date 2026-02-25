@@ -6,6 +6,7 @@ import {
   formatDateJa,
   getCategoryLabel,
   getEyecatchUrl,
+  getTagEntries,
   getPublishedColumnsByTag
 } from "../../../lib/microcms";
 
@@ -15,28 +16,33 @@ if (!rawTag) {
   return new Response("Not Found", { status: 404 });
 }
 
-const tag = decodeURIComponent(rawTag);
+const tagId = decodeURIComponent(rawTag);
 
-const columns = await getPublishedColumnsByTag(tag).catch((error) => {
+const columns = await getPublishedColumnsByTag(tagId).catch((error) => {
   console.error("[column] failed to fetch tag list", {
-    tag,
+    tagId,
     hasServiceDomain: Boolean(import.meta.env.MICROCMS_SERVICE_DOMAIN),
     hasApiKey: Boolean(import.meta.env.MICROCMS_API_KEY),
     error
   });
   return [];
 });
+
+const tagName =
+  columns
+    .flatMap((item) => getTagEntries(item.tag))
+    .find((tag) => tag.id === tagId)?.label ?? tagId;
 ---
 
 <Layout
-  title={`${tag}の記事一覧 | InsightBase コラム`}
-  description={`「${tag}」タグの記事一覧です。`}
+  title={`${tagName}の記事一覧 | InsightBase コラム`}
+  description={`「${tagName}」タグの記事一覧です。`}
 >
   <section class="column-page">
     <div class="content__inner column-page__inner">
       <article class="column-article">
         <header class="column-article__header">
-          <h1>{tag}の記事一覧</h1>
+          <h1>{tagName}の記事一覧</h1>
         </header>
 
         <div class="column-list">

@@ -5,7 +5,7 @@ import {
   formatDateJa,
   getCategoryId,
   getCategoryLabel,
-  getTagLabel,
+  getTagEntries,
   getEyecatchUrl,
   getPublishedColumns
 } from "../../lib/microcms";
@@ -31,14 +31,13 @@ const categories = Array.from(categoryMap, ([id, label]) => ({ id, label }));
 const tags = Array.from(
   new Set(
     columns
-      .flatMap((item) =>
-        getTagLabel(item.tag)
-          .split(/[、,]/)
-          .map((tag) => tag.trim())
-      )
-      .filter(Boolean)
+      .flatMap((item) => getTagEntries(item.tag))
+      .map((tag) => `${tag.id}|||${tag.label}`)
   )
-);
+).map((value) => {
+  const [id, label] = value.split("|||");
+  return { id, label };
+});
 ---
 
 <Layout
@@ -66,7 +65,7 @@ const tags = Array.from(
           <h2>TAG <small>タグ</small></h2>
           <div class="column-filter-panel__chips column-filter-panel__chips--tags">
             {tags.map((tag) => (
-              <a href={`/column/tag/${encodeURIComponent(tag)}`}>#{tag}</a>
+              <a href={`/column/tag/${encodeURIComponent(tag.id)}`}>#{tag.label}</a>
             ))}
           </div>
         </section>
