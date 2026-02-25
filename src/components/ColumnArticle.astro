@@ -2,7 +2,7 @@
 import Author from "./Author.astro";
 import Sidebar from "./Sidebar.astro";
 import type { ColumnContent } from "../lib/microcms";
-import { formatDateJa, getCategoryId, getCategoryLabel, getEyecatchUrl } from "../lib/microcms";
+import { formatDateJa, getCategoryLabel, getEyecatchUrl, getTagLabel } from "../lib/microcms";
 
 interface Props {
   article: ColumnContent;
@@ -12,7 +12,7 @@ interface Props {
 const { article, isPreview = false } = Astro.props as Props;
 
 const categoryLabel = getCategoryLabel(article.category);
-const categoryId = getCategoryId(article.category);
+const tagLabel = getTagLabel(article.tag);
 const publishedDate = formatDateJa(article.publishedAt || article.createdAt);
 const eyecatchUrl = getEyecatchUrl(article.eyecatch);
 ---
@@ -26,10 +26,10 @@ const eyecatchUrl = getEyecatchUrl(article.eyecatch);
           <a href="/">TOP</a>
           <span>/</span>
           <a href="/column">コラム一覧</a>
-          {categoryId && categoryLabel && (
+          {tagLabel && (
             <>
               <span>/</span>
-              <a href={`/column/tag/${categoryId}`}>{categoryLabel}</a>
+              <a href={`/column/tag/${encodeURIComponent(tagLabel)}`}>{tagLabel}</a>
             </>
           )}
           <span>/</span>
@@ -40,9 +40,9 @@ const eyecatchUrl = getEyecatchUrl(article.eyecatch);
         {publishedDate && (
           <div class="column-article__meta">
             <time datetime={article.publishedAt || article.createdAt}>{publishedDate}</time>
-            {categoryId && categoryLabel && (
-              <a href={`/column/tag/${categoryId}`} class="column-tag-link">
-                #{categoryLabel}
+            {tagLabel && (
+              <a href={`/column/tag/${encodeURIComponent(tagLabel)}`} class="column-tag-link">
+                #{tagLabel}
               </a>
             )}
           </div>

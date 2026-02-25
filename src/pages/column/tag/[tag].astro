@@ -4,45 +4,39 @@ import Sidebar from "../../../components/Sidebar.astro";
 import Footer from "../../../components/Footer.astro";
 import {
   formatDateJa,
-  getCategoryById,
   getCategoryLabel,
   getEyecatchUrl,
-  getPublishedColumnsByCategory
+  getPublishedColumnsByTag
 } from "../../../lib/microcms";
 
-const tagId = Astro.params.tagId;
+const rawTag = Astro.params.tag;
 
-if (!tagId) {
+if (!rawTag) {
   return new Response("Not Found", { status: 404 });
 }
 
-const [columns, category] = await Promise.all([
-  getPublishedColumnsByCategory(tagId).catch((error) => {
-    console.error("[column] failed to fetch tag list", {
-      tagId,
-      hasServiceDomain: Boolean(import.meta.env.MICROCMS_SERVICE_DOMAIN),
-      hasApiKey: Boolean(import.meta.env.MICROCMS_API_KEY),
-      error
-    });
-    return [];
-  }),
-  getCategoryById(tagId).catch(() => null)
-]);
+const tag = decodeURIComponent(rawTag);
 
-const tagLabel = category
-  ? category.name ?? category.title ?? category.label ?? category.id
-  : tagId;
+const columns = await getPublishedColumnsByTag(tag).catch((error) => {
+  console.error("[column] failed to fetch tag list", {
+    tag,
+    hasServiceDomain: Boolean(import.meta.env.MICROCMS_SERVICE_DOMAIN),
+    hasApiKey: Boolean(import.meta.env.MICROCMS_API_KEY),
+    error
+  });
+  return [];
+});
 ---
 
 <Layout
-  title={`タグ: ${tagLabel} | InsightBase コラム`}
-  description={`「${tagLabel}」タグのコラム一覧です。`}
+  title={`[${tag}]の記事一覧 | InsightBase コラム`}
+  description={`「${tag}」タグの記事一覧です。`}
 >
   <section class="column-page">
     <div class="content__inner column-page__inner">
       <article class="column-article">
         <header class="column-article__header">
-          <h1>タグ: {tagLabel}</h1>
+          <h1>[{tag}]の記事一覧</h1>
         </header>
 
         <div class="column-list">

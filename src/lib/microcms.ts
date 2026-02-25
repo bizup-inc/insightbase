@@ -25,6 +25,7 @@ export type ColumnContent = {
   content: string;
   eyecatch?: MicroCMSImage;
   category?: ColumnCategory | string | null;
+  tag?: string;
   slug: string;
   excerpt?: string;
   publishedAt?: string;
@@ -86,6 +87,11 @@ export const getCategoryId = (category?: ColumnContent["category"]) => {
   return category.id ?? "";
 };
 
+export const getTagLabel = (tag?: string) => {
+  if (!tag) return "";
+  return tag.trim();
+};
+
 export const getEyecatchUrl = (eyecatch: unknown) => {
   if (!eyecatch) return "";
   if (typeof eyecatch === "string") return eyecatch;
@@ -118,6 +124,16 @@ export const getPublishedColumnsByCategory = async (categoryId: string) => {
     limit: 100,
     depth: 1,
     filters: `category[equals]${categoryId}`
+  });
+  return data.contents;
+};
+
+export const getPublishedColumnsByTag = async (tag: string) => {
+  const data = await request<ListResponse<ColumnContent>>(endpoint, {
+    orders: "-publishedAt",
+    limit: 100,
+    depth: 1,
+    filters: `tag[equals]${tag}`
   });
   return data.contents;
 };
