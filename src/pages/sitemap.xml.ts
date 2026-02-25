@@ -6,7 +6,8 @@ const excludedRoutes = new Set([
   '/inquiry/thanks',
   '/checkout/thanks-ga4',
   '/checkout/thanks-gad',
-  '/checkout/thanks-set'
+  '/checkout/thanks-set',
+  '/column/preview'
 ]);
 
 function normalizeRoute(filePath: string): string | null {
