@@ -3,8 +3,10 @@ import Layout from "../../../layouts/Layout.astro";
 import Footer from "../../../components/Footer.astro";
 import {
   formatDateJa,
+  getCategoryId,
   getCategoryLabel,
   getEyecatchUrl,
+  getPublishedColumns,
   getPublishedColumnsByCategory
 } from "../../../lib/microcms";
 
@@ -26,7 +28,22 @@ const columns = await getPublishedColumnsByCategory(categoryId).catch((error) =>
   return [];
 });
 
-const categoryName = getCategoryLabel(columns[0]?.category) || categoryId;
+const categoryNameFromFilteredColumns = columns
+  .map((item) => getCategoryLabel(item.category))
+  .find((label) => Boolean(label) && label !== categoryId);
+
+const categoryNameFromAllColumns = categoryNameFromFilteredColumns
+  ? ""
+  : await getPublishedColumns()
+      .then((allColumns) =>
+        allColumns
+          .filter((item) => getCategoryId(item.category) === categoryId)
+          .map((item) => getCategoryLabel(item.category))
+          .find((label) => Boolean(label) && label !== categoryId) ?? ""
+      )
+      .catch(() => "");
+
+const categoryName = categoryNameFromFilteredColumns || categoryNameFromAllColumns || categoryId;
 ---
 
 <Layout
