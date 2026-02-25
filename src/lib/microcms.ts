@@ -106,7 +106,17 @@ export const formatDateJa = (date: string | undefined) => {
   if (!date) return "";
   const d = new Date(date);
   if (Number.isNaN(d.getTime())) return "";
-  return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
+  const parts = new Intl.DateTimeFormat("ja-JP", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric"
+  }).formatToParts(d);
+  const year = parts.find((part) => part.type === "year")?.value ?? "";
+  const month = parts.find((part) => part.type === "month")?.value ?? "";
+  const day = parts.find((part) => part.type === "day")?.value ?? "";
+  if (!year || !month || !day) return "";
+  return `${year}年${month}月${day}日`;
 };
 
 export const getPublishedColumns = async () => {
