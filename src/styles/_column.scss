@@ -394,6 +394,9 @@
 .column-hub {
   background: #f5f8f6;
   padding: 46px 0 70px;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
 }
 
 .column-hub__inner {
