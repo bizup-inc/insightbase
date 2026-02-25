@@ -6,6 +6,21 @@ const categoryEndpoint = "category";
 
 type QueryValue = string | number | boolean | undefined;
 
+const nowIso = () => new Date().toISOString();
+
+const buildPublishedFilter = (extra?: string) => {
+  const publishedFilter = `publishedAt[less_than]${nowIso()}`;
+  if (!extra) return publishedFilter;
+  return `${publishedFilter}[and]${extra}`;
+};
+
+const isPublishedNow = (content: Pick<ColumnContent, "publishedAt">) => {
+  if (!content.publishedAt) return false;
+  const publishedTime = new Date(content.publishedAt).getTime();
+  if (Number.isNaN(publishedTime)) return false;
+  return publishedTime <= Date.now();
+};
+
 export type MicroCMSImage = {
   url: string;
   width?: number;
@@ -167,7 +182,8 @@ export const getPublishedColumns = async () => {
   const data = await request<ListResponse<ColumnContent>>(endpoint, {
     orders: "-publishedAt",
     limit: 100,
-    depth: 1
+    depth: 1,
+    filters: buildPublishedFilter()
   });
   return data.contents;
 };
@@ -177,7 +193,7 @@ export const getPublishedColumnsByCategory = async (categoryId: string) => {
     orders: "-publishedAt",
     limit: 100,
     depth: 1,
-    filters: `category[equals]${categoryId}`
+    filters: buildPublishedFilter(`category[equals]${categoryId}`)
   });
   return data.contents;
 };
@@ -187,7 +203,7 @@ export const getPublishedColumnsByTag = async (tag: string) => {
     orders: "-publishedAt",
     limit: 100,
     depth: 1,
-    filters: `tag[contains]${tag}`
+    filters: buildPublishedFilter(`tag[contains]${tag}`)
   });
   return data.contents;
 };
@@ -197,9 +213,12 @@ export const getCategoryById = async (categoryId: string) => {
 };
 
 export const getColumnBySlug = async (slug: string, draftKey?: string) => {
+  const baseFilter = `slug[equals]${slug}`;
+  const filters = draftKey ? baseFilter : buildPublishedFilter(baseFilter);
+
   try {
     const data = await request<ListResponse<ColumnContent>>(endpoint, {
-      filters: `slug[equals]${slug}`,
+      filters,
       limit: 1,
       depth: 1,
       draftKey
@@ -214,7 +233,10 @@ export const getColumnBySlug = async (slug: string, draftKey?: string) => {
     depth: 1,
     draftKey
   });
-  return fallback.contents.find((item) => item.slug === slug) ?? null;
+  const bySlug = fallback.contents.find((item) => item.slug === slug) ?? null;
+  if (!bySlug) return null;
+  if (draftKey) return bySlug;
+  return isPublishedNow(bySlug) ? bySlug : null;
 };
 
 export const getColumnById = async (contentId: string, draftKey?: string) => {
