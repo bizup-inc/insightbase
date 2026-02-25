@@ -1,10 +1,10 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import Sidebar from "../../components/Sidebar.astro";
 import Footer from "../../components/Footer.astro";
 import {
   formatDateJa,
   getCategoryLabel,
+  getTagLabel,
   getEyecatchUrl,
   getPublishedColumns
 } from "../../lib/microcms";
@@ -17,40 +17,76 @@ const columns = await getPublishedColumns().catch((error) => {
   });
   return [];
 });
+
+const categories = Array.from(
+  new Set(columns.map((item) => getCategoryLabel(item.category)).filter(Boolean))
+);
+
+const tags = Array.from(
+  new Set(
+    columns
+      .flatMap((item) =>
+        getTagLabel(item.tag)
+          .split(/[、,]/)
+          .map((tag) => tag.trim())
+      )
+      .filter(Boolean)
+  )
+);
 ---
 
 <Layout
   title="コラム一覧 | InsightBase"
   description="InsightBaseのコラム一覧です。"
 >
-  <section class="column-page">
-    <div class="content__inner column-page__inner">
-      <article class="column-article">
-        <header class="column-article__header">
-          <h1>コラム一覧</h1>
-        </header>
+  <section class="column-hub">
+    <div class="content__inner column-hub__inner">
+      <header class="column-hub__header">
+        <p class="column-hub__sub">InsightBase</p>
+        <h1>コラム一覧</h1>
+      </header>
 
-        <div class="column-list">
+      <div class="column-hub__filters">
+        <section class="column-filter-panel">
+          <h2>CATEGORY <small>カテゴリ</small></h2>
+          <div class="column-filter-panel__chips">
+            {categories.map((category) => (
+              <span>{category}</span>
+            ))}
+          </div>
+        </section>
+
+        <section class="column-filter-panel">
+          <h2>TAG <small>タグ</small></h2>
+          <div class="column-filter-panel__chips column-filter-panel__chips--tags">
+            {tags.map((tag) => (
+              <a href={`/column/tag/${encodeURIComponent(tag)}`}>#{tag}</a>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      <section class="column-hub__latest">
+        <h2>新着記事</h2>
+        <div class="column-hub__cards">
           {columns.map((item) => (
-            <a href={`/column/${item.slug}`} class="column-list__item">
+            <a href={`/column/${item.slug}`} class="column-hub-card">
               {getEyecatchUrl(item.eyecatch) && (
-                <figure class="column-list__thumb">
+                <figure class="column-hub-card__thumb">
                   <img src={getEyecatchUrl(item.eyecatch)} alt={item.title} loading="lazy" />
                 </figure>
               )}
-              <div class="column-list__meta">
-                <p class="column-list__category">{getCategoryLabel(item.category)}</p>
+              <div class="column-hub-card__body">
                 <time datetime={item.publishedAt || item.createdAt}>
                   {formatDateJa(item.publishedAt || item.createdAt)}
                 </time>
+                <h3>{item.title}</h3>
+                <p class="column-hub-card__category">{getCategoryLabel(item.category)}</p>
               </div>
-              <h2>{item.title}</h2>
             </a>
           ))}
         </div>
-      </article>
-
-      <Sidebar />
+      </section>
     </div>
   </section>
 </Layout>
