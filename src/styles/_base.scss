@@ -43,6 +43,12 @@ section.is-visible {
   transform: translateY(0);
 }
 
+.page-column section {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   section {
     opacity: 1;

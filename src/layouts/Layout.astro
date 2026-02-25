@@ -21,6 +21,7 @@ const {
 } = Astro.props as Props;
 
 const baseUrl = Astro.site ?? Astro.url;
+const isColumnPage = Astro.url.pathname === "/column" || Astro.url.pathname.startsWith("/column/");
 const siteRootUrl = new URL("/", baseUrl).toString();
 const organizationUrl = "https://bizup-inc.co.jp";
 const organizationLogoUrl = new URL("/assets/img/logo/bizup-logo.jpg", baseUrl).toString();
@@ -114,7 +115,7 @@ const pageJsonLd = {
     </script>
     <!-- End Google Tag Manager -->
   </head>
-  <body>
+  <body class:list={{ "page-column": isColumnPage }}>
     <!-- Google Tag Manager (noscript) -->
     <noscript
       ><iframe

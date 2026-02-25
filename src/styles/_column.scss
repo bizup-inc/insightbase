@@ -1,5 +1,20 @@
 .column-page {
   text-align: left;
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+.column-hub {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+.column-sidebar .column-widget {
+  opacity: 1;
+  transform: none;
+  transition: none;
 }
 
 .column-page__inner {

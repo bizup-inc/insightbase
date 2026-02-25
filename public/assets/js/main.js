@@ -22,6 +22,14 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+  const isColumnPath =
+    window.location.pathname === "/column" || window.location.pathname.startsWith("/column/");
+
+  if (isColumnPath) {
+    document.querySelectorAll("section").forEach((section) => section.classList.add("is-visible"));
+    return;
+  }
+
   const sections = document.querySelectorAll("section");
   if (!sections.length) return;
 
