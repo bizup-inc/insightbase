@@ -4,12 +4,37 @@ import Hero from "../components/Hero.astro";
 import Faq from "../components/Faq.astro";
 import Cta from "../components/Cta.astro";
 import Footer from "../components/Footer.astro";
+import { faqItems } from "../lib/faq";
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+
+const baseUrl = Astro.site ?? Astro.url;
+const faqPageUrl = new URL(Astro.url.pathname, baseUrl).toString();
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqItems.map((item) => ({
+    "@type": "Question",
+    name: item.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: item.a.replace(/<br\s*\/?>/gi, "\n")
+    }
+  }))
+};
 ---
 
-<Layout title="GA4レポートテンプレート（完全買切り）｜Looker Studio対応・レポート自動化">
+<Layout title="よくあるお問い合わせ｜Looker Studio対応・レポート自動化「InsightBase Lite」">
+  <Fragment slot="head">
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        ...faqJsonLd,
+        url: faqPageUrl
+      })}
+    />
+  </Fragment>
   <Hero
     hasBg={true}
     title={`よくあるお問い合わせ`}

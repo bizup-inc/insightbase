@@ -21,8 +21,56 @@ const {
 } = Astro.props as Props;
 
 const baseUrl = Astro.site ?? Astro.url;
+const siteRootUrl = new URL("/", baseUrl).toString();
+const organizationUrl = "https://bizup-inc.co.jp";
+const organizationLogoUrl = new URL("/assets/img/logo/bizup-logo.jpg", baseUrl).toString();
+const contactPageUrl = new URL("/inquiry", baseUrl).toString();
 const canonicalUrl = new URL(Astro.url.pathname, baseUrl).toString();
 const ogImageUrl = new URL(ogImage, baseUrl).toString();
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${siteRootUrl}#website`,
+  name: "InsightBase",
+  alternateName: "InsightBase Lite",
+  url: siteRootUrl,
+  inLanguage: "ja-JP",
+  publisher: {
+    "@id": `${organizationUrl}#organization`
+  }
+};
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": `${organizationUrl}#organization`,
+  name: "ビザップ株式会社",
+  url: organizationUrl,
+  logo: {
+    "@type": "ImageObject",
+    url: organizationLogoUrl
+  },
+  contactPoint: [
+    {
+      "@type": "ContactPoint",
+      contactType: "customer support",
+      url: contactPageUrl
+    }
+  ]
+};
+const pageJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description,
+  url: canonicalUrl,
+  inLanguage: "ja-JP",
+  isPartOf: {
+    "@id": `${siteRootUrl}#website`
+  },
+  about: {
+    "@id": `${organizationUrl}#organization`
+  }
+};
 ---
 
 <!doctype html>
@@ -46,6 +94,9 @@ const ogImageUrl = new URL(ogImage, baseUrl).toString();
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
+    <script type="application/ld+json" set:html={JSON.stringify(websiteJsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(pageJsonLd)} />
     <slot name="head" />
 
     <!-- Google Tag Manager -->

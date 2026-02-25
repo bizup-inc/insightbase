@@ -8,11 +8,43 @@ import Footer from "../components/Footer.astro";
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+
+const baseUrl = Astro.site ?? Astro.url;
+const productUrl = new URL(Astro.url.pathname, baseUrl).toString();
+const productJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: "GA4レポートテンプレート",
+  description: "全15ページのGA4レポートを、接続するだけで即時に出力できます。",
+  image: [new URL("/assets/img/pc-image.png", baseUrl).toString()],
+  brand: {
+    "@type": "Brand",
+    name: "InsightBase"
+  },
+  category: "Looker Studio テンプレート",
+  sku: "insightbase-ga4-template",
+  url: productUrl,
+  offers: {
+    "@type": "Offer",
+    priceCurrency: "JPY",
+    price: "17600",
+    availability: "https://schema.org/InStock",
+    itemCondition: "https://schema.org/NewCondition",
+    url: "https://buy.stripe.com/fZucN58AUgoC06u9439Zm02",
+    seller: {
+      "@type": "Organization",
+      name: "InsightBase"
+    }
+  }
+};
 ---
 
 <Layout
   title="GA4レポートテンプレート（完全買切り）｜Looker Studio対応・レポート自動化"
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(productJsonLd)} />
+  </Fragment>
   <Hero
     hasBg={true}
     title={`GA4<br>レポートテンプレート`}
@@ -73,7 +105,7 @@ import Footer from "../components/Footer.astro";
       </div>
 
       <div class="colum-img">
-        <img src="/assets/img/screenshot/scsho.png" />
+        <img src="/assets/img/screenshot/scsho.png" alt="GA4レポートテンプレート一覧画面"/>
       </div>
     </div>
   </div>
@@ -84,7 +116,7 @@ import Footer from "../components/Footer.astro";
     <div class="colum-2">
       <div class="colum-text">
         <h3 class="section__title_h3">独自デザインに変更可能</h3>
-        <img src="/assets/img/screenshot/point01.jpg" />
+        <img src="/assets/img/screenshot/point01.jpg" alt="独自デザインに変更可能"/>
         <p class="--pt20">
           Looker
           Studioの基本機能を使用すれば、あらかじめ用意された表紙データを、自社ロゴの配置、タイトル変更、スクリーンショットの張り付けなど自由にデザインすることが可能です。
@@ -93,7 +125,7 @@ import Footer from "../components/Footer.astro";
 
       <div class="colum-img">
         <h3 class="section__title_h3">期間指定で簡単レポート集計</h3>
-        <img src="/assets/img/screenshot/point02.jpg" />
+        <img src="/assets/img/screenshot/point02.jpg"  alt="期間指定で簡単レポート集計"/>
         <p class="--pt20">
           任意の期間（「開始日」「終了日」）を指定するだけで、主要KPI・トレンド・比較データ等、全ページに即時反映。期間を指定するだけでレポートが完成します。
         </p>
@@ -107,7 +139,7 @@ import Footer from "../components/Footer.astro";
     <div class="colum-2">
       <div class="colum-text">
         <h3 class="section__title_h3">読み手に優しい日本語設計</h3>
-        <img src="/assets/img/screenshot/point03.jpg" />
+        <img src="/assets/img/screenshot/point03.jpg" alt="読み手に優しい日本語設計" />
         <p class="--pt20">
           Looker
           Studio標準の英語表記を、日本語に最適化。クライアント先への提出を前提に、伝わるレポート表記へ設計しています。
@@ -116,7 +148,7 @@ import Footer from "../components/Footer.astro";
 
       <div class="colum-img">
         <h3 class="section__title_h3">Looker Studioの共有機能</h3>
-        <img src="/assets/img/screenshot/point04.jpg" />
+        <img src="/assets/img/screenshot/point04.jpg"  alt="Looker Studioの共有機能"/>
         <p class="--pt20">
           レポートデータは、Looker
           Studioの共有機能を使用してクライアント様と共有が可能。
@@ -141,7 +173,7 @@ import Footer from "../components/Footer.astro";
       </p>
     </div>
     <div class="image-l">
-      <img src="/assets/img/pc-image.png" />
+      <img src="/assets/img/pc-image.png" alt="レポート自動化画面"/>
     </div>
   </div>
 </section>

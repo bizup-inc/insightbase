@@ -2,7 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import Footer from "../../components/Footer.astro";
 import ColumnArticle from "../../components/ColumnArticle.astro";
-import { getColumnBySlug, getEyecatchUrl } from "../../lib/microcms";
+import { getCategoryLabel, getColumnBySlug, getEyecatchUrl, getTagEntries } from "../../lib/microcms";
 
 const slug = Astro.params.slug;
 const draftKey = Astro.url.searchParams.get("draftKey") ?? undefined;
@@ -31,6 +31,63 @@ if (!article) {
 const pageTitle = `${article.title} | InsightBase コラム`;
 const pageDescription = article.excerpt || "InsightBaseのコラム記事です。";
 const ogImage = getEyecatchUrl(article.eyecatch) || undefined;
+const baseUrl = Astro.site ?? Astro.url;
+const articlePath = `/column/${article.slug}`;
+const articleUrl = new URL(articlePath, baseUrl).toString();
+const firstTag = getTagEntries(article.tag)[0];
+const articleCategory = getCategoryLabel(article.category);
+
+const breadcrumbItems = [
+  { name: "TOP", item: new URL("/", baseUrl).toString() },
+  { name: "ナレッジベース", item: new URL("/column", baseUrl).toString() },
+  ...(firstTag
+    ? [
+        {
+          name: firstTag.label,
+          item: new URL(`/column/tag/${encodeURIComponent(firstTag.id)}`, baseUrl).toString()
+        }
+      ]
+    : []),
+  { name: article.title, item: articleUrl }
+];
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: breadcrumbItems.map((entry, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    name: entry.name,
+    item: entry.item
+  }))
+};
+
+const articleJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: article.title,
+  description: pageDescription,
+  datePublished: article.publishedAt || article.createdAt,
+  dateModified: article.updatedAt,
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": articleUrl
+  },
+  author: {
+    "@type": "Organization",
+    name: "InsightBase"
+  },
+  publisher: {
+    "@type": "Organization",
+    name: "InsightBase",
+    logo: {
+      "@type": "ImageObject",
+      url: new URL("/assets/img/logo/ogp.jpg", baseUrl).toString()
+    }
+  },
+  ...(articleCategory ? { articleSection: articleCategory } : {}),
+  ...(ogImage ? { image: [new URL(ogImage, baseUrl).toString()] } : {})
+};
 ---
 
 <Layout
@@ -39,6 +96,12 @@ const ogImage = getEyecatchUrl(article.eyecatch) || undefined;
   ogType="article"
   ogImage={ogImage}
 >
+  {!draftKey && (
+    <Fragment slot="head">
+      <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
+      <script type="application/ld+json" set:html={JSON.stringify(articleJsonLd)} />
+    </Fragment>
+  )}
   <ColumnArticle article={article} isPreview={Boolean(draftKey)} />
 </Layout>
 <Footer />
