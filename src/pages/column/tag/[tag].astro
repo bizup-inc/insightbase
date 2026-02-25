@@ -1,6 +1,5 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
-import Sidebar from "../../../components/Sidebar.astro";
 import Footer from "../../../components/Footer.astro";
 import {
   formatDateJa,
@@ -38,34 +37,42 @@ const tagName =
   title={`${tagName}の記事一覧 | InsightBase コラム`}
   description={`「${tagName}」タグの記事一覧です。`}
 >
-  <section class="column-page">
-    <div class="content__inner column-page__inner">
-      <article class="column-article">
-        <header class="column-article__header">
-          <h1>{tagName}の記事一覧</h1>
-        </header>
+  <Fragment slot="head">
+    <style is:global>
+      main {
+        padding: 0 !important;
+      }
+    </style>
+  </Fragment>
 
-        <div class="column-list">
+  <section class="column-hub">
+    <div class="content__inner column-hub__inner">
+      <header class="column-hub__header">
+        <p class="column-hub__sub">InsightBase</p>
+        <h1>{tagName}に関する記事一覧</h1>
+      </header>
+
+      <section class="column-hub__latest">
+        <h2>記事一覧</h2>
+        <div class="column-hub__cards">
           {columns.map((item) => (
-            <a href={`/column/${item.slug}`} class="column-list__item">
+            <a href={`/column/${item.slug}`} class="column-hub-card">
               {getEyecatchUrl(item.eyecatch) && (
-                <figure class="column-list__thumb">
+                <figure class="column-hub-card__thumb">
                   <img src={getEyecatchUrl(item.eyecatch)} alt={item.title} loading="lazy" />
                 </figure>
               )}
-              <div class="column-list__meta">
-                <p class="column-list__category">{getCategoryLabel(item.category)}</p>
+              <div class="column-hub-card__body">
                 <time datetime={item.publishedAt || item.createdAt}>
                   {formatDateJa(item.publishedAt || item.createdAt)}
                 </time>
+                <h3>{item.title}</h3>
+                <p class="column-hub-card__category">{getCategoryLabel(item.category)}</p>
               </div>
-              <h2>{item.title}</h2>
             </a>
           ))}
         </div>
-      </article>
-
-      <Sidebar />
+      </section>
     </div>
   </section>
 </Layout>
