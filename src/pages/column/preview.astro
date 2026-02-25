@@ -7,11 +7,11 @@ import { getColumnById, getEyecatchUrl } from "../../lib/microcms";
 const contentId = Astro.url.searchParams.get("contentId") || Astro.url.searchParams.get("id");
 const draftKey = Astro.url.searchParams.get("draftKey");
 
-if (!contentId || !draftKey) {
-  return new Response("Missing contentId or draftKey", { status: 400 });
+if (!contentId) {
+  return new Response("Missing contentId", { status: 400 });
 }
 
-const article = await getColumnById(contentId, draftKey).catch(() => null);
+const article = await getColumnById(contentId, draftKey ?? undefined).catch(() => null);
 
 if (!article) {
   return new Response("Preview not found", { status: 404 });

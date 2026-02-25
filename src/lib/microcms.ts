@@ -163,7 +163,7 @@ export const getColumnBySlug = async (slug: string, draftKey?: string) => {
   return fallback.contents.find((item) => item.slug === slug) ?? null;
 };
 
-export const getColumnById = async (contentId: string, draftKey: string) => {
+export const getColumnById = async (contentId: string, draftKey?: string) => {
   return request<ColumnContent>(`${endpoint}/${contentId}`, {
     draftKey,
     depth: 1
