@@ -34,6 +34,11 @@ const product = productMap[Astro.url.pathname];
 <section class:list={["hero", hasBg && "hero--bg"]}>
   <div class="hero__inner">
     <div class="hero__content">
+      <div class="feature-title">
+        <li>完全買切り</li>
+        <li>高品質テンプレート</li>
+        <li>PDFレポート</li>
+      </div>
       {hasTitle && <h1 class="hero__title" set:html={title} />}
       {hasDescription && (
         <p class="hero__description">
