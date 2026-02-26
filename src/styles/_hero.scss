@@ -29,6 +29,12 @@
   background:	#5f5f5f;
   color:#fff;
   margin-right:10px;
+  @media(max-width:767px){
+padding:3px 10px;
+font-size:14px;
+margin-bottom:10px;
+margin-right:5px;
+  }
 }
 
 .hero__title {
@@ -37,11 +43,15 @@
   line-height: 1.25;
   letter-spacing: 0.02em;
   font-weight: 700;
-  @media(max-width: 767px) {
-    font-size: 41px;
-  }
+
   span{
     font-size:38px;
+  }
+    @media(max-width: 767px) {
+    font-size: 30px;
+   span{
+    font-size:19px;
+   } 
   }
 }
 
