@@ -1,0 +1,203 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<Layout
+  title="カスタム・設定代行サービス | InsightBase"
+  description="GA4/GTM導入、キーイベント設定、Looker Studio独自レポート作成、テンプレートカスタマイズに対応するInsightBaseの設定代行メニューです。"
+>
+  <section class="section__bg_w service-page">
+    <div class="content__inner">
+      <p class="section__title_en">Custom Setup Service</p>
+      <h1 class="section__title">カスタム・設定代行サービス</h1>
+      <p class="service-page__lead">
+GA4／GTMの導入からキーイベント設定、Looker Studioレポートの整備までサポートします。<br>
+タグの設置に不安がある方、GA4やGTMの操作に迷って手が止まってしまう方もご安心ください。<br>
+ご状況と目的を丁寧に確認し、必要な作業範囲に合わせて最適な内容・お見積りをご提案します。
+      </p>
+
+      <div class="service-menu">
+        <article class="service-card">
+          <h2>GA4 / GTM（Googleタグマネージャー）初期導入</h2>
+          <p class="service-card__price">33,000円（税込）</p>
+
+          <div class="service-card__included">
+            <h3>含まれる内容</h3>
+            <ul>
+              <li>GA4プロパティ／データストリーム確認（または新規作成）</li>
+              <li>GTMコンテナ設置（Web）</li>
+              <li>基本イベント（page_view等）計測確認</li>
+              <li>内部トラフィック除外（IP指定が可能な場合）</li>
+              <li>動作確認（リアルタイムで計測チェック）</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="service-card">
+          <h2>コンバージョン（キーイベント）設定</h2>
+          <p class="service-card__price">33,000円（税込）〜</p>
+
+          <div class="service-card__included">
+            <h3>含まれる内容</h3>
+            <ul>
+              <li>キーイベント設計（発火条件の確認）</li>
+              <li>GTMイベント設定（クリック／フォーム送信等）</li>
+              <li>GA4でキーイベント登録</li>
+              <li>テスト・検証（プレビュー＋本番確認）</li>
+            </ul>
+          </div>
+          <div class="--pt20"></div>
+          <p class="service-card__note">
+            ※ ご状況・ご希望をお伺いし、作業範囲を確認のうえお見積りいたします。
+          </p>
+        </article>
+
+        <article class="service-card">
+          <h2>独自レポート（Looker Studio）作成</h2>
+          <p class="service-card__price">110,000円〜（税込）</p>
+
+
+          <div class="service-card__included">
+            <h3>含まれる内容</h3>
+            <ul>
+              <li>レポート構成設計（KPI/画面設計）</li>
+              <li>GA4 / Google広告等のデータ接続</li>
+              <li>グラフ・表・フィルタ実装</li>
+              <li>PDF出力前提の体裁調整</li>
+            </ul>
+          </div>
+<div class="--pt20"></div>
+          <p class="service-card__note">
+            ※ ご状況・ご希望をお伺いし、作業範囲を確認のうえお見積りいたします。
+          </p>
+        </article>
+
+        <article class="service-card">
+          <h2>テンプレートカスタマイズ</h2>
+          <p class="service-card__price">33,000円〜（税込）</p>
+
+
+          <div class="service-card__included">
+            <h3>カスタマイズ例</h3>
+            <ul>
+              <li>ロゴ・カラー・フォントの反映（ブランド整合）</li>
+              <li>指標差し替え（CPA/ROAS/LTVなど）</li>
+              <li>表示項目追加（キャンペーン/LP/地域/デバイス等）</li>
+              <li>フィルタ追加（期間・媒体・キャンペーンなど）</li>
+            </ul>
+          </div>
+          <div class="--pt20"></div>
+                    <p class="service-card__note">
+            ※ ご状況・ご希望をお伺いし、作業範囲を確認のうえお見積りいたします。<br
+            />
+            ※ InsightBaseご購入のお客様に限ります。
+          </p>
+        </article>
+      </div>
+      <div class="cta-btn --pt50">
+        <a href="/inquiry" class="herobtn btn--green btn--cubic-green"
+          >問い合わせる</a
+        >
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<Footer />
+
+<style is:global>
+  .service-page {
+    padding: 80px 0 120px;
+  }
+
+  .service-page__lead {
+    max-width: 900px;
+    margin: 0 auto 40px;
+  }
+
+  .service-menu {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    text-align: left;
+  }
+
+  .service-card {
+    border: 1px solid #e3ece6;
+    border-radius: 12px;
+    padding: 24px;
+    background: #fff;
+    box-shadow: 0 8px 20px rgba(10, 30, 20, 0.04);
+  }
+
+  .service-card h2 {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .service-card__price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #22ac38;
+    margin: 12px 0 18px;
+    padding: 0;
+  }
+
+  .service-card h3 {
+    font-size: 1rem;
+    margin: 20px 0 8px;
+  }
+
+  .service-card ul {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+
+  .service-card__note {
+    font-size: 0.93rem;
+    margin: 0 0 10px;
+    padding: 0;
+  }
+
+  .service-page .service-card__included {
+    background: #f5f8f6;
+    border-radius: 10px;
+    padding: 16px;
+    margin-top: 20px;
+  }
+
+  .service-page .service-card__included h3 {
+    margin-top: 0;
+  }
+
+  .service-page .service-card__included ul {
+    list-style: none !important;
+    padding-left: 0;
+  }
+
+  .service-page .service-card__included li {
+    list-style: none !important;
+    position: relative;
+    padding-left: 1.1em;
+  }
+
+  .service-page .service-card__included li::before {
+    content: "●";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+
+  .service-page__cta {
+    margin-top: 40px;
+    text-align: center;
+  }
+
+  @media (max-width: 900px) {
+    .service-menu {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
