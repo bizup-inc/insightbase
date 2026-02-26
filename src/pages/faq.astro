@@ -19,19 +19,21 @@ const faqJsonLd = {
     name: item.q,
     acceptedAnswer: {
       "@type": "Answer",
-      text: item.a.replace(/<br\s*\/?>/gi, "\n")
-    }
-  }))
+      text: item.a.replace(/<br\s*\/?>/gi, "\n"),
+    },
+  })),
 };
 ---
 
-<Layout title="よくあるお問い合わせ｜Looker Studio対応・レポート自動化「InsightBase Lite」">
+<Layout
+  title="よくあるお問い合わせ｜Looker Studio対応・レポート自動化「InsightBase」"
+>
   <Fragment slot="head">
     <script
       type="application/ld+json"
       set:html={JSON.stringify({
         ...faqJsonLd,
-        url: faqPageUrl
+        url: faqPageUrl,
       })}
     />
   </Fragment>

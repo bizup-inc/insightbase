@@ -10,7 +10,7 @@ interface Props {
 
 const defaultTitle = "InsightBase";
 const defaultDescription =
-  "InsightBase Liteは、GA4・Google広告のレポート作成を効率化するLooker Studioテンプレートです。";
+  "InsightBaseは、GA4・Google広告のレポート作成を効率化するLooker Studioテンプレートです。";
 const defaultOgImage = "/assets/img/logo/ogp.jpg";
 
 const {
@@ -21,10 +21,14 @@ const {
 } = Astro.props as Props;
 
 const baseUrl = Astro.site ?? Astro.url;
-const isColumnPage = Astro.url.pathname === "/column" || Astro.url.pathname.startsWith("/column/");
+const isColumnPage =
+  Astro.url.pathname === "/column" || Astro.url.pathname.startsWith("/column/");
 const siteRootUrl = new URL("/", baseUrl).toString();
 const organizationUrl = "https://bizup-inc.co.jp";
-const organizationLogoUrl = new URL("/assets/img/logo/bizup-logo.jpg", baseUrl).toString();
+const organizationLogoUrl = new URL(
+  "/assets/img/logo/bizup-logo.jpg",
+  baseUrl,
+).toString();
 const contactPageUrl = new URL("/inquiry", baseUrl).toString();
 const canonicalUrl = new URL(Astro.url.pathname, baseUrl).toString();
 const ogImageUrl = new URL(ogImage, baseUrl).toString();
@@ -33,12 +37,12 @@ const websiteJsonLd = {
   "@type": "WebSite",
   "@id": `${siteRootUrl}#website`,
   name: "InsightBase",
-  alternateName: "InsightBase Lite",
+  alternateName: "InsightBase",
   url: siteRootUrl,
   inLanguage: "ja-JP",
   publisher: {
-    "@id": `${organizationUrl}#organization`
-  }
+    "@id": `${organizationUrl}#organization`,
+  },
 };
 const organizationJsonLd = {
   "@context": "https://schema.org",
@@ -48,15 +52,15 @@ const organizationJsonLd = {
   url: organizationUrl,
   logo: {
     "@type": "ImageObject",
-    url: organizationLogoUrl
+    url: organizationLogoUrl,
   },
   contactPoint: [
     {
       "@type": "ContactPoint",
       contactType: "customer support",
-      url: contactPageUrl
-    }
-  ]
+      url: contactPageUrl,
+    },
+  ],
 };
 const pageJsonLd = {
   "@context": "https://schema.org",
@@ -66,11 +70,11 @@ const pageJsonLd = {
   url: canonicalUrl,
   inLanguage: "ja-JP",
   isPartOf: {
-    "@id": `${siteRootUrl}#website`
+    "@id": `${siteRootUrl}#website`,
   },
   about: {
-    "@id": `${organizationUrl}#organization`
-  }
+    "@id": `${organizationUrl}#organization`,
+  },
 };
 ---
 
@@ -95,8 +99,14 @@ const pageJsonLd = {
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
-    <script type="application/ld+json" set:html={JSON.stringify(websiteJsonLd)} />
-    <script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(websiteJsonLd)}
+    />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(organizationJsonLd)}
+    />
     <script type="application/ld+json" set:html={JSON.stringify(pageJsonLd)} />
     <slot name="head" />
 
@@ -130,10 +140,7 @@ const pageJsonLd = {
       <div class="header-inner">
         <div class="brand">
           <a href="/"
-            ><img
-              src="/assets/img/logo/ib_logo.svg"
-              alt="InsightBase Lite"
-            /></a
+            ><img src="/assets/img/logo/ib_logo.svg" alt="InsightBase" /></a
           >
         </div>
         <input class="nav-toggle" type="checkbox" id="nav-toggle" />
