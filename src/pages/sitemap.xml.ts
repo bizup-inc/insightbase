@@ -7,7 +7,7 @@ const excludedRoutes = new Set([
   '/checkout/thanks-ga4',
   '/checkout/thanks-gad',
   '/checkout/thanks-set',
-  '/column/preview'
+  '/knowledge/preview'
 ]);
 
 function normalizeRoute(filePath: string): string | null {
@@ -71,7 +71,7 @@ export async function GET(context: APIContext) {
       columns
         .filter((item) => Boolean(item.slug))
         .map((item) => ({
-          path: `/column/${item.slug}`,
+          path: `/knowledge/${item.slug}`,
           lastmod: item.updatedAt ?? item.publishedAt
         }))
     )

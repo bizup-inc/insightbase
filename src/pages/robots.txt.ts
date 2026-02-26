@@ -5,7 +5,7 @@ const disallowPaths = [
   "/checkout/thanks-ga4",
   "/checkout/thanks-gad",
   "/checkout/thanks-set",
-  "/column/preview"
+  "/knowledge/preview"
 ];
 
 export async function GET(context: APIContext) {

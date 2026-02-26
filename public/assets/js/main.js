@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
   const isColumnPath =
-    window.location.pathname === "/column" || window.location.pathname.startsWith("/column/");
+    window.location.pathname === "/knowledge" || window.location.pathname.startsWith("/knowledge/");
 
   if (isColumnPath) {
     document.querySelectorAll("section").forEach((section) => section.classList.add("is-visible"));

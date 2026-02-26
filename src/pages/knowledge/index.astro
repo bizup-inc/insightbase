@@ -64,7 +64,7 @@ const tags = Array.from(
           <h2>CATEGORY <small>カテゴリ</small></h2>
           <div class="column-filter-panel__chips">
             {categories.map((category) => (
-              <a href={`/column/category/${encodeURIComponent(category.slug)}`}>{category.label}</a>
+              <a href={`/knowledge/category/${encodeURIComponent(category.slug)}`}>{category.label}</a>
             ))}
           </div>
         </section>
@@ -73,7 +73,7 @@ const tags = Array.from(
           <h2>TAG <small>タグ</small></h2>
           <div class="column-filter-panel__chips column-filter-panel__chips--tags">
             {tags.map((tag) => (
-              <a href={`/column/tag/${encodeURIComponent(tag.slug)}`}>#{tag.label}</a>
+              <a href={`/knowledge/tag/${encodeURIComponent(tag.slug)}`}>#{tag.label}</a>
             ))}
           </div>
         </section>
@@ -83,7 +83,7 @@ const tags = Array.from(
         <h2>新着記事</h2>
         <div class="column-hub__cards">
           {columns.map((item) => (
-            <a href={`/column/${item.slug}`} class="column-hub-card">
+            <a href={`/knowledge/${item.slug}`} class="column-hub-card">
               {getEyecatchUrl(item.eyecatch) && (
                 <figure class="column-hub-card__thumb">
                   <img src={getEyecatchUrl(item.eyecatch)} alt={item.title} loading="lazy" />

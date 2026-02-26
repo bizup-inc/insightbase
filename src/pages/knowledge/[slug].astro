@@ -8,7 +8,7 @@ const slug = Astro.params.slug;
 const draftKey = Astro.url.searchParams.get("draftKey") ?? undefined;
 
 if (!slug) {
-  return Astro.redirect("/column");
+  return Astro.redirect("/knowledge");
 }
 
 let article = null;
@@ -32,19 +32,19 @@ const pageTitle = `${article.title} | InsightBase コラム`;
 const pageDescription = article.excerpt || "InsightBaseのコラム記事です。";
 const ogImage = getEyecatchUrl(article.eyecatch) || undefined;
 const baseUrl = Astro.site ?? Astro.url;
-const articlePath = `/column/${article.slug}`;
+const articlePath = `/knowledge/${article.slug}`;
 const articleUrl = new URL(articlePath, baseUrl).toString();
 const firstTag = getTagEntries(article.tag)[0];
 const articleCategory = getCategoryLabel(article.category);
 
 const breadcrumbItems = [
   { name: "TOP", item: new URL("/", baseUrl).toString() },
-  { name: "ナレッジベース", item: new URL("/column", baseUrl).toString() },
+  { name: "ナレッジベース", item: new URL("/knowledge", baseUrl).toString() },
   ...(firstTag
     ? [
         {
           name: firstTag.label,
-          item: new URL(`/column/tag/${encodeURIComponent(firstTag.slug)}`, baseUrl).toString()
+          item: new URL(`/knowledge/tag/${encodeURIComponent(firstTag.slug)}`, baseUrl).toString()
         }
       ]
     : []),

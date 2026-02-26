@@ -69,7 +69,7 @@ const categoryName = categoryNameFromFilteredColumns || categoryNameFromAllColum
 
         <div class="column-hub__cards">
           {columns.map((item) => (
-            <a href={`/column/${item.slug}`} class="column-hub-card">
+            <a href={`/knowledge/${item.slug}`} class="column-hub-card">
               {getEyecatchUrl(item.eyecatch) && (
                 <figure class="column-hub-card__thumb">
                   <img src={getEyecatchUrl(item.eyecatch)} alt={item.title} loading="lazy" />
