@@ -23,6 +23,8 @@ const hasTitle = title.trim().length > 0;
 const hasDescription = description.trim().length > 0;
 const hasCta = ctaText.trim().length > 0 && ctaLink.trim().length > 0;
 const hasImage = image.trim().length > 0;
+const shouldOpenCtaInNewWindow =
+  Astro.url.pathname !== "/" && ctaText.trim() === "今すぐ購入する";
 const productMap: Record<string, string> = {
   "/": "tophero",
   "/ga4-report-template": "ga4hero",
@@ -51,6 +53,8 @@ const product = productMap[Astro.url.pathname];
           class={ctaClass}
           data-event="purchase_click"
           data-product={product}
+          target={shouldOpenCtaInNewWindow ? "_blank" : undefined}
+          rel={shouldOpenCtaInNewWindow ? "noopener noreferrer" : undefined}
         >
           {ctaText}
         </a>
