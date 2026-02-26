@@ -3,11 +3,11 @@ import Layout from "../../../layouts/Layout.astro";
 import Footer from "../../../components/Footer.astro";
 import {
   formatDateJa,
-  getCategoryId,
+  getCategorySlug,
   getCategoryLabel,
   getEyecatchUrl,
   getPublishedColumns,
-  getPublishedColumnsByCategory
+  getPublishedColumnsByCategorySlug
 } from "../../../lib/microcms";
 
 const rawCategoryId = Astro.params.categoryId;
@@ -16,11 +16,11 @@ if (!rawCategoryId) {
   return new Response("Not Found", { status: 404 });
 }
 
-const categoryId = decodeURIComponent(rawCategoryId);
+const categorySlug = decodeURIComponent(rawCategoryId);
 
-const columns = await getPublishedColumnsByCategory(categoryId).catch((error) => {
+const columns = await getPublishedColumnsByCategorySlug(categorySlug).catch((error) => {
   console.error("[column] failed to fetch category list", {
-    categoryId,
+    categorySlug,
     hasServiceDomain: Boolean(import.meta.env.MICROCMS_SERVICE_DOMAIN),
     hasApiKey: Boolean(import.meta.env.MICROCMS_API_KEY),
     error
@@ -30,20 +30,20 @@ const columns = await getPublishedColumnsByCategory(categoryId).catch((error) =>
 
 const categoryNameFromFilteredColumns = columns
   .map((item) => getCategoryLabel(item.category))
-  .find((label) => Boolean(label) && label !== categoryId);
+  .find((label) => Boolean(label) && label !== categorySlug);
 
 const categoryNameFromAllColumns = categoryNameFromFilteredColumns
   ? ""
   : await getPublishedColumns()
       .then((allColumns) =>
         allColumns
-          .filter((item) => getCategoryId(item.category) === categoryId)
+          .filter((item) => getCategorySlug(item.category) === categorySlug)
           .map((item) => getCategoryLabel(item.category))
-          .find((label) => Boolean(label) && label !== categoryId) ?? ""
+          .find((label) => Boolean(label) && label !== categorySlug) ?? ""
       )
       .catch(() => "");
 
-const categoryName = categoryNameFromFilteredColumns || categoryNameFromAllColumns || categoryId;
+const categoryName = categoryNameFromFilteredColumns || categoryNameFromAllColumns || categorySlug;
 ---
 
 <Layout

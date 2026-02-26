@@ -44,7 +44,7 @@ const breadcrumbItems = [
     ? [
         {
           name: firstTag.label,
-          item: new URL(`/column/tag/${encodeURIComponent(firstTag.id)}`, baseUrl).toString()
+          item: new URL(`/column/tag/${encodeURIComponent(firstTag.slug)}`, baseUrl).toString()
         }
       ]
     : []),

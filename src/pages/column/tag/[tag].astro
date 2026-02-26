@@ -6,7 +6,7 @@ import {
   getCategoryLabel,
   getEyecatchUrl,
   getTagEntries,
-  getPublishedColumnsByTag
+  getPublishedColumnsByTagSlug
 } from "../../../lib/microcms";
 
 const rawTag = Astro.params.tag;
@@ -15,11 +15,11 @@ if (!rawTag) {
   return new Response("Not Found", { status: 404 });
 }
 
-const tagId = decodeURIComponent(rawTag);
+const tagSlug = decodeURIComponent(rawTag);
 
-const columns = await getPublishedColumnsByTag(tagId).catch((error) => {
+const columns = await getPublishedColumnsByTagSlug(tagSlug).catch((error) => {
   console.error("[column] failed to fetch tag list", {
-    tagId,
+    tagSlug,
     hasServiceDomain: Boolean(import.meta.env.MICROCMS_SERVICE_DOMAIN),
     hasApiKey: Boolean(import.meta.env.MICROCMS_API_KEY),
     error
@@ -30,7 +30,7 @@ const columns = await getPublishedColumnsByTag(tagId).catch((error) => {
 const tagName =
   columns
     .flatMap((item) => getTagEntries(item.tag))
-    .find((tag) => tag.id === tagId)?.label ?? tagId;
+    .find((tag) => tag.slug === tagSlug)?.label ?? tagSlug;
 ---
 
 <Layout

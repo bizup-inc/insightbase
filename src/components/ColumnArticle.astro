@@ -30,7 +30,7 @@ const eyecatchUrl = getEyecatchUrl(article.eyecatch);
           {firstTag && (
             <>
               <span>/</span>
-              <a href={`/column/tag/${encodeURIComponent(firstTag.id)}`}>{firstTag.label}</a>
+              <a href={`/column/tag/${encodeURIComponent(firstTag.slug)}`}>{firstTag.label}</a>
             </>
           )}
           <span>/</span>
@@ -42,7 +42,7 @@ const eyecatchUrl = getEyecatchUrl(article.eyecatch);
           <div class="column-article__meta">
             <time datetime={article.publishedAt || article.createdAt}>{publishedDate}</time>
             {tags.map((tag) => (
-              <a href={`/column/tag/${encodeURIComponent(tag.id)}`} class="column-tag-link">
+              <a href={`/column/tag/${encodeURIComponent(tag.slug)}`} class="column-tag-link">
                 #{tag.label}
               </a>
             ))}

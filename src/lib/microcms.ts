@@ -29,6 +29,7 @@ export type MicroCMSImage = {
 
 export type ColumnCategory = {
   id: string;
+  slug?: string;
   name?: string;
   title?: string;
   label?: string;
@@ -110,6 +111,11 @@ export const getCategoryId = (category?: ColumnContent["category"]) => {
   return category.id ?? "";
 };
 
+export const getCategorySlug = (category?: ColumnContent["category"]) => {
+  if (!category || typeof category === "string" || Array.isArray(category)) return "";
+  return category.slug ?? category.id ?? "";
+};
+
 export const getTagLabel = (tag?: string) => {
   if (!tag) return "";
   return tag.trim();
@@ -120,14 +126,14 @@ const getTagLabelFromObject = (tag: ColumnTag) => {
 };
 
 export const getTagEntries = (tagField?: ColumnContent["tag"]) => {
-  if (!tagField) return [] as { id: string; label: string }[];
+  if (!tagField) return [] as { id: string; label: string; slug: string }[];
 
   if (typeof tagField === "string") {
     return tagField
       .split(/[、,]/)
       .map((raw) => raw.trim())
       .filter(Boolean)
-      .map((value) => ({ id: value, label: value }));
+      .map((value) => ({ id: value, label: value, slug: value }));
   }
 
   if (Array.isArray(tagField)) {
@@ -135,16 +141,18 @@ export const getTagEntries = (tagField?: ColumnContent["tag"]) => {
       .map((tag) => {
         const id = tag?.id ?? "";
         const label = getTagLabelFromObject(tag);
-        if (!id || !label) return null;
-        return { id, label };
+        const slug = tag?.slug ?? id;
+        if (!id || !label || !slug) return null;
+        return { id, label, slug };
       })
-      .filter((item): item is { id: string; label: string } => Boolean(item));
+      .filter((item): item is { id: string; label: string; slug: string } => Boolean(item));
   }
 
   const id = tagField.id ?? "";
   const label = getTagLabelFromObject(tagField);
-  if (!id || !label) return [];
-  return [{ id, label }];
+  const slug = tagField.slug ?? id;
+  if (!id || !label || !slug) return [];
+  return [{ id, label, slug }];
 };
 
 export const getTagLabels = (tagField?: ColumnContent["tag"]) => {
@@ -206,6 +214,16 @@ export const getPublishedColumnsByTag = async (tag: string) => {
     filters: buildPublishedFilter(`tag[contains]${tag}`)
   });
   return data.contents;
+};
+
+export const getPublishedColumnsByCategorySlug = async (categorySlug: string) => {
+  const contents = await getPublishedColumns();
+  return contents.filter((item) => getCategorySlug(item.category) === categorySlug);
+};
+
+export const getPublishedColumnsByTagSlug = async (tagSlug: string) => {
+  const contents = await getPublishedColumns();
+  return contents.filter((item) => getTagEntries(item.tag).some((tag) => tag.slug === tagSlug));
 };
 
 export const getCategoryById = async (categoryId: string) => {
