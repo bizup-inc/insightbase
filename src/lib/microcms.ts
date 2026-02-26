@@ -14,6 +14,8 @@ const buildPublishedFilter = (extra?: string) => {
   return `${publishedFilter}[and]${extra}`;
 };
 
+const normalizeSlugValue = (value: string) => value.trim().toLowerCase().replace(/\s+/g, "-");
+
 const isPublishedNow = (content: Pick<ColumnContent, "publishedAt">) => {
   if (!content.publishedAt) return false;
   const publishedTime = new Date(content.publishedAt).getTime();
@@ -113,7 +115,8 @@ export const getCategoryId = (category?: ColumnContent["category"]) => {
 
 export const getCategorySlug = (category?: ColumnContent["category"]) => {
   if (!category || typeof category === "string" || Array.isArray(category)) return "";
-  return category.slug ?? category.id ?? "";
+  const fallbackLabel = category.name ?? category.title ?? category.label ?? "";
+  return normalizeSlugValue(category.slug ?? fallbackLabel ?? category.id ?? "");
 };
 
 export const getTagLabel = (tag?: string) => {
@@ -133,7 +136,7 @@ export const getTagEntries = (tagField?: ColumnContent["tag"]) => {
       .split(/[、,]/)
       .map((raw) => raw.trim())
       .filter(Boolean)
-      .map((value) => ({ id: value, label: value, slug: value }));
+      .map((value) => ({ id: value, label: value, slug: normalizeSlugValue(value) }));
   }
 
   if (Array.isArray(tagField)) {
@@ -141,7 +144,7 @@ export const getTagEntries = (tagField?: ColumnContent["tag"]) => {
       .map((tag) => {
         const id = tag?.id ?? "";
         const label = getTagLabelFromObject(tag);
-        const slug = tag?.slug ?? id;
+        const slug = normalizeSlugValue(tag?.slug ?? label ?? id);
         if (!id || !label || !slug) return null;
         return { id, label, slug };
       })
@@ -150,7 +153,7 @@ export const getTagEntries = (tagField?: ColumnContent["tag"]) => {
 
   const id = tagField.id ?? "";
   const label = getTagLabelFromObject(tagField);
-  const slug = tagField.slug ?? id;
+  const slug = normalizeSlugValue(tagField.slug ?? label ?? id);
   if (!id || !label || !slug) return [];
   return [{ id, label, slug }];
 };
@@ -218,12 +221,14 @@ export const getPublishedColumnsByTag = async (tag: string) => {
 
 export const getPublishedColumnsByCategorySlug = async (categorySlug: string) => {
   const contents = await getPublishedColumns();
-  return contents.filter((item) => getCategorySlug(item.category) === categorySlug);
+  const normalized = normalizeSlugValue(categorySlug);
+  return contents.filter((item) => getCategorySlug(item.category) === normalized);
 };
 
 export const getPublishedColumnsByTagSlug = async (tagSlug: string) => {
   const contents = await getPublishedColumns();
-  return contents.filter((item) => getTagEntries(item.tag).some((tag) => tag.slug === tagSlug));
+  const normalized = normalizeSlugValue(tagSlug);
+  return contents.filter((item) => getTagEntries(item.tag).some((tag) => tag.slug === normalized));
 };
 
 export const getCategoryById = async (categoryId: string) => {
