@@ -7,6 +7,7 @@ const excludedRoutes = new Set([
   '/checkout/thanks-ga4',
   '/checkout/thanks-gad',
   '/checkout/thanks-set',
+  '/column/preview',
   '/knowledge/preview'
 ]);
 
