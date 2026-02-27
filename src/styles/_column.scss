@@ -530,6 +530,15 @@
   gap: 22px;
 }
 
+.column-hub__more {
+  margin-top: 28px;
+  text-align: center;
+}
+
+.column-hub__more-btn {
+  min-width: 180px;
+}
+
 .column-hub-card {
   background: #fff;
   border: 1px solid #e5eee8;
@@ -669,6 +678,10 @@
   .column-hub__cards {
     grid-template-columns: 1fr;
     gap: 14px;
+  }
+
+  .column-hub__more {
+    margin-top: 22px;
   }
 
   .column-hub-card__body {

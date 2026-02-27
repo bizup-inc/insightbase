@@ -38,6 +38,8 @@ const tags = Array.from(
   const [slug, label] = value.split("|||");
   return { slug, label };
 });
+
+const initialVisibleCount = 12;
 ---
 
 <Layout
@@ -82,8 +84,8 @@ const tags = Array.from(
       <section class="column-hub__latest">
         <h2>新着記事</h2>
         <div class="column-hub__cards">
-          {columns.map((item) => (
-            <a href={`/knowledge/${item.slug}`} class="column-hub-card">
+          {columns.map((item, index) => (
+            <a href={`/knowledge/${item.slug}`} class="column-hub-card" data-column-card hidden={index >= initialVisibleCount}>
               {getEyecatchUrl(item.eyecatch) && (
                 <figure class="column-hub-card__thumb">
                   <img src={getEyecatchUrl(item.eyecatch)} alt={item.title} loading="lazy" />
@@ -99,8 +101,49 @@ const tags = Array.from(
             </a>
           ))}
         </div>
+        {columns.length > initialVisibleCount && (
+          <div class="column-hub__more">
+            <button
+              type="button"
+              class="btn primary column-hub__more-btn"
+              data-load-more
+              data-step={String(initialVisibleCount)}
+            >
+              もっと見る
+            </button>
+          </div>
+        )}
       </section>
     </div>
   </section>
+
+  <script is:inline>
+    document.addEventListener("DOMContentLoaded", () => {
+      const button = document.querySelector("[data-load-more]");
+      if (!(button instanceof HTMLButtonElement)) return;
+
+      const cards = Array.from(document.querySelectorAll("[data-column-card]"));
+      const step = Number.parseInt(button.dataset.step || "12", 10);
+      const initialVisibleIndex = cards.findIndex((card) => card.hasAttribute("hidden"));
+      let visibleCount = initialVisibleIndex === -1 ? cards.length : initialVisibleIndex;
+
+      const updateButton = () => {
+        if (visibleCount >= cards.length) {
+          button.style.display = "none";
+        }
+      };
+
+      button.addEventListener("click", () => {
+        const nextCount = Math.min(visibleCount + step, cards.length);
+        for (let i = visibleCount; i < nextCount; i += 1) {
+          cards[i].removeAttribute("hidden");
+        }
+        visibleCount = nextCount;
+        updateButton();
+      });
+
+      updateButton();
+    });
+  </script>
 </Layout>
 <Footer />
