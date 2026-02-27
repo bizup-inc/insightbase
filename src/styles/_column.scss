@@ -688,3 +688,13 @@
   padding:20px;
   margin:20px 0;
 }
+
+.sankou-link a{
+  color:var(--blue);
+  font-weight:700;
+  transition:0.3s;
+
+  &:hover{
+    color:var(--lblue);
+  }
+}
