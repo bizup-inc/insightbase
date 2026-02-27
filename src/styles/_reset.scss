@@ -61,15 +61,7 @@
     outline-offset: 2px;
   }
   
-  /* 9. ユーザーが選択できる範囲を調整 */
-  body {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-  
-  /* 10. スクロールのスムーズ化 */
+  /* 9. スクロールのスムーズ化 */
   html {
     scroll-behavior: smooth;
   }
