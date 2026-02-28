@@ -1,10 +1,90 @@
+---
+import { getPublishedColumns, getTagEntries } from "../lib/microcms";
 
+interface Props {
+  currentSlug?: string;
+}
 
+const { currentSlug } = Astro.props as Props;
+
+// 手動で人気記事TOP5を指定（/knowledge/{slug} の slug を上から優先表示）
+const MANUAL_POPULAR_SLUGS = [
+  "looker-studio-beginner-guide",
+  "ga4-user-metrics-types",
+  "ga4-new-users-greater-than-active-users",
+  "looker-studio-template-start",
+  "ga4-source-medium-utm-channel-basics"
+];
+
+const columns = await getPublishedColumns().catch((error) => {
+  console.error("[column] failed to fetch sidebar data", {
+    hasServiceDomain: Boolean(import.meta.env.MICROCMS_SERVICE_DOMAIN),
+    hasApiKey: Boolean(import.meta.env.MICROCMS_API_KEY),
+    error
+  });
+  return [];
+});
+
+const columnsBySlug = new Map(columns.map((item) => [item.slug, item]));
+const manualPopularArticles = MANUAL_POPULAR_SLUGS
+  .map((slug) => columnsBySlug.get(slug))
+  .filter((item): item is NonNullable<typeof item> => Boolean(item))
+  .filter((item) => item.slug !== currentSlug);
+
+const manualSlugSet = new Set(manualPopularArticles.map((item) => item.slug));
+const fallbackPopularArticles = columns
+  .filter((item) => item.slug !== currentSlug && !manualSlugSet.has(item.slug))
+  .slice(0, Math.max(0, 5 - manualPopularArticles.length));
+
+const popularArticles = [...manualPopularArticles, ...fallbackPopularArticles].slice(0, 5);
+
+const tagCountMap = new Map<string, { slug: string; label: string; count: number }>();
+columns.forEach((item) => {
+  getTagEntries(item.tag).forEach((tag) => {
+    const existing = tagCountMap.get(tag.slug);
+    if (existing) {
+      existing.count += 1;
+      return;
+    }
+    tagCountMap.set(tag.slug, { slug: tag.slug, label: tag.label, count: 1 });
+  });
+});
+
+const tags = Array.from(tagCountMap.values()).sort(
+  (a, b) => b.count - a.count || a.label.localeCompare(b.label, "ja")
+);
+---
 
 <aside class="column-sidebar" aria-label="サイドバー">
   <section class="column-widget">
     <a href="/"><img src="/assets/img/column/ad01_square.jpg" alt="InsightBaseでレポート自動化"/></a>
   </section>
+
+  {popularArticles.length > 0 && (
+    <section class="column-widget">
+      <h2>人気記事TOP5</h2>
+      <ol class="column-widget__ranking">
+        {popularArticles.map((item) => (
+          <li>
+            <a href={`/knowledge/${item.slug}`}>{item.title}</a>
+          </li>
+        ))}
+      </ol>
+    </section>
+  )}
+
+  {tags.length > 0 && (
+    <section class="column-widget">
+      <h2>タグ一覧</h2>
+      <ul class="column-widget__tags">
+        {tags.map((tag) => (
+          <li>
+            <a href={`/knowledge/tag/${encodeURIComponent(tag.slug)}`}>#{tag.label}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
 
   <section class="column-widget">
     <h2>おすすめテンプレート</h2>
