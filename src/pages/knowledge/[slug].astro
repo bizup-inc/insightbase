@@ -129,7 +129,7 @@ const relatedArticles = (
     : scoredRelatedArticles
 )
   .sort((a, b) => b.score - a.score || b.time - a.time)
-  .slice(0, 3)
+  .slice(0, 5)
   .map((entry) => entry.item);
 ---
 

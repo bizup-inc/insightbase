@@ -774,6 +774,12 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 22px;
+
+  .column-hub-card__body {
+    h3 {
+      font-size: 18px;
+    }
+  }
 }
 
 @media (max-width: 960px) {
