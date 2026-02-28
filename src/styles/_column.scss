@@ -18,7 +18,7 @@
 }
 
 .column-page__inner {
-  max-width: 1300px;
+  max-width: 1500px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 320px;
   gap: 40px;
@@ -754,6 +754,10 @@
 
 .column-related {
   padding: 0 0 56px;
+
+  .content__inner {
+    max-width: 1500px;
+  }
 
   h2 {
     margin: 0 0 18px;
