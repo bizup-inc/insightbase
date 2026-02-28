@@ -2,7 +2,15 @@
 import Layout from "../../layouts/Layout.astro";
 import Footer from "../../components/Footer.astro";
 import ColumnArticle from "../../components/ColumnArticle.astro";
-import { getCategoryLabel, getColumnBySlug, getEyecatchUrl, getTagEntries } from "../../lib/microcms";
+import {
+  formatDateJa,
+  getCategoryLabel,
+  getCategorySlug,
+  getColumnBySlug,
+  getEyecatchUrl,
+  getPublishedColumns,
+  getTagEntries
+} from "../../lib/microcms";
 
 const slug = Astro.params.slug;
 const draftKey = Astro.url.searchParams.get("draftKey") ?? undefined;
@@ -88,6 +96,41 @@ const articleJsonLd = {
   ...(articleCategory ? { articleSection: articleCategory } : {}),
   ...(ogImage ? { image: [new URL(ogImage, baseUrl).toString()] } : {})
 };
+
+const currentCategorySlug = getCategorySlug(article.category);
+const currentTagSlugs = new Set(getTagEntries(article.tag).map((tag) => tag.slug));
+
+const relatedCandidates = await getPublishedColumns().catch((error) => {
+  console.error("[column] failed to fetch related articles", {
+    slug,
+    hasServiceDomain: Boolean(import.meta.env.MICROCMS_SERVICE_DOMAIN),
+    hasApiKey: Boolean(import.meta.env.MICROCMS_API_KEY),
+    error
+  });
+  return [];
+});
+
+const scoredRelatedArticles = relatedCandidates
+  .filter((item) => item.slug !== article.slug)
+  .map((item) => {
+    const tagSlugs = getTagEntries(item.tag).map((tag) => tag.slug);
+    const sharedTagCount = tagSlugs.filter((tagSlug) => currentTagSlugs.has(tagSlug)).length;
+    const hasSameCategory = Boolean(
+      currentCategorySlug && getCategorySlug(item.category) === currentCategorySlug
+    );
+    const score = sharedTagCount * 3 + (hasSameCategory ? 2 : 0);
+    const time = new Date(item.publishedAt || item.createdAt).getTime();
+    return { item, score, time: Number.isNaN(time) ? 0 : time };
+  });
+
+const relatedArticles = (
+  scoredRelatedArticles.some((entry) => entry.score > 0)
+    ? scoredRelatedArticles.filter((entry) => entry.score > 0)
+    : scoredRelatedArticles
+)
+  .sort((a, b) => b.score - a.score || b.time - a.time)
+  .slice(0, 3)
+  .map((entry) => entry.item);
 ---
 
 <Layout
@@ -103,5 +146,30 @@ const articleJsonLd = {
     </Fragment>
   )}
   <ColumnArticle article={article} isPreview={Boolean(draftKey)} />
+  {relatedArticles.length > 0 && (
+    <section class="column-related">
+      <div class="content__inner">
+        <h2>関連記事</h2>
+        <div class="column-related__cards">
+          {relatedArticles.map((item) => (
+            <a href={`/knowledge/${item.slug}`} class="column-hub-card">
+              {getEyecatchUrl(item.eyecatch) && (
+                <figure class="column-hub-card__thumb">
+                  <img src={getEyecatchUrl(item.eyecatch)} alt={item.title} loading="lazy" />
+                </figure>
+              )}
+              <div class="column-hub-card__body">
+                <time datetime={item.publishedAt || item.createdAt}>
+                  {formatDateJa(item.publishedAt || item.createdAt)}
+                </time>
+                <h3>{item.title}</h3>
+                <p class="column-hub-card__category">{getCategoryLabel(item.category)}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
 </Layout>
 <Footer />
