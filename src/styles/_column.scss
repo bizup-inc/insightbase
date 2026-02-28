@@ -399,7 +399,19 @@
   font-weight: 700;
   line-height: 1;
   color: #fff;
-  background: #d6ad2d;
+  background: #8a8a8a;
+}
+
+.column-widget__ranking li:nth-child(1) .column-widget__ranking-order {
+  background: #d4af37;
+}
+
+.column-widget__ranking li:nth-child(2) .column-widget__ranking-order {
+  background: #c0c0c0;
+}
+
+.column-widget__ranking li:nth-child(3) .column-widget__ranking-order {
+  background: #cd7f32;
 }
 
 .column-widget__ranking-label {
@@ -412,7 +424,7 @@
   font-weight: 700;
   line-height: 1;
   color: #fff;
-  background: #e2b500;
+  background: #5f5f5f;
   max-width: calc(100% - 40px);
   white-space: nowrap;
   overflow: hidden;
