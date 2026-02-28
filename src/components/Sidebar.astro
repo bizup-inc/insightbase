@@ -1,5 +1,11 @@
 ---
-import { getPublishedColumns, getTagEntries } from "../lib/microcms";
+import {
+  formatDateJa,
+  getCategoryLabel,
+  getEyecatchUrl,
+  getPublishedColumns,
+  getTagEntries
+} from "../lib/microcms";
 
 interface Props {
   currentSlug?: string;
@@ -64,9 +70,25 @@ const tags = Array.from(tagCountMap.values()).sort(
     <section class="column-widget">
       <h2>人気記事TOP5</h2>
       <ol class="column-widget__ranking">
-        {popularArticles.map((item) => (
+        {popularArticles.map((item, index) => (
           <li>
-            <a href={`/knowledge/${item.slug}`}>{item.title}</a>
+            <a href={`/knowledge/${item.slug}`} class="column-widget__ranking-link">
+              <div class="column-widget__ranking-thumb">
+                <span class="column-widget__ranking-order">{index + 1}</span>
+                {getCategoryLabel(item.category) && (
+                  <span class="column-widget__ranking-label">{getCategoryLabel(item.category)}</span>
+                )}
+                {getEyecatchUrl(item.eyecatch) ? (
+                  <img src={getEyecatchUrl(item.eyecatch)} alt={item.title} loading="lazy" />
+                ) : (
+                  <div class="column-widget__ranking-fallback" aria-hidden="true" />
+                )}
+              </div>
+              <time datetime={item.publishedAt || item.createdAt}>
+                {formatDateJa(item.publishedAt || item.createdAt)}
+              </time>
+              <p>{item.title}</p>
+            </a>
           </li>
         ))}
       </ol>
