@@ -361,11 +361,17 @@
 
   p {
     margin: 4px 0 0;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 700;
     line-height: 1.5;
     color: #222;
   }
+}
+
+.column-widget__ranking-separator {
+  border: 0;
+  border-top: 1px solid #d6d6d6;
+  margin: 16px 0 0;
 }
 
 .column-widget__ranking-thumb {
@@ -438,7 +444,7 @@
 @media (max-width: 960px) {
   .column-widget__ranking-link {
     p {
-      font-size: 18px;
+      font-size: 16px;
     }
   }
 }
@@ -446,7 +452,7 @@
 @media (max-width: 767px) {
   .column-widget__ranking-link {
     p {
-      font-size: 17px;
+      font-size: 16px;
     }
   }
 }
