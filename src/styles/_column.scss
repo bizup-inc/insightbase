@@ -772,12 +772,12 @@
 
 .column-related__cards {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 22px;
 
   .column-hub-card__body {
     h3 {
-      font-size: 18px;
+      font-size: 17px;
     }
   }
 }
