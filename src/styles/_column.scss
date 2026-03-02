@@ -220,6 +220,10 @@
 
 .column-article__body {
   overflow-wrap: anywhere;
+
+  img {
+    border: solid 10px #eee;
+  }
 }
 
 .column-author{
