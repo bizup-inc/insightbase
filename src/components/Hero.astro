@@ -23,8 +23,7 @@ const hasTitle = title.trim().length > 0;
 const hasDescription = description.trim().length > 0;
 const hasCta = ctaText.trim().length > 0 && ctaLink.trim().length > 0;
 const hasImage = image.trim().length > 0;
-const shouldOpenCtaInNewWindow =
-  Astro.url.pathname !== "/" && ctaText.trim() === "今すぐ購入する";
+const shouldOpenCtaInNewWindow = ctaLink.startsWith("http");
 const productMap: Record<string, string> = {
   "/": "tophero",
   "/ga4-report-template": "ga4hero",

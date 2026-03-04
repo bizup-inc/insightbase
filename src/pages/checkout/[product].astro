@@ -1,0 +1,177 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Footer from "../../components/Footer.astro";
+
+interface ProductConfig {
+  title: string;
+  heading: string;
+  price: string;
+  thumbnail: string;
+  stripeLink: string;
+  flow: string[];
+}
+
+const products: Record<string, ProductConfig> = {
+  ga4: {
+    title: "GA4レポートテンプレート購入前確認 | InsightBase",
+    heading: "GA4レポートテンプレート",
+    price: "17,600円（税込）",
+    thumbnail: "/assets/img/screenshot/image03.jpg",
+    stripeLink: "https://buy.stripe.com/fZucN58AUgoC06u9439Zm02",
+    flow: [
+      "1. 会社名、氏名を入力し「決済画面へ進む」をクリックします。",
+      "2. 決済画面で支払い手続きを行ってください。",
+      "3. 決済完了後、決済時に入力したメールアドレスへ「導入マニュアル」のログインURLとパスワードが送信されます。",
+      "4. 導入マニュアルサイトにログインの上、テンプレートの導入を進めてください。"
+    ]
+  },
+  googlead: {
+    title: "Google広告レポートテンプレート購入前確認 | InsightBase",
+    heading: "Google広告レポートテンプレート",
+    price: "17,600円（税込）",
+    thumbnail: "/assets/img/screenshot/image07.jpg",
+    stripeLink: "https://buy.stripe.com/6oU7sL4kEfky6uS9439Zm03",
+    flow: [
+      "1. 会社名、氏名を入力し「決済画面へ進む」をクリックします。",
+      "2. 決済画面で支払い手続きを行ってください。",
+      "3. 決済完了後、決済時に入力したメールアドレスへ「導入マニュアル」のログインURLとパスワードが送信されます。",
+      "4. 導入マニュアルサイトにログインの上、テンプレートの導入を進めてください。"
+    ]
+  },
+  set: {
+    title: "GA4＋Google広告レポート購入前確認 | InsightBase",
+    heading: "GA4＋Google広告レポートテンプレート",
+    price: "29,800円（税込）",
+    thumbnail: "/assets/img/screenshot/set.jpg",
+    stripeLink: "https://buy.stripe.com/cNibJ18AU2xMaL89439Zm01",
+    flow: [
+      "1. 会社名、氏名を入力し「決済画面へ進む」をクリックします。",
+      "2. 決済画面で支払い手続きを行ってください。",
+      "3. 決済完了後、決済時に入力したメールアドレスへ「導入マニュアル」のログインURLとパスワードが送信されます。",
+      "4. 導入マニュアルサイトにログインの上、テンプレートの導入を進めてください。"
+    ]
+  }
+};
+
+export function getStaticPaths() {
+  return Object.keys(products).map((product) => ({ params: { product } }));
+}
+
+const { product } = Astro.params;
+const productConfig = product ? products[product] : undefined;
+
+if (!productConfig) {
+  throw new Error(`Unknown product: ${product}`);
+}
+---
+
+<Layout title={productConfig.title}>
+  <section class="section__bg_w inquiry inquiry--purchase">
+    <div class="content__inner inquiry__inner">
+      <div class="inquiry__header">
+        <p class="section__title_en">Purchase</p>
+        <h1 class="section__title">購入前のご確認</h1>
+        <p class="inquiry__lead">
+          「決済画面へ進む」ボタンをクリックすると、決済代行サービス Stripe の決済画面へ移動します。<br />
+          クレジットカード情報などの決済情報はStripeが暗号化して処理し、当社が保持することはありません。
+        </p>
+      </div>
+
+      <div class="inquiry__grid">
+        <div class="inquiry__panel">
+          <h2 class="inquiry__panel-title">{productConfig.heading}</h2>
+          <p class="inquiry__panel-text inquiry__price">{productConfig.price}</p>
+          <img
+            class="inquiry__thumbnail"
+            src={productConfig.thumbnail}
+            alt={productConfig.heading}
+            loading="lazy"
+            decoding="async"
+          />
+          <h3 class="inquiry__flow-title">購入から導入までの流れ</h3>
+          <ol class="inquiry__flow-list">
+            {productConfig.flow.map((item) => <li>{item}</li>)}
+          </ol>
+        </div>
+
+        <form id="purchase-form" class="inquiry__form" data-stripe-link={productConfig.stripeLink}>
+          <input type="hidden" name="product" value={product} />
+
+          <div class="inquiry__row">
+            <label for="company">会社名・屋号（個人の場合は空欄）</label>
+            <input id="company" name="company" type="text" autocomplete="organization" />
+          </div>
+
+          <div class="inquiry__row">
+            <label for="name">氏名<span class="inquiry__required">必須</span></label>
+            <input id="name" name="name" type="text" autocomplete="name" required />
+          </div>
+
+          <p id="checkout-error" class="inquiry__error" role="alert" hidden></p>
+
+          <button
+            type="submit"
+            class="btn primary inquiry__submit"
+            data-event="checkout_entry_click"
+            data-product={product}
+          >
+            決済画面へ進む
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<Footer />
+
+<script is:inline>
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("purchase-form");
+    if (!(form instanceof HTMLFormElement)) return;
+
+    const errorBox = document.getElementById("checkout-error");
+
+    const setError = (message) => {
+      if (!(errorBox instanceof HTMLElement)) return;
+      errorBox.textContent = message;
+      errorBox.hidden = false;
+    };
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const stripeLink = form.dataset.stripeLink;
+      if (!stripeLink) return;
+
+      if (errorBox instanceof HTMLElement) {
+        errorBox.hidden = true;
+        errorBox.textContent = "";
+      }
+
+      const body = Object.fromEntries(new FormData(form).entries());
+
+      try {
+        const response = await fetch("/api/checkout-entry", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(body),
+          credentials: "same-origin"
+        });
+
+        if (!response.ok) {
+          setError("送信に失敗しました。時間をおいて再度お試しください。");
+          return;
+        }
+      } catch (error) {
+        console.error("checkout-entry error:", error);
+        setError("送信に失敗しました。時間をおいて再度お試しください。");
+        return;
+      }
+
+      window.location.href = stripeLink;
+    });
+  });
+</script>
