@@ -6,6 +6,62 @@ import Custom from "../components/Custom.astro";
 import Cta from "../components/Cta.astro";
 import Footer from "../components/Footer.astro";
 
+const customerVoices = [
+  {
+    text:
+      "これまでは管理画面から数字を拾ってレポートにまとめるだけで多くの時間がかかっていました。InsightBaseを導入してからは、月初の作業負担が大きく減り、本来の業務に時間を使えるようになりました。",
+    image: "/assets/img/voice/img01.jpg",
+    alt: "マーケティング担当者のアイコン",
+    role: "Web担当者",
+    meta: "サービス業 / K.Kさま",
+  },
+  {
+    text:
+      "見やすく整理されたデザインなので、クライアント提出用として使いやすいと感じました。数字を並べるだけではなく、全体の傾向が伝わりやすい点も良かったです。",
+    image: "/assets/img/voice/img02.jpg",
+    alt: "フリーランスマーケターのアイコン",
+    role: "フリーランス",
+    meta: "Webマーケター / A.Iさま",
+  },
+  {
+    text:
+      "自分で一から作ろうとすると、項目設計や見せ方で手が止まりがちでした。テンプレートがあることで、必要な形を短時間で整えられたのが助かりました。",
+    image: "/assets/img/voice/img03.jpg",
+    alt: "事業責任者のアイコン",
+    role: "ディレクター",
+    meta: "製作会社 / T.Yさま",
+  },
+  {
+    text:
+      "クライアントから数値について質問を受けた際も、以前より説明しやすくなりました。必要な指標が整理されているので、報告や共有がスムーズになったと感じています。",
+    image: "/assets/img/voice/img04.jpg",
+    alt: "マーケティングのアイコン",
+    role: "マーケティング担当",
+    meta: "支援会社 / S.Nさま",
+  },
+  {
+    text:
+      "媒体ごとに数字を見比べながらレポートを作る手間が減りました。どこが伸びていて、どこに課題があるのかを把握しやすく、毎月の確認がかなり楽です。",
+    image: "/assets/img/voice/img05.jpg",
+    alt: "マーケティング責任者のアイコン",
+    role: "広告担当者",
+    meta: "事業会社 / H.Kさま",
+  },
+  {
+    text:
+      "使っていくうちにLooker Studioの仕様や考え方がわかるようになり、今では自分仕様のレポートも作成できるようになりました。単に使うだけでなく、学びながら活用できる点も良かったです。",
+    image: "/assets/img/voice/img06.jpg",
+    alt: "Web担当者",
+    role: "Web担当者",
+    meta: "製作会社 / R.Oさま",
+  },
+];
+
+const customerVoiceSlides = [
+  customerVoices.slice(0, 3),
+  customerVoices.slice(3, 6),
+];
+
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
@@ -72,6 +128,36 @@ import Footer from "../components/Footer.astro";
         <h3>案件ごとにフォーマットがバラバラ</h3>
         <p>クライアントごとに形式が違い、毎回ゼロから作り直している。</p>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="section__bg_w report-fit">
+  <div class="content__inner">
+    <div class="report-fit__label">こんな方におすすめ！</div>
+    <div class="report-fit__panel">
+      <ol class="report-fit__list">
+        <li class="report-fit__item">
+          <span class="report-fit__number">1</span>
+          <p>GA4や広告レポートを毎回手作業でまとめている</p>
+        </li>
+        <li class="report-fit__item">
+          <span class="report-fit__number">2</span>
+          <p>Looker Studioでレポートを作りたいが、作り方がわからない</p>
+        </li>
+        <li class="report-fit__item">
+          <span class="report-fit__number">3</span>
+          <p>クライアント提出用のレポート作成に時間がかかっている</p>
+        </li>
+        <li class="report-fit__item">
+          <span class="report-fit__number">4</span>
+          <p>数字は取れているのに、どこを見れば良いかわからない</p>
+        </li>
+        <li class="report-fit__item">
+          <span class="report-fit__number">5</span>
+          <p>見やすく整ったレポートをすぐに使える形で導入したい</p>
+        </li>
+      </ol>
     </div>
   </div>
 </section>
@@ -150,6 +236,62 @@ import Footer from "../components/Footer.astro";
     </div>
     <div class="image-l">
       <img src="/assets/img/pc-image.png" alt="レポート自動化画面" />
+    </div>
+  </div>
+</section>
+
+<section class="section__bg_w voices">
+  <div class="content__inner">
+    <p class="section__title_en">Customer Voices</p>
+    <h2 class="section__title">お客様の声</h2>
+    <div class="lead__text">
+      <p>
+毎月のレポート作成に追われていた方や、Looker Studioの活用に悩んでいた方から、さまざまなお声をいただいています。<br>
+InsightBaseが、日々の業務負担を減らし、数字と向き合いやすくするきっかけになっています。
+      </p>
+    </div>
+
+    <div class="voices__slider --pt50 js-voices-slider">
+      <div class="voices__viewport">
+        <div class="voices__track">
+          {customerVoiceSlides.map((slide) => (
+            <div class="voices__slide">
+              <div class="voices__grid">
+                {slide.map((voice) => (
+                  <article class="voice-card">
+                    <p class="voice-card__text">{voice.text}</p>
+                    <div class="voice-card__footer">
+                      <img
+                        src={voice.image}
+                        alt={voice.alt}
+                      />
+                      <div class="voice-card__meta">
+                        <strong>{voice.role}</strong>
+                        <span>{voice.meta}</span>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="voices__controls" aria-label="お客様の声の切り替え">
+        <button
+          type="button"
+          class="voices__control is-active"
+          data-slide="0"
+          aria-label="1件目から3件目のお客様の声を表示"
+          aria-pressed="true"></button>
+        <button
+          type="button"
+          class="voices__control"
+          data-slide="1"
+          aria-label="4件目から6件目のお客様の声を表示"
+          aria-pressed="false"></button>
+      </div>
     </div>
   </div>
 </section>

@@ -51,3 +51,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
   sections.forEach((section) => observer.observe(section));
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const slider = document.querySelector(".js-voices-slider");
+  if (!slider) return;
+
+  const track = slider.querySelector(".voices__track");
+  const controls = slider.querySelectorAll(".voices__control");
+  if (!track || !controls.length) return;
+
+  const setActiveSlide = (index) => {
+    track.style.transform = `translateX(-${index * 100}%)`;
+
+    controls.forEach((control, controlIndex) => {
+      const isActive = controlIndex === index;
+      control.classList.toggle("is-active", isActive);
+      control.setAttribute("aria-pressed", String(isActive));
+    });
+  };
+
+  controls.forEach((control) => {
+    control.addEventListener("click", () => {
+      const slideIndex = Number(control.dataset.slide || 0);
+      setActiveSlide(slideIndex);
+    });
+  });
+
+  setActiveSlide(0);
+});
