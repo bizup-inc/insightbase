@@ -1,0 +1,517 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Footer from "../../components/Footer.astro";
+
+const sitePurposeOptions = [
+  "お問い合わせ獲得",
+  "資料請求",
+  "EC",
+  "採用",
+  "予約",
+  "メディアサイト",
+];
+
+const actionOptions = [
+  "送信完了",
+  "ボタンクリック",
+  "電話クリック",
+  "LINE追加",
+  "PDFダウンロード",
+  "購入開始",
+  "購入完了",
+  "外部リンククリック",
+  "スクロール到達",
+];
+
+const conditionOptions = [
+  "サンクスページあり",
+  "サンクスページなし",
+  "外部ドメインに遷移する",
+  "よくわからない",
+];
+---
+
+<Layout
+  title="GA4イベント設計シート簡易作成ツール｜計測したい内容から設計案を自動生成｜InsightBase"
+  description="サイトの目的や計測したい行動を選ぶだけで、GA4イベント設計のたたき台を自動生成。GA4やGTM設定前の整理、設定代行の相談前にも使いやすい無料ツールです。"
+>
+  <div class="ga4-event-sheet-page">
+    <section class="ga4-event-sheet-hero ga4-event-sheet-fullbleed is-visible">
+      <div class="content__inner ga4-event-sheet-hero__inner">
+        <div>
+          <div class="ga4-event-sheet-hero__eyebrow">FREE TOOL</div>
+          <h1>GA4イベント設計シート簡易作成ツール</h1>
+          <p>
+            GA4イベント設計シート簡易作成ツールは、サイトの目的や計測したい行動を選ぶだけで、イベント設計のたたき台を自動生成できる無料ツールです。GA4やGTMの設定前に、何をどう計測するかを整理したいときに役立ちます。
+          </p>
+          <small class="ga4-event-sheet-hero__note">
+            ※ このツールの出力結果は一般的な設計例です。<br />
+            ※ 実際の実装方法はサイト構造やフォーム仕様により異なります。サンクスページなし、外部ドメイン遷移、複雑なフォーム構成などは追加確認が必要です。
+          </small>
+        </div>
+      </div>
+    </section>
+
+    <section class="ga4-event-sheet-section is-visible">
+      <div class="content__inner ga4-event-sheet-layout">
+        <div class="ga4-event-sheet-panel">
+          <form class="ga4-event-sheet-form" data-ga4-event-sheet>
+            <section class="ga4-event-sheet-block">
+              <div class="ga4-event-sheet-block__header">
+                <h2>1. サイトの目的</h2>
+                <p>主な目的を1つ選ぶと、優先度や補足コメントに反映します。</p>
+              </div>
+              <div class="ga4-event-sheet-option-grid ga4-event-sheet-option-grid--single">
+                {sitePurposeOptions.map((option) => (
+                  <label class="ga4-event-sheet-option">
+                    <input type="radio" name="sitePurpose" value={option} />
+                    <span>{option}</span>
+                  </label>
+                ))}
+              </div>
+            </section>
+
+            <section class="ga4-event-sheet-block">
+              <div class="ga4-event-sheet-block__header">
+                <h2>2. 計測したい行動</h2>
+                <p>複数選択できます。設計案に入れたいものをまとめて選んでください。</p>
+              </div>
+              <div class="ga4-event-sheet-option-grid">
+                {actionOptions.map((option) => (
+                  <label class="ga4-event-sheet-option">
+                    <input type="checkbox" name="actions" value={option} />
+                    <span>{option}</span>
+                  </label>
+                ))}
+              </div>
+            </section>
+
+            <section class="ga4-event-sheet-block">
+              <div class="ga4-event-sheet-block__header">
+                <h2>3. 判定方法・状況</h2>
+                <p>現時点で分かっている範囲で選んでください。未確定でも問題ありません。</p>
+              </div>
+              <div class="ga4-event-sheet-option-grid">
+                {conditionOptions.map((option) => (
+                  <label class="ga4-event-sheet-option">
+                    <input type="checkbox" name="conditions" value={option} />
+                    <span>{option}</span>
+                  </label>
+                ))}
+              </div>
+            </section>
+
+            <div class="ga4-event-sheet-actions">
+              <button class="ga4-event-sheet-button ga4-event-sheet-button--primary" type="submit">
+                設計案を作成する
+              </button>
+              <button class="ga4-event-sheet-button ga4-event-sheet-button--ghost" type="reset">
+                クリア
+              </button>
+            </div>
+
+            <div class="ga4-event-sheet-status" data-ga4-status></div>
+            <div class="ga4-event-sheet-alert ga4-event-sheet-alert--error" data-ga4-error hidden></div>
+
+            <section class="ga4-event-sheet-block">
+              <div class="ga4-event-sheet-block__header">
+                <h2>このツールでできること</h2>
+              </div>
+              <div class="ga4-event-sheet-info-grid">
+                <div class="ga4-event-sheet-info-card">
+                  <ul>
+                    <li>GA4やGTMの設定前に、何を計測するかのたたき台を短時間で整理できます。</li>
+                    <li>制作会社やエンジニアへ依頼する前の要件整理にも使いやすい構成です。</li>
+                    <li>キーイベント候補や判定方法の目安もあわせて確認できます。</li>
+                  </ul>
+                </div>
+                <div class="ga4-event-sheet-info-card">
+                  <ul>
+                    <li>このツールの出力は一般的な設計例であり、厳密な正解を断定するものではありません。</li>
+                    <li>サンクスページなしや外部ドメイン遷移がある場合は、実装方法の確認が特に重要です。</li>
+                    <li>設定内容に不安がある場合は、専門家への相談を推奨します。</li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+
+            <div class="ga4-event-sheet-result" data-ga4-result hidden>
+              <section class="ga4-event-sheet-result__section">
+                <div class="ga4-event-sheet-result__header">
+                  <h2>設計案サマリー</h2>
+                  <button
+                    class="ga4-event-sheet-button ga4-event-sheet-button--chip"
+                    type="button"
+                    data-copy-summary
+                  >
+                    要約をコピー
+                  </button>
+                </div>
+                <div class="ga4-event-sheet-summary" data-ga4-summary></div>
+              </section>
+
+              <section class="ga4-event-sheet-result__section">
+                <div class="ga4-event-sheet-result__header">
+                  <h2>イベント設計案</h2>
+                </div>
+                <div class="ga4-event-sheet-cards" data-ga4-cards></div>
+              </section>
+
+              <section class="ga4-event-sheet-result__section">
+                <div class="ga4-event-sheet-result__header">
+                  <h2>コピー用テキスト</h2>
+                  <button
+                    class="ga4-event-sheet-button ga4-event-sheet-button--chip"
+                    type="button"
+                    data-copy-text
+                  >
+                    テキストをコピー
+                  </button>
+                </div>
+                <div class="ga4-event-sheet-copybox" data-ga4-copybox></div>
+              </section>
+
+              <section class="ga4-event-sheet-result__section">
+                <div class="ga4-event-sheet-cta">
+                  <p>この設計案をもとにGA4 / GTMの設定代行をご希望の方はご相談ください。</p>
+                  <p>サンクスページなしや外部ドメイン遷移など、複雑なケースにも対応可能です。</p>
+                  <a class="ga4-event-sheet-button ga4-event-sheet-button--primary" href="/inquiry">
+                    設定代行を相談する
+                  </a>
+                </div>
+              </section>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <div class="ga4-event-sheet-fullbleed">
+      <Footer />
+    </div>
+  </div>
+</Layout>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.querySelector("[data-ga4-event-sheet]");
+    if (!(form instanceof HTMLFormElement)) return;
+
+    const status = form.querySelector("[data-ga4-status]");
+    const error = form.querySelector("[data-ga4-error]");
+    const result = form.querySelector("[data-ga4-result]");
+    const summary = form.querySelector("[data-ga4-summary]");
+    const cards = form.querySelector("[data-ga4-cards]");
+    const copyBox = form.querySelector("[data-ga4-copybox]");
+    const copySummaryButton = form.querySelector("[data-copy-summary]");
+    const copyTextButton = form.querySelector("[data-copy-text]");
+
+    const eventCatalog = {
+      "送信完了": {
+        target: "お問い合わせ完了",
+        eventName: "generate_lead",
+        method: "サンクスページ表示 または フォーム送信完了判定",
+        keyEvent: "○",
+        note: "主要CVとして設定候補",
+      },
+      "ボタンクリック": {
+        target: "CTAボタンクリック",
+        eventName: "cta_click",
+        method: "特定ボタンのクリック",
+        keyEvent: "△",
+        note: "中間指標として活用可能",
+      },
+      "電話クリック": {
+        target: "電話リンククリック",
+        eventName: "phone_click",
+        method: "tel:リンククリック",
+        keyEvent: "△",
+        note: "スマホ利用が多いサイトで有効",
+      },
+      "LINE追加": {
+        target: "LINEリンククリック",
+        eventName: "line_click",
+        method: "LINE遷移リンククリック",
+        keyEvent: "△",
+        note: "実際の友だち追加完了とは別に考える",
+      },
+      "PDFダウンロード": {
+        target: "資料ダウンロード",
+        eventName: "file_download",
+        method: "PDFリンククリック",
+        keyEvent: "○",
+        note: "資料請求型サイトと相性が良い",
+      },
+      "購入開始": {
+        target: "購入開始",
+        eventName: "begin_checkout",
+        method: "購入ボタン押下、決済導線開始",
+        keyEvent: "○",
+        note: "外部決済遷移前の計測として有効",
+      },
+      "購入完了": {
+        target: "購入完了",
+        eventName: "purchase",
+        method: "購入完了ページ表示",
+        keyEvent: "○",
+        note: "ECの主要CV",
+      },
+      "外部リンククリック": {
+        target: "外部リンククリック",
+        eventName: "outbound_click",
+        method: "外部ドメインリンククリック",
+        keyEvent: "△",
+        note: "遷移先の重要度に応じて判断",
+      },
+      "スクロール到達": {
+        target: "スクロール到達",
+        eventName: "scroll_depth",
+        method: "ページ下部到達率で判定",
+        keyEvent: "×",
+        note: "補助指標として利用",
+      },
+    };
+
+    let currentSummaryText = "";
+    let currentCopyText = "";
+
+    const setStatus = (message, state = "") => {
+      if (!(status instanceof HTMLElement)) return;
+      status.textContent = message;
+      status.dataset.state = state;
+    };
+
+    const hideError = () => {
+      if (!(error instanceof HTMLElement)) return;
+      error.hidden = true;
+      error.textContent = "";
+    };
+
+    const showError = (message) => {
+      if (!(error instanceof HTMLElement)) return;
+      error.hidden = false;
+      error.textContent = message;
+    };
+
+    const setResultVisible = (visible) => {
+      if (result instanceof HTMLElement) {
+        result.hidden = !visible;
+      }
+    };
+
+    const clearContent = (element) => {
+      if (!(element instanceof HTMLElement)) return;
+      element.innerHTML = "";
+    };
+
+    const getSelectedValues = (name) =>
+      Array.from(form.querySelectorAll(`input[name="${name}"]:checked`)).map((input) =>
+        input instanceof HTMLInputElement ? input.value : ""
+      );
+
+    const addMethodHints = (baseMethod, conditions) => {
+      const notes = [];
+
+      if (conditions.includes("サンクスページあり")) {
+        notes.push("サンクスページ表示での判定がしやすいです");
+      }
+      if (conditions.includes("サンクスページなし")) {
+        notes.push("クリック判定や送信完了判定など、実装方法の確認が必要です");
+      }
+      if (conditions.includes("外部ドメインに遷移する")) {
+        notes.push("外部ドメイン遷移があるため、遷移前クリック計測や計測条件の確認が必要です");
+      }
+      if (conditions.includes("よくわからない")) {
+        notes.push("実際の計測条件はサイト構造の確認が必要です");
+      }
+
+      return notes.length ? `${baseMethod} / ${notes.join(" / ")}` : baseMethod;
+    };
+
+    const buildPurposeNote = (purpose, action) => {
+      const notes = [];
+
+      if (purpose === "お問い合わせ獲得" && action === "送信完了") {
+        notes.push("お問い合わせ獲得を目的にする場合は、最優先で定義したいイベントです");
+      }
+      if (purpose === "資料請求" && action === "PDFダウンロード") {
+        notes.push("資料請求の主要指標として優先度が高い候補です");
+      }
+      if (purpose === "EC" && ["購入開始", "購入完了"].includes(action)) {
+        notes.push("ECの主要導線として優先度が高い候補です");
+      }
+      if (purpose === "採用" && action === "送信完了") {
+        notes.push("応募完了やエントリー完了に読み替えて設計するケースがあります");
+      }
+      if (purpose === "予約" && action === "送信完了") {
+        notes.push("予約完了を成果地点として扱う場合に相性が良いです");
+      }
+      if (purpose === "メディアサイト" && ["外部リンククリック", "スクロール到達"].includes(action)) {
+        notes.push("閲覧行動の評価指標として活用しやすい候補です");
+      }
+
+      return notes.join(" ");
+    };
+
+    const buildRows = (purpose, actions, conditions) =>
+      actions.map((action) => {
+        const base = eventCatalog[action];
+        const method = addMethodHints(base.method, conditions);
+        const noteParts = [base.note];
+        const purposeNote = buildPurposeNote(purpose, action);
+
+        if (purposeNote) {
+          noteParts.push(purposeNote);
+        }
+
+        return {
+          target: base.target,
+          eventName: base.eventName,
+          method,
+          keyEvent: base.keyEvent,
+          note: noteParts.join(" "),
+        };
+      });
+
+    const renderSummary = (purpose, actions, conditions, rows) => {
+      if (!(summary instanceof HTMLElement)) return;
+      const conditionText = conditions.length ? conditions.join(" / ") : "未選択";
+      summary.innerHTML = `
+        <div class="ga4-event-sheet-summary__item"><strong>サイトの目的</strong><span>${purpose}</span></div>
+        <div class="ga4-event-sheet-summary__item"><strong>計測したい行動</strong><span>${actions.join(" / ")}</span></div>
+        <div class="ga4-event-sheet-summary__item"><strong>判定方法・状況</strong><span>${conditionText}</span></div>
+        <div class="ga4-event-sheet-summary__item"><strong>生成件数</strong><span>${rows.length}件</span></div>
+      `;
+    };
+
+    const renderCards = (rows) => {
+      if (!(cards instanceof HTMLElement)) return;
+      clearContent(cards);
+
+      rows.forEach((row) => {
+        const card = document.createElement("article");
+        card.className = "ga4-event-sheet-card";
+        card.innerHTML = `
+          <div class="ga4-event-sheet-card__header">
+            <h3>${row.target}</h3>
+            <span class="ga4-event-sheet-card__pill is-${row.keyEvent === "○" ? "primary" : row.keyEvent === "△" ? "assist" : "muted"}">キーイベント候補: ${row.keyEvent}</span>
+          </div>
+          <dl class="ga4-event-sheet-card__meta">
+            <div>
+              <dt>event名候補</dt>
+              <dd>${row.eventName}</dd>
+            </div>
+            <div>
+              <dt>判定方法の目安</dt>
+              <dd>${row.method}</dd>
+            </div>
+            <div>
+              <dt>補足</dt>
+              <dd>${row.note}</dd>
+            </div>
+          </dl>
+        `;
+        cards.append(card);
+      });
+    };
+
+    const buildSummaryText = (purpose, actions, conditions, rows) => {
+      const lines = [
+        `サイトの目的: ${purpose}`,
+        `計測したい行動: ${actions.join(" / ")}`,
+        `判定方法・状況: ${conditions.length ? conditions.join(" / ") : "未選択"}`,
+        `生成件数: ${rows.length}件`,
+      ];
+      return lines.join("\n");
+    };
+
+    const buildCopyText = (rows) =>
+      rows
+        .map(
+          (row) =>
+            `${row.target} / ${row.eventName} / ${row.method} / キーイベント候補: ${row.keyEvent} / ${row.note}`
+        )
+        .join("\n");
+
+    const copyText = async (value, successMessage) => {
+      if (!value) {
+        setStatus("先に設計案を作成してください。", "warning");
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(value);
+        setStatus(successMessage, "success");
+      } catch {
+        setStatus("コピーに失敗しました。手動で内容をコピーしてください。", "error");
+      }
+    };
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      hideError();
+
+      const purposeField = form.querySelector('input[name="sitePurpose"]:checked');
+      const purpose = purposeField instanceof HTMLInputElement ? purposeField.value : "";
+      const actions = getSelectedValues("actions");
+      const conditions = getSelectedValues("conditions");
+
+      if (!purpose) {
+        setResultVisible(false);
+        showError("サイトの目的を1つ選んでください。");
+        setStatus("入力内容を確認してください。", "error");
+        return;
+      }
+
+      if (!actions.length) {
+        setResultVisible(false);
+        showError("計測したい行動を1つ以上選ぶと、設計案を作成できます。");
+        setStatus("入力内容を確認してください。", "error");
+        return;
+      }
+
+      const rows = buildRows(purpose, actions, conditions);
+      renderSummary(purpose, actions, conditions, rows);
+      renderCards(rows);
+
+      currentSummaryText = buildSummaryText(purpose, actions, conditions, rows);
+      currentCopyText = buildCopyText(rows);
+
+      if (copyBox instanceof HTMLElement) {
+        copyBox.textContent = currentCopyText;
+      }
+
+      setResultVisible(true);
+      setStatus("イベント設計のたたき台を作成しました。サイト構造に合わせて調整しながらご利用ください。", "success");
+    });
+
+    form.addEventListener("reset", () => {
+      window.setTimeout(() => {
+        hideError();
+        setResultVisible(false);
+        clearContent(summary);
+        clearContent(cards);
+        if (copyBox instanceof HTMLElement) {
+          copyBox.textContent = "";
+        }
+        currentSummaryText = "";
+        currentCopyText = "";
+        setStatus("入力内容をクリアしました。", "warning");
+      }, 0);
+    });
+
+    if (copySummaryButton instanceof HTMLButtonElement) {
+      copySummaryButton.addEventListener("click", () => {
+        copyText(currentSummaryText, "設計案サマリーをコピーしました。");
+      });
+    }
+
+    if (copyTextButton instanceof HTMLButtonElement) {
+      copyTextButton.addEventListener("click", () => {
+        copyText(currentCopyText, "コピー用テキストをコピーしました。");
+      });
+    }
+
+    setStatus("サイトの目的と計測したい行動を選ぶと、イベント設計のたたき台を作成できます。", "");
+  });
+</script>
