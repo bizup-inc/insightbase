@@ -1,0 +1,641 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Footer from "../../components/Footer.astro";
+---
+
+<Layout
+  title="OGP確認ツール｜URLを入力してOGP・Twitter Cardをチェック｜InsightBase"
+  description="URLを入力するだけで、OGPやTwitter Cardの設定状況を確認できる無料ツールです。og:title、og:description、og:image などのmeta情報を見やすく表示します。"
+>
+  <div class="ogp-checker-page">
+    <section class="ogp-checker-hero ogp-checker-fullbleed is-visible">
+      <div class="content__inner ogp-checker-hero__inner">
+        <div>
+          <div class="ogp-checker-hero__eyebrow">FREE TOOL</div>
+          <h1>OGP確認ツール</h1>
+          <p>
+            OGP確認ツールは、入力したURLのOGPやTwitter Card設定を取得して表示する無料ツールです。公開ページのmeta情報を確認したいときや、SNSシェア時の設定漏れをチェックしたいときに便利です。
+          </p>
+          <small class="ogp-checker-hero__note">
+            ※ このツールはページ内のmeta情報を取得して表示する確認用ツールです。<br />
+            ※ 実際のSNSシェア表示は各サービスの仕様やキャッシュにより異なる場合があります。対象サイトの設定によっては情報を取得できない場合があります。
+          </small>
+        </div>
+      </div>
+    </section>
+
+    <section class="ogp-checker-section is-visible">
+      <div class="content__inner ogp-checker-layout">
+        <div class="ogp-checker-panel">
+          <h2>URLを確認する</h2>
+
+          <form class="ogp-checker-form" data-ogp-checker>
+            <div class="ogp-checker-field">
+              <label for="ogp-target-url">
+                URL
+                <span class="ogp-checker-required">必須</span>
+              </label>
+              <input
+                id="ogp-target-url"
+                name="targetUrl"
+                type="url"
+                inputmode="url"
+                placeholder="https://example.com/page"
+                autocomplete="off"
+              />
+              <small>公開済みのURLを入力すると、OGP / Twitter Card関連のmeta情報を取得します。</small>
+            </div>
+
+            <div class="ogp-checker-actions">
+              <button
+                class="ogp-checker-button ogp-checker-button--paste"
+                type="button"
+                data-ogp-paste
+              >
+                ペースト
+              </button>
+              <button class="ogp-checker-button ogp-checker-button--primary" type="submit">
+                確認する
+              </button>
+              <button class="ogp-checker-button ogp-checker-button--ghost" type="reset">
+                クリア
+              </button>
+            </div>
+
+            <div class="ogp-checker-status" data-ogp-status></div>
+            <div class="ogp-checker-loading" data-ogp-loading hidden>取得中です。数秒お待ちください。</div>
+            <div class="ogp-checker-alert ogp-checker-alert--error" data-ogp-error hidden></div>
+
+            <section class="ogp-checker-info-section">
+              <div class="ogp-checker-info-section__header">
+                <h2>このツールでできること</h2>
+              </div>
+              <div class="ogp-checker-sidebar__card ogp-checker-sidebar__card--inline">
+                <ul>
+                  <li>URLを入力するだけで、OGPとTwitter Cardの設定状況をまとめて確認できます。</li>
+                  <li>公開後の設定漏れチェックや、SNSシェア用meta情報の見直しに使えます。</li>
+                  <li>画像URLや相対パスの補完状況もあわせて確認できます。</li>
+                </ul>
+              </div>
+            </section>
+
+            <div class="ogp-checker-result" data-ogp-result hidden>
+              <section class="ogp-checker-result__section">
+                <div class="ogp-checker-result__header">
+                  <h2>SNS別イメージプレビュー</h2>
+                </div>
+                <p class="ogp-checker-preview-note">
+                  以下は各SNSで共有されたときのイメージです。実際の表示はサービス側の仕様やキャッシュ状況により異なる場合があります。確認用の擬似プレビューのため、実際の見え方とは完全には一致しません。
+                </p>
+                <div class="ogp-checker-social-previews" data-social-previews></div>
+              </section>
+
+              <section class="ogp-checker-result__section">
+                <div class="ogp-checker-result__header">
+                  <h2>基本情報</h2>
+                  <button
+                    class="ogp-checker-button ogp-checker-button--chip"
+                    type="button"
+                    data-copy-result
+                  >
+                    結果をコピー
+                  </button>
+                </div>
+                <div class="ogp-checker-info-grid">
+                  <div class="ogp-checker-info-card">
+                    <strong>対象URL</strong>
+                    <span data-ogp-requested-url></span>
+                  </div>
+                  <div class="ogp-checker-info-card">
+                    <strong>最終取得URL</strong>
+                    <span data-ogp-final-url></span>
+                  </div>
+                  <div class="ogp-checker-info-card">
+                    <strong>取得結果</strong>
+                    <span data-ogp-fetch-status></span>
+                  </div>
+                </div>
+              </section>
+
+              <section class="ogp-checker-result__section">
+                <div class="ogp-checker-result__header">
+                  <h2>簡易チェック結果</h2>
+                </div>
+                <ul class="ogp-checker-checklist" data-ogp-checks></ul>
+              </section>
+
+              <section class="ogp-checker-result__section">
+                <div class="ogp-checker-result__header">
+                  <h2>OGP</h2>
+                </div>
+                <div class="ogp-checker-meta-grid" data-ogp-list></div>
+              </section>
+
+              <section class="ogp-checker-result__section">
+                <div class="ogp-checker-result__header">
+                  <h2>Twitter Card</h2>
+                </div>
+                <div class="ogp-checker-meta-grid" data-twitter-list></div>
+              </section>
+
+              <section class="ogp-checker-result__section">
+                <div class="ogp-checker-result__header">
+                  <h2>補助情報</h2>
+                </div>
+                <div class="ogp-checker-meta-grid" data-basic-list></div>
+              </section>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <div class="ogp-checker-fullbleed">
+      <Footer />
+    </div>
+  </div>
+</Layout>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.querySelector("[data-ogp-checker]");
+    if (!(form instanceof HTMLFormElement)) return;
+
+    const urlField = form.elements.namedItem("targetUrl");
+    const status = form.querySelector("[data-ogp-status]");
+    const loading = form.querySelector("[data-ogp-loading]");
+    const error = form.querySelector("[data-ogp-error]");
+    const result = form.querySelector("[data-ogp-result]");
+    const pasteButton = form.querySelector("[data-ogp-paste]");
+    const copyButton = form.querySelector("[data-copy-result]");
+    const requestedUrlOutput = form.querySelector("[data-ogp-requested-url]");
+    const finalUrlOutput = form.querySelector("[data-ogp-final-url]");
+    const fetchStatusOutput = form.querySelector("[data-ogp-fetch-status]");
+    const checksList = form.querySelector("[data-ogp-checks]");
+    const ogpList = form.querySelector("[data-ogp-list]");
+    const twitterList = form.querySelector("[data-twitter-list]");
+    const basicList = form.querySelector("[data-basic-list]");
+    const socialPreviews = form.querySelector("[data-social-previews]");
+
+    let copyText = "";
+
+    const setStatus = (message, state = "") => {
+      if (!(status instanceof HTMLElement)) return;
+      status.textContent = message;
+      status.dataset.state = state;
+    };
+
+    const showLoading = (visible) => {
+      if (loading instanceof HTMLElement) {
+        loading.hidden = !visible;
+      }
+    };
+
+    const showError = (message) => {
+      if (!(error instanceof HTMLElement)) return;
+      error.hidden = false;
+      error.textContent = message;
+    };
+
+    const hideError = () => {
+      if (!(error instanceof HTMLElement)) return;
+      error.hidden = true;
+      error.textContent = "";
+    };
+
+    const setResultVisible = (visible) => {
+      if (result instanceof HTMLElement) {
+        result.hidden = !visible;
+      }
+    };
+
+    const clearChildren = (element) => {
+      if (element instanceof HTMLElement) {
+        element.innerHTML = "";
+      }
+    };
+
+    const createMetaCard = (label, value) => {
+      const item = document.createElement("div");
+      item.className = "ogp-checker-meta-card";
+
+      const title = document.createElement("strong");
+      title.textContent = label;
+
+      const body = document.createElement("span");
+      body.textContent = value || "未設定です";
+      if (!value) {
+        body.className = "is-empty";
+      }
+
+      item.append(title, body);
+      return item;
+    };
+
+    const truncateText = (value, maxLength) => {
+      if (!value) return "";
+      return value.length > maxLength ? `${value.slice(0, maxLength - 1)}…` : value;
+    };
+
+    const escapeHtml = (value = "") =>
+      value
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+
+    const getDomainLabel = (value) => {
+      if (!value) return "";
+      try {
+        return new URL(value).hostname.replace(/^www\./, "");
+      } catch {
+        return value;
+      }
+    };
+
+    const renderMetaSection = (container, fields) => {
+      if (!(container instanceof HTMLElement)) return;
+      clearChildren(container);
+      fields.forEach((field) => {
+        container.append(createMetaCard(field.label, field.value));
+      });
+    };
+
+    const renderChecks = (checks) => {
+      if (!(checksList instanceof HTMLElement)) return;
+      clearChildren(checksList);
+
+      checks.forEach((check) => {
+        const item = document.createElement("li");
+        item.className = `ogp-checker-checklist__item is-${check.state}`;
+        item.innerHTML = `<strong>${check.label}</strong> ${check.message}`;
+        checksList.append(item);
+      });
+    };
+
+    const createSocialCardMarkup = ({
+      platform,
+      device,
+      title,
+      description,
+      image,
+      domain,
+      url,
+      specLabel,
+      mediaClass,
+    }) => {
+      const platformLabel =
+        platform === "x" ? "X" : platform.charAt(0).toUpperCase() + platform.slice(1);
+      const eyebrow =
+        platform === "facebook"
+          ? domain
+          : platform === "x"
+            ? `@preview • ${domain}`
+            : platform === "line"
+              ? domain
+              : "Instagram風プレビュー";
+
+      const imageMarkup = image
+        ? `<img class="ogp-social-card__image" src="${escapeHtml(image)}" alt="${platformLabel} preview" loading="lazy" />`
+        : `<div class="ogp-social-card__placeholder">${platform === "instagram" ? "画像なし" : "No Image"}</div>`;
+
+      const descriptionMarkup =
+        platform !== "instagram"
+          ? `<p class="ogp-social-card__description">${escapeHtml(description || "説明文なし")}</p>`
+          : description
+            ? `<p class="ogp-social-card__description is-instagram">${escapeHtml(description)}</p>`
+            : "";
+
+      return `
+        <div class="ogp-social-preview is-${platform} is-${device}">
+          <div class="ogp-social-preview__header">
+            <div class="ogp-social-preview__titlegroup">
+              <h3>${platformLabel}</h3>
+              <small>${escapeHtml(specLabel)}</small>
+            </div>
+            <span>${device === "pc" ? "PC版" : "スマホ版"}</span>
+          </div>
+          <div class="ogp-social-card is-${platform} is-${device}">
+            <div class="ogp-social-card__media ${mediaClass}">
+              ${imageMarkup}
+            </div>
+            <div class="ogp-social-card__body">
+              <div class="ogp-social-card__eyebrow">${escapeHtml(eyebrow || url)}</div>
+              <h4 class="ogp-social-card__title">${escapeHtml(title || url || "タイトル未設定")}</h4>
+              ${descriptionMarkup}
+              <div class="ogp-social-card__footer">${escapeHtml(domain || url)}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    };
+
+    const renderSocialPreviews = (data) => {
+      if (!(socialPreviews instanceof HTMLElement)) return;
+      clearChildren(socialPreviews);
+
+      const baseTitle = data.ogp.title || data.basic.title || data.finalUrl;
+      const baseDescription = data.ogp.description || data.basic.description || "";
+      const baseImage = data.ogp.image || data.twitter.image || "";
+      const baseDomain = getDomainLabel(data.finalUrl);
+
+      const xTitle = data.twitter.title || data.ogp.title || data.basic.title || data.finalUrl;
+      const xDescription = data.twitter.description || data.ogp.description || data.basic.description || "";
+      const xImage = data.twitter.image || data.ogp.image || "";
+      const xCardType = data.twitter.card || "";
+      const xIsLargeImage = xCardType === "summary_large_image";
+
+      const previewConfigs = [
+        {
+          platform: "facebook",
+          device: "pc",
+          title: truncateText(baseTitle, 72),
+          description: truncateText(baseDescription, 120),
+          image: baseImage,
+          domain: baseDomain,
+          url: data.finalUrl,
+          specLabel: "1.91:1 / 1200×630 推奨",
+          mediaClass: "is-landscape",
+        },
+        {
+          platform: "facebook",
+          device: "mobile",
+          title: truncateText(baseTitle, 52),
+          description: truncateText(baseDescription, 90),
+          image: baseImage,
+          domain: baseDomain,
+          url: data.finalUrl,
+          specLabel: "1.91:1 / 1200×630 推奨",
+          mediaClass: "is-landscape",
+        },
+        {
+          platform: "instagram",
+          device: "pc",
+          title: truncateText(baseTitle, 44),
+          description: truncateText(baseDescription, 52),
+          image: baseImage,
+          domain: baseDomain,
+          url: data.finalUrl,
+          specLabel: "Instagram風 / 1:1ベース",
+          mediaClass: "is-square",
+        },
+        {
+          platform: "instagram",
+          device: "mobile",
+          title: truncateText(baseTitle, 32),
+          description: truncateText(baseDescription, 36),
+          image: baseImage,
+          domain: baseDomain,
+          url: data.finalUrl,
+          specLabel: "Instagram風 / 1:1ベース",
+          mediaClass: "is-square",
+        },
+        {
+          platform: "line",
+          device: "pc",
+          title: truncateText(baseTitle, 58),
+          description: truncateText(baseDescription, 68),
+          image: baseImage,
+          domain: baseDomain,
+          url: data.finalUrl,
+          specLabel: "LINEは og:title / og:description / og:image を使用",
+          mediaClass: "is-landscape",
+        },
+        {
+          platform: "line",
+          device: "mobile",
+          title: truncateText(baseTitle, 42),
+          description: truncateText(baseDescription, 52),
+          image: baseImage,
+          domain: baseDomain,
+          url: data.finalUrl,
+          specLabel: "LINEは og:title / og:description / og:image を使用",
+          mediaClass: "is-landscape",
+        },
+        {
+          platform: "x",
+          device: "pc",
+          title: truncateText(xTitle, 70),
+          description: truncateText(xDescription, 110),
+          image: xImage,
+          domain: baseDomain,
+          url: data.finalUrl,
+          specLabel: xIsLargeImage ? "summary_large_image / 2:1" : "summary / 1:1",
+          mediaClass: xIsLargeImage ? "is-x-large" : "is-square",
+        },
+        {
+          platform: "x",
+          device: "mobile",
+          title: truncateText(xTitle, 48),
+          description: truncateText(xDescription, 86),
+          image: xImage,
+          domain: baseDomain,
+          url: data.finalUrl,
+          specLabel: xIsLargeImage ? "summary_large_image / 2:1" : "summary / 1:1",
+          mediaClass: xIsLargeImage ? "is-x-large" : "is-square",
+        },
+      ];
+
+      socialPreviews.innerHTML = previewConfigs.map((config) => createSocialCardMarkup(config)).join("");
+
+      socialPreviews.querySelectorAll(".ogp-social-card__image").forEach((img) => {
+        if (!(img instanceof HTMLImageElement)) return;
+
+        img.addEventListener("error", () => {
+          const media = img.closest(".ogp-social-card__media");
+          const card = img.closest(".ogp-social-card");
+          if (!(media instanceof HTMLElement) || !(card instanceof HTMLElement)) return;
+
+          const isInstagram = card.classList.contains("is-instagram");
+          media.innerHTML = `<div class="ogp-social-card__placeholder">${isInstagram ? "画像なし" : "画像を表示できません"}</div>`;
+        });
+      });
+
+      if (!socialPreviews.children.length) {
+        socialPreviews.innerHTML =
+          '<div class="ogp-checker-preview__empty">SNS別イメージプレビューを表示できませんでした。</div>';
+      }
+    };
+
+    const buildCopyText = (data) => {
+      const lines = [
+        `対象URL: ${data.requestedUrl}`,
+        `最終取得URL: ${data.finalUrl}`,
+        `取得結果: 取得成功`,
+        "",
+        "[OGP]",
+        `og:title: ${data.ogp.title || "未設定です"}`,
+        `og:description: ${data.ogp.description || "未設定です"}`,
+        `og:image: ${data.ogp.image || "未設定です"}`,
+        `og:url: ${data.ogp.url || "未設定です"}`,
+        `og:type: ${data.ogp.type || "未設定です"}`,
+        `og:site_name: ${data.ogp.siteName || "未設定です"}`,
+        `og:locale: ${data.ogp.locale || "未設定です"}`,
+        "",
+        "[Twitter Card]",
+        `twitter:card: ${data.twitter.card || "未設定です"}`,
+        `twitter:title: ${data.twitter.title || "未設定です"}`,
+        `twitter:description: ${data.twitter.description || "未設定です"}`,
+        `twitter:image: ${data.twitter.image || "未設定です"}`,
+        `twitter:site: ${data.twitter.site || "未設定です"}`,
+        "",
+        "[補助情報]",
+        `title: ${data.basic.title || "未設定です"}`,
+        `meta description: ${data.basic.description || "未設定です"}`,
+        "",
+        "[簡易チェック結果]",
+        ...data.checks.map((check) => `${check.label}: ${check.message}`),
+      ];
+
+      return lines.join("\n");
+    };
+
+    const resetResult = () => {
+      setResultVisible(false);
+      hideError();
+      showLoading(false);
+      copyText = "";
+      if (requestedUrlOutput instanceof HTMLElement) requestedUrlOutput.textContent = "";
+      if (finalUrlOutput instanceof HTMLElement) finalUrlOutput.textContent = "";
+      if (fetchStatusOutput instanceof HTMLElement) fetchStatusOutput.textContent = "";
+      clearChildren(checksList);
+      clearChildren(ogpList);
+      clearChildren(twitterList);
+      clearChildren(basicList);
+      clearChildren(socialPreviews);
+    };
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      hideError();
+
+      if (!(urlField instanceof HTMLInputElement)) return;
+      const targetUrl = urlField.value.trim();
+
+      if (!targetUrl) {
+        resetResult();
+        showError("URLを入力してください。");
+        setStatus("入力内容を確認してください。", "error");
+        return;
+      }
+
+      try {
+        const parsed = new URL(targetUrl);
+        if (!["http:", "https:"].includes(parsed.protocol)) {
+          throw new Error("invalid protocol");
+        }
+      } catch {
+        resetResult();
+        showError("URLの形式が正しくありません。`https://` または `http://` から始まるURLを入力してください。");
+        setStatus("入力内容を確認してください。", "error");
+        return;
+      }
+
+      showLoading(true);
+      setResultVisible(false);
+      setStatus("URLのmeta情報を取得しています。", "");
+
+      try {
+        const response = await fetch("/api/ogp-check", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ url: targetUrl }),
+        });
+
+        const payload = await response.json();
+        if (!response.ok || !payload.success) {
+          throw new Error(payload.error || "情報を取得できませんでした。");
+        }
+
+        const { data } = payload;
+
+        if (requestedUrlOutput instanceof HTMLElement) requestedUrlOutput.textContent = data.requestedUrl;
+        if (finalUrlOutput instanceof HTMLElement) finalUrlOutput.textContent = data.finalUrl;
+        if (fetchStatusOutput instanceof HTMLElement) fetchStatusOutput.textContent = "取得成功";
+
+        renderChecks(data.checks);
+        renderMetaSection(ogpList, [
+          { label: "og:title", value: data.ogp.title },
+          { label: "og:description", value: data.ogp.description },
+          { label: "og:image", value: data.ogp.image },
+          { label: "og:url", value: data.ogp.url },
+          { label: "og:type", value: data.ogp.type },
+          { label: "og:site_name", value: data.ogp.siteName },
+          { label: "og:locale", value: data.ogp.locale },
+        ]);
+        renderMetaSection(twitterList, [
+          { label: "twitter:card", value: data.twitter.card },
+          { label: "twitter:title", value: data.twitter.title },
+          { label: "twitter:description", value: data.twitter.description },
+          { label: "twitter:image", value: data.twitter.image },
+          { label: "twitter:site", value: data.twitter.site },
+        ]);
+        renderMetaSection(basicList, [
+          { label: "title", value: data.basic.title },
+          { label: 'meta name="description"', value: data.basic.description },
+        ]);
+        renderSocialPreviews(data);
+
+        copyText = buildCopyText(data);
+        setResultVisible(true);
+        setStatus("OGP / Twitter Card の設定状況を取得しました。", "success");
+      } catch (requestError) {
+        resetResult();
+        showError(
+          requestError instanceof Error
+            ? requestError.message
+            : "対象サイトの設定により取得できない場合があります。"
+        );
+        setStatus("取得に失敗しました。", "error");
+      } finally {
+        showLoading(false);
+      }
+    });
+
+    form.addEventListener("reset", () => {
+      window.setTimeout(() => {
+        resetResult();
+        setStatus("入力内容をクリアしました。", "warning");
+      }, 0);
+    });
+
+    if (pasteButton instanceof HTMLButtonElement && urlField instanceof HTMLInputElement) {
+      pasteButton.addEventListener("click", async () => {
+        try {
+          const pastedText = await navigator.clipboard.readText();
+          if (!pastedText) {
+            setStatus("クリップボードにテキストが見つかりませんでした。", "warning");
+            return;
+          }
+
+          urlField.value = pastedText;
+          urlField.focus();
+          setStatus("クリップボードのURLを貼り付けました。「確認する」を押して取得してください。", "success");
+        } catch {
+          setStatus("ペーストに失敗しました。ブラウザの許可設定を確認してください。", "error");
+        }
+      });
+    }
+
+    if (copyButton instanceof HTMLButtonElement) {
+      copyButton.addEventListener("click", async () => {
+        if (!copyText) {
+          setStatus("先に結果を取得してください。", "warning");
+          return;
+        }
+
+        try {
+          await navigator.clipboard.writeText(copyText);
+          setStatus("確認結果をコピーしました。", "success");
+        } catch {
+          setStatus("コピーに失敗しました。手動で内容をコピーしてください。", "error");
+        }
+      });
+    }
+
+    setStatus("URLを入力して「確認する」を押すと、OGPとTwitter Cardの設定状況を確認できます。", "");
+  });
+</script>
