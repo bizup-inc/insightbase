@@ -1,0 +1,480 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Footer from "../../components/Footer.astro";
+
+const sourceSuggestions = [
+  "google",
+  "yahoo",
+  "meta",
+  "line",
+  "x",
+  "newsletter",
+];
+
+const mediumSuggestions = [
+  "cpc",
+  "paid_social",
+  "display",
+  "email",
+  "social",
+  "referral",
+];
+
+const campaignSuggestions = [
+  "spring_campaign",
+  "summer_sale",
+  "black_friday",
+  "year_end_sale",
+  "brand_campaign",
+  "retargeting",
+  "new_product_launch",
+  "seminar_registration",
+  "whitepaper_download",
+  "lp_test_a",
+  "member_acquisition",
+];
+
+const termSuggestions = [
+  "brand_keyword",
+  "generic_keyword",
+  "competitor_keyword",
+  "remarketing_list",
+  "lookalike_1pct",
+  "interest_marketing",
+  "audience_a",
+  "audience_b",
+  "tokyo_area",
+  "osaka_area",
+  "women_25_34",
+  "men_35_44",
+];
+
+const contentSuggestions = [
+  "banner_a",
+  "banner_b",
+  "textlink_header",
+  "textlink_footer",
+  "cta_primary",
+  "cta_secondary",
+  "responsive_ad_a",
+  "creative_video_01",
+  "carousel_01",
+  "image_1080x1080",
+  "image_1200x628",
+  "first_view",
+];
+---
+
+<Layout
+  title="UTMパラメータ自動生成ツール｜InsightBase"
+  description="URL・source・medium を入力すると、UTM パラメータ付きのURLをその場で生成できる無料ツールです。"
+>
+  <div class="utm-builder-page">
+    <section class="utm-builder-hero utm-builder-fullbleed is-visible">
+      <div class="content__inner utm-builder-hero__inner">
+        <div>
+          <div class="utm-builder-hero__eyebrow">FREE TOOL</div>
+          <h1>UTM パラメータ自動生成ツール</h1>
+          <p>
+            URL と各パラメータを入力すると、UTM 付き URL をリアルタイムで生成します。
+          </p>
+          <small class="utm-builder-hero__note">※ 入力内容は送信・保存されません。<br>※ 必須項目を入力することで自動生成されます。</small>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="utm-builder-section is-visible">
+      <div class="content__inner utm-builder-layout">
+        <div class="utm-builder-panel">
+          <h2>URL を生成する</h2>
+
+          <form class="utm-builder-form" data-utm-builder>
+            <div class="utm-builder-form__grid">
+              <div class="utm-field utm-field--full">
+                <label for="base-url">
+                  URL
+                  <span class="utm-required">必須</span>
+                </label>
+                <input
+                  id="base-url"
+                  name="baseUrl"
+                  type="url"
+                  inputmode="url"
+                  placeholder="https://example.com/lp"
+                  autocomplete="off"
+                />
+                <small>例: https://example.com/contact</small>
+              </div>
+
+              <div class="utm-field">
+                <label for="utm-source">
+                  utm_source
+                  <span class="utm-required">必須</span>
+                </label>
+                <input
+                  id="utm-source"
+                  name="utm_source"
+                  type="text"
+                  placeholder="google"
+                  autocomplete="off"
+                />
+                <small>流入元。例: google / meta / newsletter</small>
+                <div class="utm-suggestions" aria-label="utm_source の候補">
+                  {sourceSuggestions.map((suggestion) => (
+                    <button
+                      class="utm-suggestion"
+                      type="button"
+                      data-utm-suggestion="utm_source"
+                      data-utm-value={suggestion}
+                    >
+                      {suggestion}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div class="utm-field">
+                <label for="utm-medium">
+                  utm_medium
+                  <span class="utm-required">必須</span>
+                </label>
+                <input
+                  id="utm-medium"
+                  name="utm_medium"
+                  type="text"
+                  placeholder="cpc"
+                  autocomplete="off"
+                />
+                <small>媒体種別。例: cpc / email / social</small>
+                <div class="utm-suggestions" aria-label="utm_medium の候補">
+                  {mediumSuggestions.map((suggestion) => (
+                    <button
+                      class="utm-suggestion"
+                      type="button"
+                      data-utm-suggestion="utm_medium"
+                      data-utm-value={suggestion}
+                    >
+                      {suggestion}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div class="utm-field">
+                <label for="utm-campaign">
+                  utm_campaign
+                  <span class="utm-optional">推奨</span>
+                </label>
+                <input
+                  id="utm-campaign"
+                  name="utm_campaign"
+                  type="text"
+                  placeholder="spring_campaign"
+                  autocomplete="off"
+                />
+                <small>施策やキャンペーン名です。月別や企画名を含めると管理しやすくなります。</small>
+                <small>例: spring_campaign / brand_campaign</small>
+              </div>
+
+              <div class="utm-field">
+                <label for="utm-term">
+                  utm_term
+                  <span class="utm-optional">任意</span>
+                </label>
+                <input
+                  id="utm-term"
+                  name="utm_term"
+                  type="text"
+                  placeholder="brand_keyword"
+                  autocomplete="off"
+                />
+                <small>検索語句や配信条件の違いを区別したいときに使います。</small>
+                <small>例: brand_keyword / keyword_a</small>
+              </div>
+
+              <div class="utm-field utm-field--full">
+                <label for="utm-content">
+                  utm_content
+                  <span class="utm-optional">任意</span>
+                </label>
+                <input
+                  id="utm-content"
+                  name="utm_content"
+                  type="text"
+                  placeholder="banner_a"
+                  autocomplete="off"
+                />
+                <small>広告文・バナー・ボタン位置などの違いを区別するために使います。</small>
+                <small>同じ施策内のABテスト管理にも便利です。</small>
+                <small>例：banner_a / textlink_footer / cta_red_button</small>
+
+              </div>
+            </div>
+
+            <div class="utm-builder-result">
+              <h2>生成された URL</h2>
+              <div class="utm-result__box" aria-live="polite">
+                <p class="utm-result__url" data-utm-output>
+                  必須項目を入力すると、ここに UTM パラメータ付き URL が表示されます。
+                </p>
+              </div>
+
+              <div class="utm-result__actions">
+                <button class="utm-builder-button utm-builder-button--primary" type="button" data-utm-copy>
+                  URL をコピー
+                </button>
+                <a
+                  class="utm-builder-button utm-builder-button--secondary"
+                  href="#"
+                  target="_blank"
+                  rel="noreferrer"
+                  data-utm-open
+                  aria-disabled="true"
+                >
+                  URL を開く
+                </a>
+                <button class="utm-builder-button utm-builder-button--ghost" type="reset">
+                  クリア
+                </button>
+              </div>
+
+              <div class="utm-builder-status" data-utm-status></div>
+              <div class="utm-builder-empty utm-builder-note">
+                半角英数字・小文字・命名ルールの統一を推奨します。
+              </div>
+              <div class="utm-builder-alert utm-builder-alert--warning" data-utm-warning hidden></div>
+              <div class="utm-builder-alert utm-builder-alert--error" data-utm-error hidden></div>
+            </div>
+          </form>
+        </div>
+
+        <aside class="utm-builder-sidebar">
+          <div class="utm-builder-sidebar__card">
+            <h2>UTM の基本</h2>
+            <ul>
+              <li>`utm_source` は流入元です。例: `google`, `meta`, `line`</li>
+              <li>`utm_medium` は配信チャネルです。例: `cpc`, `email`, `display`</li>
+              <li>`utm_campaign` は施策名です。月次や目的を含めると管理しやすくなります。</li>
+              <li>`utm_content` はバナーやCTAの差分管理に向いています。</li>
+            </ul>
+          </div>
+
+          <div class="utm-builder-sidebar__card">
+            <h2>運用上の注意</h2>
+            <p>
+              UTM は分析用の公開情報です。個人情報は含めず、表記ゆれを避けてください。
+              例: `Meta` と `meta` を混在させると GA4 側で別データとして分かれます。
+            </p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <div class="utm-builder-fullbleed">
+      <Footer />
+    </div>
+  </div>
+</Layout>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.querySelector("[data-utm-builder]");
+    if (!(form instanceof HTMLFormElement)) return;
+
+    const output = form.querySelector("[data-utm-output]");
+    const status = form.querySelector("[data-utm-status]");
+    const warning = form.querySelector("[data-utm-warning]");
+    const error = form.querySelector("[data-utm-error]");
+    const copyButton = form.querySelector("[data-utm-copy]");
+    const openLink = form.querySelector("[data-utm-open]");
+    const suggestionButtons = form.querySelectorAll("[data-utm-suggestion]");
+
+    const fields = {
+      baseUrl: form.elements.namedItem("baseUrl"),
+      utm_source: form.elements.namedItem("utm_source"),
+      utm_medium: form.elements.namedItem("utm_medium"),
+      utm_campaign: form.elements.namedItem("utm_campaign"),
+      utm_term: form.elements.namedItem("utm_term"),
+      utm_content: form.elements.namedItem("utm_content"),
+    };
+
+    let generatedUrl = "";
+
+    const getValue = (field) =>
+      field instanceof HTMLInputElement ? field.value.trim() : "";
+
+    const hasNonAscii = (value) => /[^\x20-\x7E]/.test(value);
+
+    const resetFeedback = () => {
+      if (status instanceof HTMLElement) {
+        status.textContent = "";
+        status.dataset.state = "";
+      }
+      if (warning instanceof HTMLElement) {
+        warning.hidden = true;
+        warning.textContent = "";
+      }
+      if (error instanceof HTMLElement) {
+        error.hidden = true;
+        error.textContent = "";
+      }
+    };
+
+    const setOutput = (value) => {
+      if (!(output instanceof HTMLElement)) return;
+      output.textContent =
+        value || "必須項目を入力すると、ここに UTM パラメータ付き URL が表示されます。";
+    };
+
+    const setOpenLink = (value) => {
+      if (!(openLink instanceof HTMLAnchorElement)) return;
+      openLink.href = value || "#";
+      openLink.setAttribute("aria-disabled", value ? "false" : "true");
+      openLink.style.pointerEvents = value ? "auto" : "none";
+      openLink.style.opacity = value ? "1" : "0.55";
+    };
+
+    const buildUrl = () => {
+      resetFeedback();
+
+      const baseUrl = getValue(fields.baseUrl);
+      const source = getValue(fields.utm_source);
+      const medium = getValue(fields.utm_medium);
+      const campaign = getValue(fields.utm_campaign);
+      const term = getValue(fields.utm_term);
+      const content = getValue(fields.utm_content);
+
+      if (!baseUrl || !source || !medium) {
+        generatedUrl = "";
+        setOutput("");
+        setOpenLink("");
+        if (status instanceof HTMLElement) {
+          status.textContent = "URL・utm_source・utm_medium を入力すると生成できます。";
+          status.dataset.state = "warning";
+        }
+        return;
+      }
+
+      let parsedUrl;
+
+      try {
+        parsedUrl = new URL(baseUrl);
+      } catch {
+        generatedUrl = "";
+        setOutput("");
+        setOpenLink("");
+        if (error instanceof HTMLElement) {
+          error.hidden = false;
+          error.textContent = "URL の形式が正しくありません。`https://` から入力してください。";
+        }
+        if (status instanceof HTMLElement) {
+          status.textContent = "URL を修正すると再生成されます。";
+          status.dataset.state = "error";
+        }
+        return;
+      }
+
+      parsedUrl.searchParams.set("utm_source", source);
+      parsedUrl.searchParams.set("utm_medium", medium);
+
+      if (campaign) {
+        parsedUrl.searchParams.set("utm_campaign", campaign);
+      } else {
+        parsedUrl.searchParams.delete("utm_campaign");
+      }
+
+      if (term) {
+        parsedUrl.searchParams.set("utm_term", term);
+      } else {
+        parsedUrl.searchParams.delete("utm_term");
+      }
+
+      if (content) {
+        parsedUrl.searchParams.set("utm_content", content);
+      } else {
+        parsedUrl.searchParams.delete("utm_content");
+      }
+
+      generatedUrl = parsedUrl.toString();
+      setOutput(generatedUrl);
+      setOpenLink(generatedUrl);
+
+      const warningMessages = [
+        source,
+        medium,
+        campaign,
+        term,
+        content,
+      ].filter(Boolean).filter(hasNonAscii);
+
+      if (warningMessages.length && warning instanceof HTMLElement) {
+        warning.hidden = false;
+        warning.textContent =
+          "日本語や全角文字を含む値があります。計測自体は可能ですが、運用ルール上は半角英数字に統一する方が安全です。";
+      }
+
+      if (status instanceof HTMLElement) {
+        status.textContent = "UTM パラメータ付き URL を生成しました。";
+        status.dataset.state = "success";
+      }
+    };
+
+    form.addEventListener("input", buildUrl);
+
+    form.addEventListener("reset", () => {
+      window.setTimeout(() => {
+        generatedUrl = "";
+        resetFeedback();
+        setOutput("");
+        setOpenLink("");
+        if (status instanceof HTMLElement) {
+          status.textContent = "フォームをリセットしました。";
+          status.dataset.state = "warning";
+        }
+      }, 0);
+    });
+
+    suggestionButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const fieldName = button.getAttribute("data-utm-suggestion");
+        const fieldValue = button.getAttribute("data-utm-value") ?? "";
+        if (!fieldName || !(fieldName in fields)) return;
+
+        const field = fields[fieldName];
+        if (field instanceof HTMLInputElement) {
+          field.value = fieldValue;
+          field.focus();
+          buildUrl();
+        }
+      });
+    });
+
+    if (copyButton instanceof HTMLButtonElement) {
+      copyButton.addEventListener("click", async () => {
+        if (!generatedUrl) {
+          if (status instanceof HTMLElement) {
+            status.textContent = "先に URL を生成してください。";
+            status.dataset.state = "warning";
+          }
+          return;
+        }
+
+        try {
+          await navigator.clipboard.writeText(generatedUrl);
+          if (status instanceof HTMLElement) {
+            status.textContent = "URL をコピーしました。";
+            status.dataset.state = "success";
+          }
+        } catch {
+          if (status instanceof HTMLElement) {
+            status.textContent = "コピーに失敗しました。手動で URL を選択してください。";
+            status.dataset.state = "error";
+          }
+        }
+      });
+    }
+
+    buildUrl();
+  });
+</script>
