@@ -63,6 +63,21 @@ const contentSuggestions = [
   "image_1200x628",
   "first_view",
 ];
+
+const relatedArticles = [
+  {
+    href: "https://insightbase.jp/knowledge/utm-parameters-basics",
+    title: "UTMパラメータとは？意味・使い方・注意点を初心者向けにやさしく解説",
+    thumbnail:
+      "https://images.microcms-assets.io/assets/764dbcc81b5a4f0a8b5a41851a615d7f/95e2725e7ae14458b78db293419f63d4/ga4-thumbnail.jpg",
+  },
+  {
+    href: "https://insightbase.jp/knowledge/utm-source-medium-campaign-difference",
+    title: "utm_source・utm_medium・utm_campaignの違いとは？迷いやすい3項目を具体例で整理",
+    thumbnail:
+      "https://images.microcms-assets.io/assets/764dbcc81b5a4f0a8b5a41851a615d7f/95e2725e7ae14458b78db293419f63d4/ga4-thumbnail.jpg",
+  },
+];
 ---
 
 <Layout
@@ -266,6 +281,27 @@ const contentSuggestions = [
               UTM は分析用の公開情報です。個人情報は含めず、表記ゆれを避けてください。
               例: `Meta` と `meta` を混在させると GA4 側で別データとして分かれます。
             </p>
+          </div>
+
+          <div class="utm-builder-sidebar__card">
+            <h2>関連記事</h2>
+            <p>パラメータの意味や命名ルールを整理したい場合は、次の記事も参照してください。</p>
+            <div class="utm-builder-related__grid utm-builder-related__grid--sidebar">
+              {relatedArticles.map((article) => (
+                <a class="utm-related-card" href={article.href}>
+                  <img
+                    class="utm-related-card__thumbnail"
+                    src={article.thumbnail}
+                    alt=""
+                    loading="lazy"
+                  />
+                  <div class="utm-related-card__body">
+                    <span class="utm-related-card__label">Knowledge</span>
+                    <h3>{article.title}</h3>
+                  </div>
+                </a>
+              ))}
+            </div>
           </div>
         </aside>
       </div>
