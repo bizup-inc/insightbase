@@ -1,0 +1,599 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Footer from "../../components/Footer.astro";
+
+const sampleUrl =
+  "https://example.com/lp?utm_source=Google&utm_medium=paid_social&utm_campaign=spring_sale&utm_content=banner%20a&id=123&ref=mail#cta";
+
+const relatedArticles = [
+  {
+    href: "https://insightbase.jp/knowledge/utm-parameters-basics",
+    title: "UTMパラメータとは？意味・使い方・注意点を初心者向けにやさしく解説",
+    thumbnail:
+      "https://images.microcms-assets.io/assets/764dbcc81b5a4f0a8b5a41851a615d7f/95e2725e7ae14458b78db293419f63d4/ga4-thumbnail.jpg",
+  },
+  {
+    href: "https://insightbase.jp/knowledge/utm-source-medium-campaign-difference",
+    title: "utm_source・utm_medium・utm_campaignの違いとは？迷いやすい3項目を具体例で整理",
+    thumbnail:
+      "https://images.microcms-assets.io/assets/764dbcc81b5a4f0a8b5a41851a615d7f/95e2725e7ae14458b78db293419f63d4/ga4-thumbnail.jpg",
+  },
+];
+---
+
+<Layout
+  title="URLパラメータ確認ツール｜UTMやクエリを分解してチェック"
+  description="URLを入力するだけで、クエリパラメータやUTMパラメータを分解表示。広告URL、メルマガURL、UTM付きURLの確認に便利な無料ツールです。"
+>
+  <div class="url-parameter-checker-page">
+    <section class="url-parameter-checker-hero url-parameter-checker-fullbleed is-visible">
+      <div class="content__inner url-parameter-checker-hero__inner">
+        <div>
+          <div class="url-parameter-checker-hero__eyebrow">FREE TOOL</div>
+          <h1>URLパラメータ確認ツール</h1>
+          <p>
+            URLパラメータ確認ツールは、入力したURLに含まれるクエリパラメータを分解して表示するツールです。UTMパラメータの有無や内容を確認したいとき、広告URLやメルマガURLのチェックをしたいときに便利です。
+          </p>
+          <small class="url-parameter-checker-hero__note">
+            ※ このツールはURLを解析して表示するものであり、GA4上の計測可否を保証するものではありません。
+          </small>
+        </div>
+      </div>
+    </section>
+
+    <section class="url-parameter-checker-section is-visible">
+      <div class="content__inner url-parameter-checker-layout">
+        <div class="url-parameter-checker-panel">
+          <h2>URLを解析する</h2>
+
+          <form class="url-parameter-checker-form" data-url-parameter-checker>
+            <div class="url-parameter-checker-field">
+              <label for="target-url">
+                URL
+                <span class="url-parameter-checker-required">必須</span>
+              </label>
+              <textarea
+                id="target-url"
+                name="targetUrl"
+                rows="4"
+                inputmode="url"
+                placeholder="https://example.com/lp?utm_source=google&utm_medium=cpc&utm_campaign=spring_sale"
+                autocomplete="off"
+              ></textarea>
+              <small>広告URLやメルマガURLなど、確認したいURLをそのまま貼り付けてください。</small>
+            </div>
+
+            <div class="url-parameter-checker-actions">
+              <button
+                class="url-parameter-checker-button url-parameter-checker-button--paste"
+                type="button"
+                data-url-paste
+              >
+                ペースト
+              </button>
+              <button class="url-parameter-checker-button url-parameter-checker-button--primary" type="submit">
+                解析する
+              </button>
+              <button
+                class="url-parameter-checker-button url-parameter-checker-button--secondary"
+                type="button"
+                data-url-sample
+              >
+                サンプルURLでチェック
+              </button>
+              <button
+                class="url-parameter-checker-button url-parameter-checker-button--ghost"
+                type="reset"
+              >
+                クリア
+              </button>
+            </div>
+
+            <div class="url-parameter-checker-status" data-url-status></div>
+            <div class="url-parameter-checker-alert url-parameter-checker-alert--error" data-url-error hidden></div>
+
+            <div class="url-parameter-checker-result" data-url-result hidden>
+              <section class="url-parameter-checker-result__section">
+                <div class="url-parameter-checker-result__header">
+                  <h2>ベースURL</h2>
+                  <button
+                    class="url-parameter-checker-button url-parameter-checker-button--chip"
+                    type="button"
+                    data-copy-base
+                  >
+                    ベースURLをコピー
+                  </button>
+                </div>
+                <div class="url-parameter-checker-output" data-base-url>
+                  解析結果がここに表示されます。
+                </div>
+              </section>
+
+              <section class="url-parameter-checker-result__section">
+                <div class="url-parameter-checker-result__header">
+                  <h2>チェック結果</h2>
+                </div>
+                <ul class="url-parameter-checker-checklist" data-checklist></ul>
+              </section>
+
+              <section class="url-parameter-checker-result__section">
+                <div class="url-parameter-checker-result__header">
+                  <h2>UTMパラメータ</h2>
+                  <button
+                    class="url-parameter-checker-button url-parameter-checker-button--chip"
+                    type="button"
+                    data-copy-utm
+                  >
+                    UTM一覧をコピー
+                  </button>
+                </div>
+                <div class="url-parameter-checker-empty" data-utm-empty hidden>
+                  UTMパラメータは見つかりませんでした。
+                </div>
+                <div class="url-parameter-checker-list" data-utm-list></div>
+              </section>
+
+              <section class="url-parameter-checker-result__section">
+                <div class="url-parameter-checker-result__header">
+                  <h2>その他のパラメータ</h2>
+                  <button
+                    class="url-parameter-checker-button url-parameter-checker-button--chip"
+                    type="button"
+                    data-copy-params
+                  >
+                    パラメータ一覧をコピー
+                  </button>
+                </div>
+                <div class="url-parameter-checker-empty" data-other-empty hidden>
+                  その他のパラメータは見つかりませんでした。
+                </div>
+                <div class="url-parameter-checker-list" data-other-list></div>
+              </section>
+            </div>
+          </form>
+        </div>
+
+        <aside class="url-parameter-checker-sidebar">
+          <div class="url-parameter-checker-sidebar__card">
+            <h2>このツールでできること</h2>
+            <ul>
+              <li>URLに含まれるクエリパラメータを `key = value` の形で整理して確認できます。</li>
+              <li>`utm_source` `utm_medium` `utm_campaign` の有無をすぐにチェックできます。</li>
+              <li>大文字や空白など、UTM運用で起こりやすい表記ゆれを見つけやすくします。</li>
+            </ul>
+          </div>
+
+          <div class="url-parameter-checker-sidebar__card">
+            <h2>確認のポイント</h2>
+            <ul>
+              <li>表記ゆれがあると、GA4や広告レポートで集計が分かれることがあります。</li>
+              <li>他人が作成したURLを確認するときは、UTM以外の独自パラメータもあわせて見てください。</li>
+              <li>URLに個人情報や機微情報を含める運用は避けてください。</li>
+            </ul>
+          </div>
+
+          <div class="url-parameter-checker-sidebar__card">
+            <h2>関連記事</h2>
+            <p>パラメータの意味や命名ルールを整理したい場合は、次の記事も参照してください。</p>
+            <div class="url-parameter-checker-related__grid">
+              {relatedArticles.map((article) => (
+                <a class="url-parameter-checker-related-card" href={article.href}>
+                  <img
+                    class="url-parameter-checker-related-card__thumbnail"
+                    src={article.thumbnail}
+                    alt=""
+                    loading="lazy"
+                  />
+                  <div class="url-parameter-checker-related-card__body">
+                    <span class="url-parameter-checker-related-card__label">Knowledge</span>
+                    <h3>{article.title}</h3>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <div class="url-parameter-checker-fullbleed">
+      <Footer />
+    </div>
+  </div>
+</Layout>
+
+<script define:vars={{ sampleUrl }}>
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.querySelector("[data-url-parameter-checker]");
+    if (!(form instanceof HTMLFormElement)) return;
+
+    const urlField = form.elements.namedItem("targetUrl");
+    const result = form.querySelector("[data-url-result]");
+    const status = form.querySelector("[data-url-status]");
+    const error = form.querySelector("[data-url-error]");
+    const sampleButton = form.querySelector("[data-url-sample]");
+    const pasteButton = form.querySelector("[data-url-paste]");
+    const baseUrlOutput = form.querySelector("[data-base-url]");
+    const checklist = form.querySelector("[data-checklist]");
+    const utmList = form.querySelector("[data-utm-list]");
+    const otherList = form.querySelector("[data-other-list]");
+    const utmEmpty = form.querySelector("[data-utm-empty]");
+    const otherEmpty = form.querySelector("[data-other-empty]");
+    const copyBaseButton = form.querySelector("[data-copy-base]");
+    const copyParamsButton = form.querySelector("[data-copy-params]");
+    const copyUtmButton = form.querySelector("[data-copy-utm]");
+
+    const utmKeys = new Set([
+      "utm_source",
+      "utm_medium",
+      "utm_campaign",
+      "utm_term",
+      "utm_content",
+    ]);
+
+    let currentState = {
+      baseUrl: "",
+      utmText: "",
+      paramsText: "",
+    };
+
+    const setStatus = (message, state = "") => {
+      if (!(status instanceof HTMLElement)) return;
+      status.textContent = message;
+      status.dataset.state = state;
+    };
+
+    const resetError = () => {
+      if (!(error instanceof HTMLElement)) return;
+      error.hidden = true;
+      error.textContent = "";
+    };
+
+    const showError = (message) => {
+      if (!(error instanceof HTMLElement)) return;
+      error.hidden = false;
+      error.textContent = message;
+    };
+
+    const setResultVisibility = (visible) => {
+      if (result instanceof HTMLElement) {
+        result.hidden = !visible;
+      }
+    };
+
+    const clearChildren = (element) => {
+      if (!(element instanceof HTMLElement)) return;
+      element.innerHTML = "";
+    };
+
+    const decodeQueryComponent = (value) => {
+      try {
+        return decodeURIComponent(value.replace(/\+/g, " "));
+      } catch {
+        return value;
+      }
+    };
+
+    const escapeHtml = (value) =>
+      value
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+
+    const parseEntries = (inputUrl) => {
+      const parsedUrl = new URL(inputUrl);
+      const hashIndex = inputUrl.indexOf("#");
+      const beforeHash = hashIndex >= 0 ? inputUrl.slice(0, hashIndex) : inputUrl;
+      const questionIndex = beforeHash.indexOf("?");
+      const rawQuery = questionIndex >= 0 ? beforeHash.slice(questionIndex + 1) : "";
+
+      const rawEntries = rawQuery
+        ? rawQuery.split("&").filter(Boolean).map((chunk) => {
+            const equalIndex = chunk.indexOf("=");
+            const rawKey = equalIndex >= 0 ? chunk.slice(0, equalIndex) : chunk;
+            const rawValue = equalIndex >= 0 ? chunk.slice(equalIndex + 1) : "";
+            return {
+              key: decodeQueryComponent(rawKey),
+              rawKey,
+              rawValue,
+              decodedValue: decodeQueryComponent(rawValue),
+            };
+          })
+        : [];
+
+      return {
+        parsedUrl,
+        rawEntries,
+      };
+    };
+
+    const formatValueLine = (entry) => {
+      const rawValueText = entry.rawValue || "(空)";
+      if (entry.decodedValue !== entry.rawValue) {
+        return `${entry.key} = ${rawValueText} (decoded: ${entry.decodedValue || "(空)"})`;
+      }
+      return `${entry.key} = ${entry.decodedValue || "(空)"}`;
+    };
+
+    const renderParamList = (container, entries) => {
+      if (!(container instanceof HTMLElement)) return;
+      clearChildren(container);
+
+      entries.forEach((entry) => {
+        const item = document.createElement("div");
+        item.className = "url-parameter-checker-item";
+
+        const key = document.createElement("div");
+        key.className = "url-parameter-checker-item__key";
+        key.textContent = entry.key;
+
+        const raw = document.createElement("div");
+        raw.className = "url-parameter-checker-item__value";
+        raw.textContent = entry.rawValue || "(空)";
+
+        item.append(key, raw);
+
+        if (entry.decodedValue !== entry.rawValue) {
+          const decoded = document.createElement("div");
+          decoded.className = "url-parameter-checker-item__decoded";
+          decoded.textContent = `decoded: ${entry.decodedValue || "(空)"}`;
+          item.append(decoded);
+        }
+
+        container.append(item);
+      });
+    };
+
+    const renderChecklist = (items) => {
+      if (!(checklist instanceof HTMLElement)) return;
+      clearChildren(checklist);
+
+      items.forEach((item) => {
+        const li = document.createElement("li");
+        li.className = `url-parameter-checker-checklist__item is-${item.state}`;
+        li.innerHTML = `<strong>${escapeHtml(item.label)}</strong> ${escapeHtml(item.message)}`;
+        checklist.append(li);
+      });
+    };
+
+    const getUtmValue = (entries, key) => {
+      const matchedEntry = entries.find((entry) => entry.key === key && entry.decodedValue !== "");
+      return matchedEntry ? matchedEntry.decodedValue.trim().toLowerCase() : "";
+    };
+
+    const evaluateSourceMediumCombination = (utmEntries) => {
+      const source = getUtmValue(utmEntries, "utm_source");
+      const medium = getUtmValue(utmEntries, "utm_medium");
+
+      if (!source || !medium) {
+        return {
+          label: "組み合わせチェック:",
+          message: "要確認：utm_source または utm_medium が未設定です",
+          state: "warning",
+        };
+      }
+
+      const commonPairs = {
+        google: new Set(["cpc", "organic", "display", "referral"]),
+        yahoo: new Set(["cpc", "organic", "display", "referral"]),
+        meta: new Set(["paid_social", "social"]),
+        facebook: new Set(["paid_social", "social"]),
+        instagram: new Set(["paid_social", "social"]),
+        line: new Set(["paid_social", "social"]),
+        x: new Set(["paid_social", "social"]),
+        newsletter: new Set(["email"]),
+        mail: new Set(["email"]),
+      };
+
+      const allowedMediums = commonPairs[source];
+
+      if (allowedMediums?.has(medium)) {
+        return {
+          label: "組み合わせチェック:",
+          message: "一般的な組み合わせです",
+          state: "success",
+        };
+      }
+
+      return {
+        label: "組み合わせチェック:",
+        message: `要確認：utm_source=${source} に対して utm_medium=${medium} は一般的ではない組み合わせです。設定意図を確認してください`,
+        state: "warning",
+      };
+    };
+
+    const buildChecklist = (utmEntries) => {
+      const checklistItems = [];
+      const requiredKeys = ["utm_source", "utm_medium", "utm_campaign"];
+
+      requiredKeys.forEach((key) => {
+        const exists = utmEntries.some((entry) => entry.key === key && entry.decodedValue !== "");
+        checklistItems.push({
+          label: `${key}:`,
+          message: exists
+            ? "OK"
+            : key === "utm_campaign"
+              ? "未設定です。必須ではありませんが、施策名を区別したい場合は設定しておくと後から集計しやすくなります。"
+              : "設定されていません",
+          state: exists ? "success" : "warning",
+        });
+      });
+
+      const upperCaseEntries = utmEntries.filter((entry) => /[A-Z]/.test(entry.decodedValue));
+      checklistItems.push({
+        label: "大文字チェック:",
+        message: upperCaseEntries.length
+          ? `小文字統一推奨です（${upperCaseEntries.map((entry) => entry.key).join(", ")}）`
+          : "大文字は含まれていません",
+        state: upperCaseEntries.length ? "warning" : "success",
+      });
+
+      const whiteSpaceEntries = utmEntries.filter((entry) => /\s/.test(entry.decodedValue));
+      checklistItems.push({
+        label: "空白チェック:",
+        message: whiteSpaceEntries.length
+          ? `空白を含む値があります（${whiteSpaceEntries.map((entry) => entry.key).join(", ")}）`
+          : "空白は含まれていません",
+        state: whiteSpaceEntries.length ? "warning" : "success",
+      });
+
+      checklistItems.push(evaluateSourceMediumCombination(utmEntries));
+
+      return checklistItems;
+    };
+
+    const updateCopyState = (baseUrl, utmEntries, allEntries) => {
+      currentState = {
+        baseUrl,
+        utmText: utmEntries.length
+          ? utmEntries.map((entry) => formatValueLine(entry)).join("\n")
+          : "UTMパラメータは見つかりませんでした。",
+        paramsText: allEntries.length
+          ? allEntries.map((entry) => formatValueLine(entry)).join("\n")
+          : "パラメータは見つかりませんでした。",
+      };
+    };
+
+    const parseUrl = () => {
+      resetError();
+
+      if (!(urlField instanceof HTMLTextAreaElement)) return;
+
+      const inputUrl = urlField.value.trim();
+      if (!inputUrl) {
+        setResultVisibility(false);
+        setStatus("URLを入力してから解析してください。", "warning");
+        currentState = { baseUrl: "", utmText: "", paramsText: "" };
+        return;
+      }
+
+      let parsed;
+      try {
+        parsed = parseEntries(inputUrl);
+      } catch {
+        setResultVisibility(false);
+        showError("URLの形式が正しくありません。`https://` または `http://` を含む完全なURLを入力してください。");
+        setStatus("URLを修正すると再度解析できます。", "error");
+        currentState = { baseUrl: "", utmText: "", paramsText: "" };
+        return;
+      }
+
+      const { parsedUrl, rawEntries } = parsed;
+      const baseUrl = `${parsedUrl.origin}${parsedUrl.pathname}${parsedUrl.hash}`;
+      const utmEntries = rawEntries.filter((entry) => utmKeys.has(entry.key));
+      const otherEntries = rawEntries.filter((entry) => !utmKeys.has(entry.key));
+
+      if (baseUrlOutput instanceof HTMLElement) {
+        baseUrlOutput.textContent = baseUrl;
+      }
+
+      renderChecklist(buildChecklist(utmEntries));
+      renderParamList(utmList, utmEntries);
+      renderParamList(otherList, otherEntries);
+
+      if (utmEmpty instanceof HTMLElement) {
+        utmEmpty.hidden = utmEntries.length > 0;
+      }
+      if (otherEmpty instanceof HTMLElement) {
+        otherEmpty.hidden = otherEntries.length > 0;
+      }
+
+      updateCopyState(baseUrl, utmEntries, rawEntries);
+      setResultVisibility(true);
+
+      if (!rawEntries.length) {
+        setStatus("クエリパラメータは見つかりませんでした。ハッシュ付きURLでもそのまま確認できます。", "warning");
+      } else {
+        setStatus("URLを解析しました。UTMパラメータとその他のパラメータを分類して表示しています。", "success");
+      }
+    };
+
+    const copyText = async (value, successMessage) => {
+      if (!value) {
+        setStatus("先にURLを解析してください。", "warning");
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(value);
+        setStatus(successMessage, "success");
+      } catch {
+        setStatus("コピーに失敗しました。内容を選択して手動でコピーしてください。", "error");
+      }
+    };
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      parseUrl();
+    });
+
+    form.addEventListener("reset", () => {
+      window.setTimeout(() => {
+        resetError();
+        setResultVisibility(false);
+        if (baseUrlOutput instanceof HTMLElement) {
+          baseUrlOutput.textContent = "解析結果がここに表示されます。";
+        }
+        clearChildren(checklist);
+        clearChildren(utmList);
+        clearChildren(otherList);
+        if (utmEmpty instanceof HTMLElement) {
+          utmEmpty.hidden = true;
+        }
+        if (otherEmpty instanceof HTMLElement) {
+          otherEmpty.hidden = true;
+        }
+        currentState = { baseUrl: "", utmText: "", paramsText: "" };
+        setStatus("入力内容をクリアしました。", "warning");
+      }, 0);
+    });
+
+    if (sampleButton instanceof HTMLButtonElement && urlField instanceof HTMLTextAreaElement) {
+      sampleButton.addEventListener("click", () => {
+        urlField.value = sampleUrl;
+        parseUrl();
+        urlField.focus();
+      });
+    }
+
+    if (pasteButton instanceof HTMLButtonElement && urlField instanceof HTMLTextAreaElement) {
+      pasteButton.addEventListener("click", async () => {
+        try {
+          const pastedText = await navigator.clipboard.readText();
+          if (!pastedText) {
+            setStatus("クリップボードにテキストが見つかりませんでした。", "warning");
+            return;
+          }
+
+          urlField.value = pastedText;
+          urlField.focus();
+          setStatus("クリップボードのURLを貼り付けました。「解析する」を押して内容を確認してください。", "success");
+        } catch {
+          setStatus("ペーストに失敗しました。ブラウザの許可設定を確認してください。", "error");
+        }
+      });
+    }
+
+    if (copyBaseButton instanceof HTMLButtonElement) {
+      copyBaseButton.addEventListener("click", () => {
+        copyText(currentState.baseUrl, "ベースURLをコピーしました。");
+      });
+    }
+
+    if (copyParamsButton instanceof HTMLButtonElement) {
+      copyParamsButton.addEventListener("click", () => {
+        copyText(currentState.paramsText, "パラメータ一覧をコピーしました。");
+      });
+    }
+
+    if (copyUtmButton instanceof HTMLButtonElement) {
+      copyUtmButton.addEventListener("click", () => {
+        copyText(currentState.utmText, "UTMパラメータ一覧をコピーしました。");
+      });
+    }
+
+    setStatus("URLを入力して「解析する」を押すと、その場で内容を確認できます。", "");
+  });
+</script>
