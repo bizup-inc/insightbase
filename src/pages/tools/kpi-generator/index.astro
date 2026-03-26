@@ -1,0 +1,464 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import Footer from "../../../components/Footer.astro";
+import {
+  currentIssueOptions,
+  evaluationAxisOptions,
+  outcomeOptions,
+  sitePurposeOptions,
+  siteTypeOptions,
+  toolOptions,
+  trafficSourceOptions,
+} from "../../../lib/kpi-generator/options";
+---
+
+<Layout
+  title="KPI設計ジェネレーター｜KPI設計ツールとGA4指標設計のたたき台を作成｜InsightBase"
+  description="サイトの目的や集客手段を選ぶだけで、KGI・主要KPI・補助KPI・レポートに載せるべき項目を整理できる無料のKPI設計ジェネレーターです。"
+>
+  <div class="kpi-generator-page">
+    <section class="kpi-generator-hero kpi-generator-fullbleed is-visible">
+      <div class="content__inner kpi-generator-hero__inner">
+        <div>
+          <div class="kpi-generator-hero__eyebrow">FREE TOOL</div>
+          <h1>KPI設計ジェネレーター</h1>
+          <p>
+            KPI設計ジェネレーターは、サイトの目的や集客手段を選ぶだけで、KGIや毎月まず見るべき主要KPIのたたき台を作れる無料ツールです。GA4の指標設計や、レポートに何を載せるべきかを整理したいときに役立ちます。
+          </p>
+          <small class="kpi-generator-hero__note">
+            ※ 出力結果は一般的な設計例です。実際のKPI設計は商材、商談化条件、レポートの用途に応じて調整してください。
+          </small>
+        </div>
+      </div>
+    </section>
+
+    <section class="kpi-generator-section is-visible">
+      <div class="content__inner kpi-generator-layout">
+        <div class="kpi-generator-panel">
+          <form class="kpi-generator-form" data-kpi-generator method="post">
+            <section class="kpi-generator-block">
+              <div class="kpi-generator-block__header">
+                <h2>1. サイトの目的</h2>
+                <p>ひとつだけ選択できます。最終的に増やしたい成果にもっとも近いものを選んでください。</p>
+              </div>
+              <div class="kpi-generator-option-grid kpi-generator-option-grid--single">
+                {sitePurposeOptions.map((option) => (
+                  <label class="kpi-generator-option">
+                    <input type="radio" name="sitePurpose" value={option} />
+                    <span>{option}</span>
+                  </label>
+                ))}
+              </div>
+            </section>
+
+            <section class="kpi-generator-block">
+              <div class="kpi-generator-block__header">
+                <h2>2. サイトの種類</h2>
+                <p>ひとつだけ選択できます。レポートの前提になるサイトタイプを選んでください。</p>
+              </div>
+              <div class="kpi-generator-option-grid">
+                {siteTypeOptions.map((option) => (
+                  <label class="kpi-generator-option">
+                    <input type="radio" name="siteType" value={option} />
+                    <span>{option}</span>
+                  </label>
+                ))}
+              </div>
+            </section>
+
+            <section class="kpi-generator-block">
+              <div class="kpi-generator-block__header">
+                <h2>3. 主な集客手段</h2>
+                <p>複数選択できます。今の集客評価で外せないものを選んでください。</p>
+              </div>
+              <div class="kpi-generator-option-grid">
+                {trafficSourceOptions.map((option) => (
+                  <label class="kpi-generator-option">
+                    <input type="checkbox" name="trafficSources" value={option} />
+                    <span>{option}</span>
+                  </label>
+                ))}
+              </div>
+            </section>
+
+            <section class="kpi-generator-block">
+              <div class="kpi-generator-block__header">
+                <h2>4. 重視したい評価軸</h2>
+                <p>複数選択できます。主要KPIの並び順に反映します。</p>
+              </div>
+              <div class="kpi-generator-option-grid">
+                {evaluationAxisOptions.map((option) => (
+                  <label class="kpi-generator-option">
+                    <input type="checkbox" name="evaluationAxes" value={option} />
+                    <span>{option}</span>
+                  </label>
+                ))}
+              </div>
+            </section>
+
+            <section class="kpi-generator-block">
+              <div class="kpi-generator-block__header">
+                <h2>5. 現在いちばん困っていること</h2>
+                <p>ひとつだけ選択できます。今の悩みに近いものを選ぶと、最後のアドバイスに反映します。</p>
+              </div>
+              <div class="kpi-generator-option-grid">
+                {currentIssueOptions.map((option) => (
+                  <label class="kpi-generator-option">
+                    <input type="radio" name="currentIssue" value={option} />
+                    <span>{option}</span>
+                  </label>
+                ))}
+              </div>
+            </section>
+
+            <section class="kpi-generator-block">
+              <div class="kpi-generator-block__header">
+                <h2>6. 計測している成果</h2>
+                <p>複数選択できます。まだ決めきれていない場合はそのまま選んでください。</p>
+              </div>
+              <div class="kpi-generator-option-grid">
+                {outcomeOptions.map((option) => (
+                  <label class="kpi-generator-option">
+                    <input type="checkbox" name="outcomes" value={option} />
+                    <span>{option}</span>
+                  </label>
+                ))}
+              </div>
+            </section>
+
+            <section class="kpi-generator-block">
+              <div class="kpi-generator-block__header">
+                <h2>7. 現在使っているツール</h2>
+                <p>複数選択できます。今の可視化や計測環境に近いものを選んでください。</p>
+              </div>
+              <div class="kpi-generator-option-grid">
+                {toolOptions.map((option) => (
+                  <label class="kpi-generator-option">
+                    <input type="checkbox" name="tools" value={option} />
+                    <span>{option}</span>
+                  </label>
+                ))}
+              </div>
+            </section>
+
+            <div class="kpi-generator-actions">
+              <button class="kpi-generator-button kpi-generator-button--primary" type="submit">
+                KPI設計を作成して結果を見る
+              </button>
+              <button class="kpi-generator-button kpi-generator-button--ghost" type="reset">
+                クリア
+              </button>
+            </div>
+
+            <div class="kpi-generator-status" data-kpi-status></div>
+            <div class="kpi-generator-alert kpi-generator-alert--error" data-kpi-error hidden></div>
+
+            <section class="kpi-generator-block">
+              <div class="kpi-generator-block__header">
+                <h2>このツールでできること</h2>
+              </div>
+              <div class="kpi-generator-info-grid">
+                <div class="kpi-generator-info-card">
+                  <ul>
+                    <li>サイトの目的や集客手段に合わせて、毎月まず見るべきKPIを整理できます。</li>
+                    <li>GA4やLooker Studioのレポート設計前に、見る順番や載せる項目のたたき台を作れます。</li>
+                    
+                  </ul>
+                </div>
+                <div class="kpi-generator-info-card">
+                  <ul>
+                    <li>成果がまだ未整理なら、まず何をCVとして定義するかを先に固める方が安全です。</li>
+                    <li>主要KPIは増やしすぎず、レポートで毎月見る項目は3〜5個程度に絞るのがおすすめです。</li>
+                    <li>出力は一般的な設計例なので、商材や営業体制に合わせて微調整してください。</li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+
+            <div class="kpi-generator-result" data-kpi-result hidden>
+              <section class="kpi-generator-result__section">
+                <div class="kpi-generator-result__header">
+                  <h2>あなたのサイトのKGI</h2>
+                  <button
+                    class="kpi-generator-button kpi-generator-button--chip"
+                    type="button"
+                    data-copy-result
+                  >
+                    結果をコピー
+                  </button>
+                </div>
+                <div class="kpi-generator-kgi" data-kpi-kgi></div>
+                <div class="kpi-generator-summary" data-kpi-summary></div>
+              </section>
+
+              <section class="kpi-generator-result__section">
+                <div class="kpi-generator-result__header">
+                  <h2>毎月まず見るべき主要KPI</h2>
+                </div>
+                <ul class="kpi-generator-list" data-kpi-primary></ul>
+              </section>
+
+              <section class="kpi-generator-result__section">
+                <div class="kpi-generator-result__header">
+                  <h2>補助KPI</h2>
+                </div>
+                <ul class="kpi-generator-list" data-kpi-support></ul>
+              </section>
+
+              <section class="kpi-generator-result__section">
+                <div class="kpi-generator-result__header">
+                  <h2>おすすめの見る順番</h2>
+                </div>
+                <ol class="kpi-generator-order-list" data-kpi-order></ol>
+              </section>
+
+              <section class="kpi-generator-result__section">
+                <div class="kpi-generator-result__header">
+                  <h2>レポートに載せるべき項目</h2>
+                </div>
+                <ul class="kpi-generator-list" data-kpi-report></ul>
+              </section>
+
+              <section class="kpi-generator-result__section">
+                <div class="kpi-generator-result__header">
+                  <h2>一言アドバイス</h2>
+                </div>
+                <div class="kpi-generator-advice" data-kpi-advice></div>
+              </section>
+
+              <section class="kpi-generator-result__section">
+                <div class="kpi-generator-cta">
+                  <p>このKPI設計をそのまま見やすいレポートにしたい方は InsightBase テンプレートをご活用ください。</p>
+                  <div class="kpi-generator-cta__actions" data-kpi-cta-actions>
+                    <a class="kpi-generator-button kpi-generator-button--primary" href="/ga4-report-template">
+                      GA4テンプレートを見る
+                    </a>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <div class="kpi-generator-fullbleed">
+      <Footer />
+    </div>
+  </div>
+</Layout>
+
+<script>
+  import { generateKpiPlan } from "../../../lib/kpi-generator/service";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    if (window.location.search) {
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+
+    const form = document.querySelector("[data-kpi-generator]");
+    if (!(form instanceof HTMLFormElement)) return;
+    const firstBlock = form.querySelector(".kpi-generator-block");
+
+    const status = form.querySelector("[data-kpi-status]");
+    const error = form.querySelector("[data-kpi-error]");
+    const result = form.querySelector("[data-kpi-result]");
+    const kgi = form.querySelector("[data-kpi-kgi]");
+    const summary = form.querySelector("[data-kpi-summary]");
+    const primary = form.querySelector("[data-kpi-primary]");
+    const support = form.querySelector("[data-kpi-support]");
+    const order = form.querySelector("[data-kpi-order]");
+    const report = form.querySelector("[data-kpi-report]");
+    const advice = form.querySelector("[data-kpi-advice]");
+    const copyButton = form.querySelector("[data-copy-result]");
+    const ctaActions = form.querySelector("[data-kpi-cta-actions]");
+
+    let copyText = "";
+
+    const setStatus = (message, state = "") => {
+      if (!(status instanceof HTMLElement)) return;
+      status.textContent = message;
+      status.dataset.state = state;
+    };
+
+    const showError = (message) => {
+      if (!(error instanceof HTMLElement)) return;
+      error.hidden = false;
+      error.textContent = message;
+    };
+
+    const hideError = () => {
+      if (!(error instanceof HTMLElement)) return;
+      error.hidden = true;
+      error.textContent = "";
+    };
+
+    const setResultVisible = (visible) => {
+      if (result instanceof HTMLElement) {
+        result.hidden = !visible;
+      }
+    };
+
+    const clearChildren = (element) => {
+      if (element instanceof HTMLElement) {
+        element.innerHTML = "";
+      }
+    };
+
+    const getCheckedValues = (name) =>
+      Array.from(form.querySelectorAll(`input[name="${name}"]:checked`)).map((input) =>
+        input instanceof HTMLInputElement ? input.value : ""
+      );
+
+    const renderList = (element, items) => {
+      if (!(element instanceof HTMLElement)) return;
+      clearChildren(element);
+      items.forEach((item) => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        element.append(li);
+      });
+    };
+
+    const buildCopyText = (plan) => {
+      const lines = [
+        `シナリオ: ${plan.scenarioLabel}`,
+        `KGI: ${plan.kgi}`,
+        "",
+        "[主要KPI]",
+        ...plan.primaryKpis.map((item) => `- ${item}`),
+        "",
+        "[補助KPI]",
+        ...plan.supportKpis.map((item) => `- ${item}`),
+        "",
+        "[見る順番]",
+        ...plan.viewOrder.map((item, index) => `${index + 1}. ${item}`),
+        "",
+        "[レポートに載せるべき項目]",
+        ...plan.reportItems.map((item) => `- ${item}`),
+        "",
+        `アドバイス: ${plan.advice}`,
+      ];
+
+      return lines.join("\n");
+    };
+
+    const renderCtaActions = (tools) => {
+      if (!(ctaActions instanceof HTMLElement)) return;
+
+      ctaActions.innerHTML = `
+        <a class="kpi-generator-button kpi-generator-button--primary" href="/ga4-report-template">
+          GA4テンプレートを見る
+        </a>
+      `;
+
+      if (tools.includes("Google広告")) {
+        ctaActions.insertAdjacentHTML(
+          "beforeend",
+          `
+            <a class="kpi-generator-button kpi-generator-button--secondary" href="/googlead-report-template">
+              Google広告テンプレートを見る
+            </a>
+          `
+        );
+      }
+    };
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      hideError();
+
+      const sitePurposeField = form.querySelector('input[name="sitePurpose"]:checked');
+      const siteTypeField = form.querySelector('input[name="siteType"]:checked');
+      const issueField = form.querySelector('input[name="currentIssue"]:checked');
+      const trafficSources = getCheckedValues("trafficSources");
+      const evaluationAxes = getCheckedValues("evaluationAxes");
+      const outcomes = getCheckedValues("outcomes");
+      const tools = getCheckedValues("tools");
+
+      const sitePurpose = sitePurposeField instanceof HTMLInputElement ? sitePurposeField.value : "";
+      const siteType = siteTypeField instanceof HTMLInputElement ? siteTypeField.value : "";
+      const currentIssue = issueField instanceof HTMLInputElement ? issueField.value : "";
+
+      if (!sitePurpose || !siteType || !currentIssue || !trafficSources.length || !evaluationAxes.length) {
+        setResultVisible(false);
+        showError("サイトの目的・サイト種類・集客手段・評価軸・困っていることを入力すると、KPI設計を作成できます。");
+        setStatus("入力内容を確認してください。", "error");
+        return;
+      }
+
+      const plan = generateKpiPlan({
+        sitePurpose,
+        siteType,
+        trafficSources,
+        evaluationAxes,
+        currentIssue,
+        outcomes,
+        tools,
+      });
+
+      if (kgi instanceof HTMLElement) {
+        kgi.textContent = plan.kgi;
+      }
+      if (summary instanceof HTMLElement) {
+        summary.innerHTML = `<strong>${plan.scenarioLabel}</strong><span>${plan.summary}</span>`;
+      }
+      if (advice instanceof HTMLElement) {
+        advice.textContent = plan.advice;
+      }
+
+      renderList(primary, plan.primaryKpis);
+      renderList(support, plan.supportKpis);
+      renderList(order, plan.viewOrder);
+      renderList(report, plan.reportItems);
+      renderCtaActions(tools);
+
+      copyText = buildCopyText(plan);
+      setResultVisible(true);
+      if (result instanceof HTMLElement) {
+        const top = result.getBoundingClientRect().top + window.scrollY - 110;
+        window.scrollTo({ top: Math.max(top, 0), behavior: "smooth" });
+      }
+      window.history.replaceState({}, "", window.location.pathname);
+      setStatus("KPI設計のたたき台を作成しました。まずは主要KPIからレポートに載せる形をおすすめします。", "success");
+    });
+
+    form.addEventListener("reset", () => {
+      window.setTimeout(() => {
+        hideError();
+        setResultVisible(false);
+        copyText = "";
+        clearChildren(primary);
+        clearChildren(support);
+        clearChildren(order);
+        clearChildren(report);
+        if (kgi instanceof HTMLElement) kgi.textContent = "";
+        if (summary instanceof HTMLElement) summary.innerHTML = "";
+        if (advice instanceof HTMLElement) advice.textContent = "";
+        setStatus("入力内容をクリアしました。", "warning");
+
+        const scrollTarget = firstBlock instanceof HTMLElement ? firstBlock : form;
+        const top = scrollTarget.getBoundingClientRect().top + window.scrollY - 110;
+        window.scrollTo({ top: Math.max(top, 0), behavior: "smooth" });
+      }, 0);
+    });
+
+    if (copyButton instanceof HTMLButtonElement) {
+      copyButton.addEventListener("click", async () => {
+        if (!copyText) {
+          setStatus("先にKPI設計を作成してください。", "warning");
+          return;
+        }
+
+        try {
+          await navigator.clipboard.writeText(copyText);
+          setStatus("結果をコピーしました。", "success");
+        } catch {
+          setStatus("コピーに失敗しました。手動で内容をコピーしてください。", "error");
+        }
+      });
+    }
+
+    setStatus("設問を選ぶと、KGI・主要KPI・補助KPIのたたき台を作成できます。", "");
+  });
+</script>
