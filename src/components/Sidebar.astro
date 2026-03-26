@@ -42,11 +42,56 @@ const fallbackPopularArticles = columns
   .slice(0, Math.max(0, 5 - manualPopularArticles.length));
 
 const popularArticles = [...manualPopularArticles, ...fallbackPopularArticles].slice(0, 5);
+const freeTools = [
+  {
+    href: "/tools/kpi-generator/",
+    title: "KPI設計ジェネレーター",
+    description: "KGIや主要KPIのたたき台を整理できます。",
+  },
+  {
+    href: "/tools/ga4-event-sheet-builder",
+    title: "GA4イベント設計シート簡易作成ツール",
+    description: "計測設計のたたき台をすばやく作成できます。",
+  },
+  {
+    href: "/tools/utm-builder",
+    title: "UTMパラメーター自動生成ツール",
+    description: "UTM付きURLをその場で生成できます。",
+  },
+  {
+    href: "/tools/url-parameter-checker",
+    title: "URLパラメーター確認ツール",
+    description: "URLのクエリやUTMを分解して確認できます。",
+  },
+  {
+    href: "/tools/ogp-checker",
+    title: "OGP確認ツール",
+    description: "OGPやTwitter Cardの設定状況を確認できます。",
+  },
+];
 ---
 
 <aside class="column-sidebar" aria-label="サイドバー">
   <section class="column-widget">
     <a href="/"><img src="/assets/img/column/ad01_square.jpg" alt="InsightBaseでレポート自動化"/></a>
+  </section>
+
+  <section class="column-widget">
+    <div class="column-widget__header">
+      <h2>無料ツール</h2>
+      <a href="/tools/" class="column-widget__more-link">一覧を見る</a>
+    </div>
+    <p class="column-widget__lead">
+      記事内で紹介している設定や確認作業を、その場で試せる無料ツールをまとめています。
+    </p>
+    <div class="column-tool-list">
+      {freeTools.map((tool) => (
+        <a href={tool.href} class="column-tool-card">
+          <strong>{tool.title}</strong>
+          <span>{tool.description}</span>
+        </a>
+      ))}
+    </div>
   </section>
 
   {popularArticles.length > 0 && (

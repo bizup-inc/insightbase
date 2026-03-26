@@ -1,0 +1,85 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Footer from "../../components/Footer.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+
+const tools = [
+  {
+    href: "/tools/kpi-generator/",
+    title: "KPI設計ジェネレーター",
+    description:
+      "サイト目的や集客手段などを選ぶと、KGI・主要KPI・補助KPI・見る順番を整理して確認できます。",
+    category: "KPI設計",
+  },
+  {
+    href: "/tools/ga4-event-sheet-builder",
+    title: "GA4イベント設計シート簡易作成ツール",
+    description:
+      "計測したい行動や判定方法を選ぶだけで、GA4イベント設計のたたき台をすぐに作成できます。",
+    category: "GA4設計",
+  },
+  {
+    href: "/tools/utm-builder",
+    title: "UTMパラメーター自動生成ツール",
+    description:
+      "URLと各パラメーターを入力すると、UTM付きURLをその場で生成できます。",
+    category: "UTM作成",
+  },
+  {
+    href: "/tools/url-parameter-checker",
+    title: "URLパラメーター確認ツール",
+    description:
+      "入力したURLのクエリやUTMパラメーターを分解し、表記ゆれや不足項目を確認できます。",
+    category: "URL確認",
+  },
+  {
+    href: "/tools/ogp-checker",
+    title: "OGP確認ツール",
+    description:
+      "URLを入力するだけで、OGP・Twitter Card・SNS別イメージプレビューを確認できます。",
+    category: "OGP確認",
+  },
+];
+---
+
+<Layout
+  title="無料ツール一覧｜InsightBase"
+  description="InsightBaseで公開している無料ツールの一覧ページです。KPI設計、GA4イベント設計、UTM作成、URLパラメーター確認、OGP確認ツールをまとめて確認できます。"
+>
+  <div class="tools-archive-page">
+    <section class="tools-archive-hero tools-archive-fullbleed is-visible">
+      <div class="content__inner tools-archive-hero__inner">
+        <Breadcrumbs
+          items={[
+            { label: "TOP", href: "/" },
+            { label: "無料ツール" },
+          ]}
+        />
+        <div class="tools-archive-hero__eyebrow">FREE TOOLS</div>
+        <h1>無料ツール一覧</h1>
+        <p>
+          InsightBaseで公開している無料ツールをまとめています。KPI設計の整理、GA4やGTMの設計準備、UTMやURLパラメーターの確認、OGP設定のチェックなど、実務でそのまま使いやすいツールを用意しています。
+        </p>
+      </div>
+    </section>
+
+    <section class="tools-archive-section is-visible">
+      <div class="content__inner tools-archive-inner">
+        <div class="tools-archive-grid">
+          {tools.map((tool) => (
+            <article class="tools-archive-card">
+              <div class="tools-archive-card__meta">{tool.category}</div>
+              <h2>{tool.title}</h2>
+              <p>{tool.description}</p>
+              <a class="tools-archive-card__link" href={tool.href}>ツールを見る</a>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <div class="tools-archive-fullbleed">
+      <Footer />
+    </div>
+  </div>
+</Layout>

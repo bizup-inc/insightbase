@@ -1,0 +1,30 @@
+---
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+  className?: string;
+}
+
+const { items, className = "" } = Astro.props as Props;
+---
+
+<nav class:list={["tool-breadcrumb", className]} aria-label="パンくずリスト">
+  {items.map((item, index) => {
+    const isLast = index === items.length - 1;
+
+    return (
+      <>
+        {item.href && !isLast ? (
+          <a href={item.href}>{item.label}</a>
+        ) : (
+          <span aria-current={isLast ? "page" : undefined}>{item.label}</span>
+        )}
+        {!isLast && <span class="tool-breadcrumb__separator">/</span>}
+      </>
+    );
+  })}
+</nav>

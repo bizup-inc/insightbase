@@ -1,5 +1,6 @@
 @use "reset";
 @use "base";
+@use "breadcrumb";
 @use "header";
 @use "hero";
 @use "content";
@@ -14,3 +15,4 @@
 @use "ga4-event-sheet-builder";
 @use "ogp-checker";
 @use "kpi-generator";
+@use "tools-archive";

@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import Footer from "../../components/Footer.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
 
 const sourceSuggestions = [
   "google",
@@ -88,6 +89,13 @@ const relatedArticles = [
     <section class="utm-builder-hero utm-builder-fullbleed is-visible">
       <div class="content__inner utm-builder-hero__inner">
         <div>
+          <Breadcrumbs
+            items={[
+              { label: "TOP", href: "/" },
+              { label: "無料ツール", href: "/tools/" },
+              { label: "UTMパラメータ自動生成ツール" },
+            ]}
+          />
           <div class="utm-builder-hero__eyebrow">FREE TOOL</div>
           <h1>UTM パラメータ自動生成ツール</h1>
           <p>

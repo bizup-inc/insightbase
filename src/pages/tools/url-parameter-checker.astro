@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import Footer from "../../components/Footer.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
 
 const sampleUrl =
   "https://example.com/lp?utm_source=Google&utm_medium=paid_social&utm_campaign=spring_sale&utm_content=banner%20a&id=123&ref=mail#cta";
@@ -29,6 +30,13 @@ const relatedArticles = [
     <section class="url-parameter-checker-hero url-parameter-checker-fullbleed is-visible">
       <div class="content__inner url-parameter-checker-hero__inner">
         <div>
+          <Breadcrumbs
+            items={[
+              { label: "TOP", href: "/" },
+              { label: "無料ツール", href: "/tools/" },
+              { label: "URLパラメーター確認ツール" },
+            ]}
+          />
           <div class="url-parameter-checker-hero__eyebrow">FREE TOOL</div>
           <h1>URLパラメーター確認ツール</h1>
           <p>

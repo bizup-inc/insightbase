@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import Footer from "../../components/Footer.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
 ---
 
 <Layout
@@ -11,6 +12,13 @@ import Footer from "../../components/Footer.astro";
     <section class="ogp-checker-hero ogp-checker-fullbleed is-visible">
       <div class="content__inner ogp-checker-hero__inner">
         <div>
+          <Breadcrumbs
+            items={[
+              { label: "TOP", href: "/" },
+              { label: "無料ツール", href: "/tools/" },
+              { label: "OGP確認ツール" },
+            ]}
+          />
           <div class="ogp-checker-hero__eyebrow">FREE TOOL</div>
           <h1>OGP確認ツール</h1>
           <p>

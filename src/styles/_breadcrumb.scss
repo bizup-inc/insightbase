@@ -1,0 +1,24 @@
+.tool-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin: 0 0 18px;
+  color: #617164;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.tool-breadcrumb a {
+  color: #617164;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.tool-breadcrumb a:hover {
+  color: #22ac38;
+}
+
+.tool-breadcrumb__separator {
+  color: #9aa79d;
+}

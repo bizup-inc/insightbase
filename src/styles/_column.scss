@@ -445,6 +445,66 @@
   background: linear-gradient(135deg, #dfe8e3, #f2f5f3);
 }
 
+.column-widget__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.column-widget__header h2 {
+  margin-bottom: 0;
+}
+
+.column-widget__more-link {
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.column-widget__lead {
+  margin: 0 0 14px;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.column-tool-list {
+  display: grid;
+  gap: 10px;
+}
+
+.column-tool-card {
+  display: grid;
+  gap: 4px;
+  padding: 14px 14px 13px;
+  border: 1px solid #d9e5d2;
+  border-radius: 12px;
+  background: #f8fcf8;
+  text-decoration: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.column-tool-card strong {
+  color: #213028;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.column-tool-card span {
+  color: #617164;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.column-tool-card:hover {
+  border-color: #22ac38;
+  background: #f1f9f1;
+  transform: translateY(-1px);
+}
+
 @media (max-width: 960px) {
   .column-widget__ranking-link {
     p {
