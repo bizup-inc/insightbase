@@ -81,17 +81,13 @@ const freeTools = [
       <h2>無料ツール</h2>
       <a href="/tools/" class="column-widget__more-link">一覧を見る</a>
     </div>
-    <p class="column-widget__lead">
-      記事内で紹介している設定や確認作業を、その場で試せる無料ツールをまとめています。
-    </p>
-    <div class="column-tool-list">
+    <ul class="column-tool-list">
       {freeTools.map((tool) => (
-        <a href={tool.href} class="column-tool-card">
-          <strong>{tool.title}</strong>
-          <span>{tool.description}</span>
-        </a>
+        <li>
+          <a href={tool.href} class="column-tool-link">{tool.title}</a>
+        </li>
       ))}
-    </div>
+    </ul>
   </section>
 
   {popularArticles.length > 0 && (
