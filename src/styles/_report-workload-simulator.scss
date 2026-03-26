@@ -1,0 +1,619 @@
+.report-workload-page {
+  --workload-bg: #edf4e6;
+  --workload-panel: #ffffff;
+  --workload-ink: #213028;
+  --workload-muted: #617164;
+  --workload-border: #d9e5d2;
+  --workload-accent: #22ac38;
+  --workload-accent-dark: #168629;
+  --workload-blue: #1a73e8;
+  --workload-blue-soft: #edf6ff;
+  --workload-danger: #b42318;
+  --workload-danger-bg: #fef1f1;
+  --workload-warning: #9f5a00;
+  margin: -20px;
+}
+
+.report-workload-fullbleed {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+
+.report-workload-hero {
+  padding: 52px 0 28px;
+  background: var(--workload-bg);
+}
+
+.report-workload-hero__inner,
+.report-workload-layout {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.report-workload-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  margin-bottom: 14px;
+  border-radius: 999px;
+  background: rgba(34, 172, 56, 0.1);
+  color: var(--workload-accent-dark);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.report-workload-hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.report-workload-hero__meta span {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid rgba(34, 172, 56, 0.18);
+  color: var(--workload-accent-dark);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.report-workload-hero h1 {
+  margin: 0 0 18px;
+  color: var(--workload-ink);
+  font-size: clamp(34px, 4.4vw, 56px);
+  line-height: 1.18;
+}
+
+.report-workload-hero p {
+  max-width: 940px;
+  margin: 0;
+  color: var(--workload-muted);
+  font-size: 17px;
+  line-height: 1.9;
+}
+
+.report-workload-points {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 26px;
+}
+
+.report-workload-point {
+  padding: 18px 20px;
+  border: 1px solid var(--workload-border);
+  border-radius: 18px;
+  background: #ffffff;
+}
+
+.report-workload-point strong {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--workload-ink);
+  font-size: 16px;
+}
+
+.report-workload-point span {
+  color: var(--workload-muted);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.report-workload-section {
+  padding: 42px 0 0;
+}
+
+.report-workload-panel {
+  background: var(--workload-panel);
+  border: 1px solid var(--workload-border);
+  border-radius: 24px;
+  box-shadow: 0 18px 45px rgba(33, 48, 40, 0.08);
+}
+
+.report-workload-panel {
+  padding: 34px;
+}
+
+.report-workload-form {
+  display: grid;
+  gap: 50px;
+}
+
+.report-workload-form__header h2 {
+  margin: 0;
+  color: var(--workload-ink);
+  font-size: 28px;
+}
+
+.report-workload-form__header p,
+.report-workload-status {
+  margin: 8px 0 0;
+  color: var(--workload-muted);
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.report-workload-block {
+  margin: 0;
+  padding: 24px;
+  border: 1px solid var(--workload-border);
+  border-radius: 22px;
+  background: #fbfdfb;
+}
+
+.report-workload-block__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 0;
+  color: var(--workload-ink);
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.report-workload-block__number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(34, 172, 56, 0.1);
+  color: var(--workload-accent-dark);
+  font-size: 13px;
+  letter-spacing: 0.05em;
+}
+
+.report-workload-block__help {
+  margin: 12px 0 0;
+  color: var(--workload-muted);
+  font-size: 14px;
+  line-height: 2;
+}
+
+.report-workload-option-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.report-workload-option-grid--single {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.report-workload-option {
+  position: relative;
+  display: block;
+}
+
+.report-workload-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.report-workload-option span {
+  display: flex;
+  align-items: center;
+  min-height: 62px;
+  padding: 14px 16px;
+  border: 1px solid rgba(34, 172, 56, 0.18);
+  border-radius: 16px;
+  background: #ffffff;
+  color: var(--workload-ink);
+  font-weight: 700;
+  line-height: 1.9;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.report-workload-option input:checked + span {
+  border-color: rgba(34, 172, 56, 0.45);
+  background: #edf8ef;
+  color: var(--workload-accent-dark);
+  box-shadow: 0 0 0 4px rgba(34, 172, 56, 0.08);
+}
+
+.report-workload-actions,
+.report-workload-more__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.report-workload-actions {
+  margin-top: 10px;
+}
+
+.report-workload-actions .report-workload-button {
+  flex: 1 1 calc(50% - 6px);
+}
+
+.report-workload-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 12px;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.report-workload-button:hover {
+  transform: translateY(-1px);
+}
+
+.report-workload-button--primary {
+  background: var(--workload-accent);
+  color: #ffffff;
+}
+
+.report-workload-button--primary:hover {
+  color: #ffffff;
+}
+
+.report-workload-button--secondary {
+  background: var(--workload-blue);
+  color: #ffffff;
+}
+
+.report-workload-button--secondary:hover {
+  color: #ffffff;
+}
+
+.report-workload-button--ghost {
+  background: #3f3f3f;
+  color: #ffffff;
+}
+
+.report-workload-button--ghost:hover {
+  color: #ffffff;
+}
+
+.report-workload-button--chip {
+  min-height: auto;
+  padding: 9px 12px;
+  border: 1px solid rgba(34, 172, 56, 0.18);
+  background: #f6fbf5;
+  color: #2b5d33;
+  font-size: 13px;
+}
+
+.report-workload-status {
+  min-height: 28px;
+}
+
+.report-workload-status[data-state="success"] {
+  color: var(--workload-accent-dark);
+}
+
+.report-workload-status[data-state="warning"] {
+  color: var(--workload-warning);
+}
+
+.report-workload-status[data-state="error"] {
+  color: var(--workload-danger);
+}
+
+.report-workload-alert {
+  padding: 14px 16px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.report-workload-alert--error {
+  background: var(--workload-danger-bg);
+  color: var(--workload-danger);
+}
+
+.report-workload-result {
+  margin-top: 8px;
+  padding-top: 24px;
+  border-top: 1px solid var(--workload-border);
+}
+
+.report-workload-result__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.report-workload-result__header h2 {
+  margin: 4px 0 0;
+  color: var(--workload-ink);
+  font-size: 30px;
+}
+
+.report-workload-result__eyebrow {
+  margin: 0;
+  color: var(--workload-accent-dark);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.report-workload-summary-card {
+  padding: 24px;
+  border: 1px solid #cfe3fb;
+  border-radius: 20px;
+  background: var(--workload-blue-soft);
+}
+
+.report-workload-summary-card__label {
+  margin: 0 0 8px;
+  color: var(--workload-blue);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.report-workload-summary-card strong {
+  display: block;
+  color: var(--workload-ink);
+  font-size: 22px;
+  line-height: 1.8;
+}
+
+.report-workload-chart-card,
+.report-workload-result-card,
+.report-workload-metric-card {
+  border: 1px solid var(--workload-border);
+  border-radius: 20px;
+  background: #ffffff;
+}
+
+.report-workload-chart-card {
+  margin-top: 18px;
+  padding: 24px;
+}
+
+.report-workload-chart-card__header h3,
+.report-workload-result-card h3 {
+  margin: 0;
+  color: var(--workload-ink);
+  font-size: 22px;
+}
+
+.report-workload-chart-card__header p {
+  margin: 8px 0 0;
+  color: var(--workload-muted);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.report-workload-chart {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.report-workload-chart__row {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) 180px;
+  gap: 14px;
+  align-items: center;
+}
+
+.report-workload-chart__label,
+.report-workload-chart__value {
+  color: var(--workload-ink);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.report-workload-chart-card__note {
+  display: block;
+  margin-top: 12px;
+  color: var(--workload-muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.report-workload-chart__bar-wrap {
+  height: 28px;
+  border-radius: 0;
+  background: #eef4ee;
+  overflow: hidden;
+}
+
+.report-workload-chart__bar {
+  width: 0;
+  height: 100%;
+  border-radius: 0;
+  transition: width 0.35s ease;
+}
+
+.report-workload-chart__bar--current {
+  background: #d64545;
+}
+
+.report-workload-chart__bar--after {
+  background: #1a73e8;
+}
+
+.report-workload-metric-grid,
+.report-workload-result-grid {
+  display: grid;
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.report-workload-metric-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.report-workload-result-grid {
+  grid-template-columns: 1fr;
+}
+
+.report-workload-metric-card,
+.report-workload-result-card {
+  padding: 24px;
+}
+
+.report-workload-metric-card > span {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--workload-muted);
+  font-size: 14px;
+}
+
+.report-workload-metric-card__value {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  color: var(--workload-ink);
+  font-size: 28px;
+  line-height: 1.35;
+}
+
+.report-workload-metric-card__number {
+  display: inline-block;
+  color: var(--workload-blue);
+  font-size: clamp(42px, 5.4vw, 56px);
+  font-weight: 800;
+  font-family: "Avenir Next Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.report-workload-metric-card__value--current .report-workload-metric-card__number {
+  color: #d64545;
+}
+
+.report-workload-metric-card__suffix {
+  display: inline-block;
+  color: var(--workload-ink);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.report-workload-result-card ul {
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.report-workload-result-card li {
+  position: relative;
+  margin-top: 8px;
+  padding-left: 18px;
+  color: var(--workload-muted);
+  line-height: 1.8;
+}
+
+.report-workload-result-card li:first-child {
+  margin-top: 0;
+}
+
+.report-workload-result-card li::before {
+  content: "●";
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: var(--workload-accent);
+}
+
+.report-workload-result-card--cta {
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+.report-workload-result-card--cta > h3 {
+  padding: 10px 10px 0;
+}
+
+.report-workload-template-cta {
+  margin-top: 0;
+}
+
+.report-workload-template-cta .cta_box {
+  margin-top: 24px;
+}
+
+.report-workload-result > .report-workload-result-card:last-child {
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+
+[data-report-workload-cta-shell] {
+  margin-top: 50px;
+}
+
+@media (max-width: 960px) {
+  .report-workload-points,
+  .report-workload-metric-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .report-workload-option-grid,
+  .report-workload-option-grid--single {
+    grid-template-columns: 1fr;
+  }
+
+  .report-workload-actions .report-workload-button {
+    flex-basis: 100%;
+  }
+
+  .report-workload-chart__row {
+    grid-template-columns: 64px minmax(0, 1fr);
+  }
+
+  .report-workload-chart__value {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .report-workload-hero {
+    padding-top: 42px;
+  }
+
+  .report-workload-panel {
+    padding: 22px;
+    border-radius: 20px;
+  }
+
+  .report-workload-block {
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .report-workload-block__legend {
+    font-size: 20px;
+  }
+
+  .report-workload-result__header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .report-workload-result__header h2 {
+    font-size: 26px;
+  }
+
+  .report-workload-metric-card__value,
+  .report-workload-metric-card__suffix {
+    font-size: 20px;
+  }
+
+  .report-workload-metric-card__number {
+    font-size: 40px;
+  }
+}

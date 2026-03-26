@@ -1,0 +1,407 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Footer from "../../components/Footer.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import Cta from "../../components/Cta.astro";
+import { reportWorkloadQuestions } from "../../data/reportWorkloadQuestions";
+
+const breadcrumbItems = [
+  { label: "TOP", href: "https://insightbase.jp/" },
+  { label: "無料ツール", href: "https://insightbase.jp/tools/" },
+  {
+    label: "工数削減シミュレーションツール",
+    href: "https://insightbase.jp/tools/report-workload-simulator/",
+  },
+];
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: breadcrumbItems.map((item, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    name: item.label,
+    item: item.href,
+  })),
+};
+---
+
+<Layout
+  title="レポート工数削減シミュレーション｜毎月の作業時間を見える化｜InsightBase"
+  description="GA4や広告レポートの集計・グラフ作成・PowerPoint貼り付けなど、毎月のレポート作業にどれだけ時間を使っているかを見える化できる無料シミュレーションです。"
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
+  </Fragment>
+
+  <div class="report-workload-page">
+    <section class="report-workload-hero report-workload-fullbleed is-visible">
+      <div class="content__inner report-workload-hero__inner">
+        <Breadcrumbs
+          items={[
+            { label: "TOP", href: "/" },
+            { label: "無料ツール", href: "/tools/" },
+            { label: "工数削減シミュレーションツール" },
+          ]}
+        />
+        <div class="report-workload-hero__eyebrow">FREE TOOL</div>
+
+        <h1>工数削減シミュレーションツール</h1>
+        <p>
+          毎月のレポート作業にどれだけ時間を使っているかを見える化できる無料ツールです。テンプレート導入で削減できそうな工数も確認できます。
+        </p>
+
+        
+      </div>
+    </section>
+
+    <section class="report-workload-section is-visible">
+      <div class="content__inner report-workload-layout">
+        <div class="report-workload-panel">
+          <form class="report-workload-form" data-report-workload method="post" novalidate>
+            <div class="report-workload-form__header">
+              <h2>毎月の作業時間をシミュレーションする</h2>
+              <p>普段の運用に近いものを選ぶだけで、月間・年間の工数を簡易計算できます。</p>
+            </div>
+
+            <div class="report-workload-alert report-workload-alert--error" data-report-workload-error hidden></div>
+
+            {reportWorkloadQuestions.map((question) => (
+              <fieldset class="report-workload-block" data-question-key={question.key}>
+                <legend class="report-workload-block__legend">
+                  <span class="report-workload-block__number">Q{question.number}</span>
+                  <span>{question.title}</span>
+                </legend>
+                <p class="report-workload-block__help">{question.help}</p>
+                <div
+                  class:list={[
+                    "report-workload-option-grid",
+                    question.type === "single" ? "report-workload-option-grid--single" : "",
+                  ]}
+                >
+                  {question.options.map((option) => {
+                    const inputId = `${question.key}-${option.value}`;
+
+                    return (
+                      <label class="report-workload-option" for={inputId}>
+                        <input
+                          id={inputId}
+                          type={question.type === "single" ? "radio" : "checkbox"}
+                          name={question.key}
+                          value={option.value}
+                        />
+                        <span>{option.label}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+              </fieldset>
+            ))}
+
+            <div class="report-workload-actions">
+              <button class="report-workload-button report-workload-button--primary" type="submit">
+                工数をシミュレーションする
+              </button>
+              <button class="report-workload-button report-workload-button--ghost" type="reset">
+                クリア
+              </button>
+            </div>
+
+            <div class="report-workload-status" data-report-workload-status></div>
+
+            <section class="report-workload-result" data-report-workload-result hidden>
+              <div class="report-workload-result__header">
+                <div>
+                  <p class="report-workload-result__eyebrow">シミュレーション結果</p>
+                  <h2 data-result-title></h2>
+                </div>
+                <button
+                  class="report-workload-button report-workload-button--chip"
+                  type="button"
+                  data-report-workload-retry
+                >
+                  再計算する
+                </button>
+              </div>
+
+              <div class="report-workload-summary-card">
+                <p class="report-workload-summary-card__label">気づきポイント</p>
+                <strong data-result-lead></strong>
+              </div>
+
+              <section class="report-workload-chart-card">
+                <div class="report-workload-chart-card__header">
+                  <h3>月間工数の比較</h3>
+                  <p>現在の運用と、テンプレート導入後の想定時間を比較しています。</p>
+                </div>
+                <div class="report-workload-chart">
+                  <div class="report-workload-chart__row">
+                    <div class="report-workload-chart__label">現在</div>
+                    <div class="report-workload-chart__bar-wrap">
+                      <div class="report-workload-chart__bar report-workload-chart__bar--current" data-chart-current></div>
+                    </div>
+                    <div class="report-workload-chart__value" data-result-current-monthly></div>
+                  </div>
+                  <div class="report-workload-chart__row">
+                    <div class="report-workload-chart__label">導入後</div>
+                    <div class="report-workload-chart__bar-wrap">
+                      <div class="report-workload-chart__bar report-workload-chart__bar--after" data-chart-reduced></div>
+                    </div>
+                    <div class="report-workload-chart__value" data-result-reduced-monthly></div>
+                  </div>
+                </div>
+                <small class="report-workload-chart-card__note">
+                  ※ 回答した作業時間に加えて、転記・確認・整形などの隠れ時間も一部含めて簡易計算しています。
+                </small>
+              </section>
+
+              <div class="report-workload-metric-grid">
+                <div class="report-workload-metric-card">
+                  <span>現在の月間工数</span>
+                  <strong class="report-workload-metric-card__value report-workload-metric-card__value--current" data-result-current-monthly-card></strong>
+                </div>
+                <div class="report-workload-metric-card">
+                  <span>現在の年間工数</span>
+                  <strong class="report-workload-metric-card__value report-workload-metric-card__value--current" data-result-current-yearly></strong>
+                </div>
+                <div class="report-workload-metric-card">
+                  <span>導入後の月間工数</span>
+                  <strong class="report-workload-metric-card__value" data-result-reduced-monthly-card></strong>
+                </div>
+                <div class="report-workload-metric-card">
+                  <span>削減できる月間時間</span>
+                  <strong class="report-workload-metric-card__value" data-result-saved-monthly></strong>
+                </div>
+                <div class="report-workload-metric-card">
+                  <span>削減できる年間時間</span>
+                  <strong class="report-workload-metric-card__value" data-result-saved-yearly></strong>
+                </div>
+                <div class="report-workload-metric-card">
+                  <span>営業日換算</span>
+                  <strong class="report-workload-metric-card__value" data-result-saved-workdays></strong>
+                </div>
+              </div>
+
+              <div class="report-workload-result-grid">
+                <section class="report-workload-result-card">
+                  <h3>気づきポイント</h3>
+                  <ul data-result-insights></ul>
+                </section>
+                <section class="report-workload-result-card">
+                  <h3>おすすめアクション</h3>
+                  <ul data-result-actions></ul>
+                </section>
+              </div>
+
+            </section>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <div class="report-workload-fullbleed" data-report-workload-cta-shell hidden>
+      <Cta />
+    </div>
+
+    <div class="report-workload-fullbleed">
+      <Footer />
+    </div>
+  </div>
+</Layout>
+
+<script>
+  import { reportWorkloadQuestions } from "../../data/reportWorkloadQuestions";
+  import { simulateReportWorkload } from "../../utils/reportWorkloadScoring";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.querySelector("[data-report-workload]");
+    if (!(form instanceof HTMLFormElement)) return;
+
+    const error = form.querySelector("[data-report-workload-error]");
+    const status = form.querySelector("[data-report-workload-status]");
+    const result = form.querySelector("[data-report-workload-result]");
+    const retryButton = form.querySelector("[data-report-workload-retry]");
+    const title = form.querySelector("[data-result-title]");
+    const lead = form.querySelector("[data-result-lead]");
+    const currentMonthly = form.querySelector("[data-result-current-monthly]");
+    const currentMonthlyCard = form.querySelector("[data-result-current-monthly-card]");
+    const currentYearly = form.querySelector("[data-result-current-yearly]");
+    const reducedMonthly = form.querySelector("[data-result-reduced-monthly]");
+    const reducedMonthlyCard = form.querySelector("[data-result-reduced-monthly-card]");
+    const savedMonthly = form.querySelector("[data-result-saved-monthly]");
+    const savedYearly = form.querySelector("[data-result-saved-yearly]");
+    const savedWorkdays = form.querySelector("[data-result-saved-workdays]");
+    const insightsList = form.querySelector("[data-result-insights]");
+    const actionsList = form.querySelector("[data-result-actions]");
+    const chartCurrent = form.querySelector("[data-chart-current]");
+    const chartReduced = form.querySelector("[data-chart-reduced]");
+    const ctaShell = document.querySelector("[data-report-workload-cta-shell]");
+
+    const setStatus = (message, state = "") => {
+      if (!(status instanceof HTMLElement)) return;
+      status.textContent = message;
+      status.dataset.state = state;
+    };
+
+    const showError = (message) => {
+      if (!(error instanceof HTMLElement)) return;
+      error.hidden = false;
+      error.textContent = message;
+    };
+
+    const hideError = () => {
+      if (!(error instanceof HTMLElement)) return;
+      error.hidden = true;
+      error.textContent = "";
+    };
+
+    const resetList = (element) => {
+      if (element instanceof HTMLElement) {
+        element.innerHTML = "";
+      }
+    };
+
+    const appendListItems = (element, items) => {
+      if (!(element instanceof HTMLElement)) return;
+      resetList(element);
+      items.forEach((item) => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        element.appendChild(li);
+      });
+    };
+
+    const setMetricValue = (element, value) => {
+      if (!(element instanceof HTMLElement)) return;
+      const match = value.match(/^([0-9]+(?:\.[0-9]+)?)(.*)$/);
+
+      if (!match) {
+        element.textContent = value;
+        return;
+      }
+
+      const [, number, suffix] = match;
+      element.innerHTML = `<span class="report-workload-metric-card__number">${number}</span><span class="report-workload-metric-card__suffix">${suffix}</span>`;
+    };
+
+    const buildAnswers = () => {
+      const getSingleValue = (name) => {
+        const field = form.querySelector(`input[name="${name}"]:checked`);
+        return field instanceof HTMLInputElement ? field.value : "";
+      };
+
+      const getMultipleValues = (name) =>
+        Array.from(form.querySelectorAll(`input[name="${name}"]:checked`))
+          .filter((field) => field instanceof HTMLInputElement)
+          .map((field) => field.value);
+
+      return {
+        manualTasks: getMultipleValues("manualTasks"),
+        timePerReport: getSingleValue("timePerReport"),
+        reportCount: getSingleValue("reportCount"),
+        painPoints: getMultipleValues("painPoints"),
+        workloadFeeling: getSingleValue("workloadFeeling"),
+        freedTimeUse: getSingleValue("freedTimeUse"),
+      };
+    };
+
+    const validateAnswers = (answers) => {
+      const unanswered = reportWorkloadQuestions.find((question) => {
+        if (question.type === "single") {
+          return !answers[question.key];
+        }
+
+        return !Array.isArray(answers[question.key]) || answers[question.key].length === 0;
+      });
+
+      return unanswered ? `Q${unanswered.number}「${unanswered.title}」に回答してください。` : "";
+    };
+
+    const scrollToElement = (element) => {
+      if (!(element instanceof HTMLElement)) return;
+      const top = element.getBoundingClientRect().top + window.scrollY - 110;
+      window.scrollTo({ top, behavior: "smooth" });
+    };
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      hideError();
+
+      const answers = buildAnswers();
+      const validationMessage = validateAnswers(answers);
+
+      if (validationMessage) {
+        showError(validationMessage);
+        setStatus("未回答の設問があります。", "error");
+        return;
+      }
+
+      const simulation = simulateReportWorkload(answers);
+
+      if (title instanceof HTMLElement) title.textContent = simulation.resultTitle;
+      if (lead instanceof HTMLElement) lead.textContent = simulation.leadMessage;
+      if (currentMonthly instanceof HTMLElement) currentMonthly.textContent = simulation.currentMonthlyHours;
+      setMetricValue(currentMonthlyCard, simulation.currentMonthlyHours);
+      setMetricValue(currentYearly, simulation.currentYearlyHours);
+      if (reducedMonthly instanceof HTMLElement) reducedMonthly.textContent = simulation.reducedMonthlyHours;
+      setMetricValue(reducedMonthlyCard, simulation.reducedMonthlyHours);
+      setMetricValue(savedMonthly, simulation.savedMonthlyHours);
+      setMetricValue(savedYearly, simulation.savedYearlyHours);
+      setMetricValue(savedWorkdays, simulation.savedWorkdays);
+
+      appendListItems(insightsList, simulation.insightPoints);
+      appendListItems(actionsList, simulation.recommendedActions);
+      const chartMax = Math.max(simulation.currentMonthlyHoursValue, 1);
+      if (chartCurrent instanceof HTMLElement) {
+        chartCurrent.style.width = `${Math.max((simulation.currentMonthlyHoursValue / chartMax) * 100, 8)}%`;
+      }
+      if (chartReduced instanceof HTMLElement) {
+        chartReduced.style.width = `${Math.max((simulation.reducedMonthlyHoursValue / chartMax) * 100, 8)}%`;
+      }
+
+      if (result instanceof HTMLElement) {
+        result.hidden = false;
+      }
+      if (ctaShell instanceof HTMLElement) {
+        ctaShell.hidden = false;
+      }
+
+      setStatus("シミュレーション結果を表示しました。", "success");
+      history.replaceState({}, "", window.location.pathname);
+      scrollToElement(result);
+    });
+
+    form.addEventListener("reset", () => {
+      hideError();
+      setStatus("入力内容をクリアしました。", "warning");
+
+      window.setTimeout(() => {
+        if (result instanceof HTMLElement) result.hidden = true;
+        if (ctaShell instanceof HTMLElement) ctaShell.hidden = true;
+        resetList(insightsList);
+        resetList(actionsList);
+        if (title instanceof HTMLElement) title.textContent = "";
+        if (lead instanceof HTMLElement) lead.textContent = "";
+        if (currentMonthly instanceof HTMLElement) currentMonthly.textContent = "";
+        if (currentMonthlyCard instanceof HTMLElement) currentMonthlyCard.textContent = "";
+        if (currentYearly instanceof HTMLElement) currentYearly.textContent = "";
+        if (reducedMonthly instanceof HTMLElement) reducedMonthly.textContent = "";
+        if (reducedMonthlyCard instanceof HTMLElement) reducedMonthlyCard.textContent = "";
+        if (savedMonthly instanceof HTMLElement) savedMonthly.textContent = "";
+        if (savedYearly instanceof HTMLElement) savedYearly.textContent = "";
+        if (savedWorkdays instanceof HTMLElement) savedWorkdays.textContent = "";
+        if (chartCurrent instanceof HTMLElement) chartCurrent.style.width = "0%";
+        if (chartReduced instanceof HTMLElement) chartReduced.style.width = "0%";
+
+        const firstQuestion = form.querySelector("[data-question-key]");
+        scrollToElement(firstQuestion);
+      }, 0);
+    });
+
+    if (retryButton instanceof HTMLButtonElement) {
+      retryButton.addEventListener("click", () => {
+        form.reset();
+      });
+    }
+  });
+</script>
