@@ -1,0 +1,636 @@
+---
+import Cta from "../Cta.astro";
+import { adBudgetSiteTypes } from "../../data/adBudgetSiteTypes";
+
+const defaultSiteType = adBudgetSiteTypes[0].key;
+const defaultMode = adBudgetSiteTypes[0].modes.goal.key;
+---
+
+<section class="ad-budget-section is-visible">
+  <div class="content__inner ad-budget-layout">
+    <div class="ad-budget-panel">
+      <div class="ad-budget-selector">
+        <div class="ad-budget-type-selector" role="radiogroup" aria-label="サイト種別">
+          <p class="ad-budget-type-selector__label">1. サイト種別を選択</p>
+          <div class="ad-budget-type-selector__grid">
+            {adBudgetSiteTypes.map((siteType, index) => {
+              const inputId = `ad-budget-type-${siteType.key}`;
+
+              return (
+                <label class="ad-budget-type-card" for={inputId}>
+                  <input
+                    id={inputId}
+                    type="radio"
+                    name="siteType"
+                    value={siteType.key}
+                    checked={index === 0}
+                  />
+                  <span class="ad-budget-type-card__title">{siteType.shortLabel}</span>
+                  <span class="ad-budget-type-card__text">{siteType.description}</span>
+                </label>
+              );
+            })}
+          </div>
+        </div>
+
+        <div class="ad-budget-mode-selector" role="radiogroup" aria-label="利用モード">
+          <p class="ad-budget-type-selector__label">2. 利用モードを選択</p>
+          <div class="ad-budget-mode-selector__grid">
+            <label class="ad-budget-mode-card" for="ad-budget-mode-goal">
+              <input id="ad-budget-mode-goal" type="radio" name="mode" value="goal" checked />
+              <span class="ad-budget-mode-card__title">目標から逆算したい</span>
+              <span class="ad-budget-mode-card__text">事業側の目標数値から、許容広告費の上限目安を逆算します。</span>
+            </label>
+            <label class="ad-budget-mode-card" for="ad-budget-mode-audit">
+              <input id="ad-budget-mode-audit" type="radio" name="mode" value="audit" />
+              <span class="ad-budget-mode-card__title">今の広告を診断したい</span>
+              <span class="ad-budget-mode-card__text">現在の広告データから、今の良し悪しを診断します。</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <form class="ad-budget-form" data-ad-budget-form method="post" novalidate>
+        <div class="ad-budget-form__header">
+          <h2 data-form-title>条件を入力して試算する</h2>
+          <p data-form-intro>事業側で分かる数字から、許容広告費の上限目安を逆算できます。</p>
+        </div>
+
+        <div class="ad-budget-alert ad-budget-alert--error" data-ad-budget-error hidden></div>
+        <div class="ad-budget-status" data-ad-budget-status></div>
+
+        {adBudgetSiteTypes.map((siteType, siteIndex) =>
+          Object.values(siteType.modes).map((mode, modeIndex) => (
+            <section
+              class:list={[
+                "ad-budget-form-panel",
+                siteIndex === 0 && modeIndex === 0 ? "is-active" : "",
+              ]}
+              data-site-form={siteType.key}
+              data-mode-form={mode.key}
+              hidden={!(siteIndex === 0 && modeIndex === 0)}
+            >
+              <div class="ad-budget-form-panel__header">
+                <h3>{siteType.label}</h3>
+                <p>{mode.description}</p>
+              </div>
+
+              <div class="ad-budget-input-grid">
+                {mode.fields.map((field) => {
+                  const fieldId = `${siteType.key}-${mode.key}-${field.key}`;
+
+                  return (
+                    <label
+                      class:list={[
+                        "ad-budget-input",
+                        field.required ? "is-required" : "is-optional",
+                      ]}
+                      for={fieldId}
+                    >
+                      <span class="ad-budget-input__label">
+                        {field.label}
+                        <small>{field.required ? "必須" : "任意"}</small>
+                      </span>
+                      <span class="ad-budget-input__field">
+                        <input
+                          id={fieldId}
+                          data-field-key={field.key}
+                          data-required={field.required ? "true" : "false"}
+                          data-allow-zero={field.allowZero ? "true" : "false"}
+                          data-kind={field.kind}
+                          inputmode="decimal"
+                          placeholder={field.placeholder}
+                          type="number"
+                          min="0"
+                          step="any"
+                        />
+                        <span>{field.suffix}</span>
+                      </span>
+                    </label>
+                  );
+                })}
+              </div>
+            </section>
+          )),
+        )}
+
+        <div class="ad-budget-actions">
+          <button class="ad-budget-button ad-budget-button--primary" data-submit-label type="submit">
+            目標から広告費を試算する
+          </button>
+          <button class="ad-budget-button ad-budget-button--ghost" type="reset">
+            クリア
+          </button>
+        </div>
+
+        <section class="ad-budget-result" data-ad-budget-result hidden>
+          <div class="ad-budget-result__header">
+            <div>
+              <p class="ad-budget-result__eyebrow">シミュレーション結果</p>
+              <div class="ad-budget-result__headline">
+                <span class="ad-budget-result__badge" data-result-status hidden></span>
+                <h2 data-result-title></h2>
+              </div>
+              <p class="ad-budget-result__summary" data-result-summary></p>
+            </div>
+            <button class="ad-budget-button ad-budget-button--chip" data-ad-budget-retry type="button">
+              再計算する
+            </button>
+          </div>
+
+          <section class="ad-budget-result-card">
+            <h3 data-primary-heading>許容広告費の上限目安と主要指標</h3>
+            <div class="ad-budget-metric-grid" data-result-primary-metrics></div>
+          </section>
+
+          <section class="ad-budget-result-card">
+            <h3 data-reference-heading>参考ライン</h3>
+            <div class="ad-budget-reference-grid" data-result-reference-cards hidden></div>
+            <p class="ad-budget-reference-note" data-result-reference-note hidden></p>
+            <div class="ad-budget-reference-table" data-result-reference-table hidden>
+              <h4 data-reference-table-title></h4>
+              <div class="ad-budget-reference-table__inner">
+                <table>
+                  <thead>
+                    <tr data-reference-table-head></tr>
+                  </thead>
+                  <tbody data-reference-table-body></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <section class="ad-budget-result-card">
+            <h3 data-secondary-heading>補足指標</h3>
+            <div class="ad-budget-metric-grid ad-budget-metric-grid--sub" data-result-secondary-metrics></div>
+          </section>
+
+          <div class="ad-budget-result-grid" data-audit-detail-grid hidden>
+            <section class="ad-budget-result-card">
+              <h3>理想との差分</h3>
+              <p class="ad-budget-result-card__text" data-result-difference></p>
+            </section>
+            <section class="ad-budget-result-card">
+              <h3>改善優先度</h3>
+              <p class="ad-budget-result-card__text" data-result-priority></p>
+            </section>
+          </div>
+
+          <div class="ad-budget-result-grid ad-budget-result-grid--lists">
+            <section class="ad-budget-result-card">
+              <h3>気づきポイント</h3>
+              <ul data-result-insights></ul>
+            </section>
+            <section class="ad-budget-result-card">
+              <h3>おすすめアクション</h3>
+              <ul data-result-actions></ul>
+            </section>
+          </div>
+        </section>
+      </form>
+    </div>
+  </div>
+</section>
+
+<div class="ad-budget-fullbleed" data-ad-budget-cta-shell hidden>
+  <Cta />
+</div>
+
+<script>
+  import { adBudgetSiteTypes } from "../../data/adBudgetSiteTypes";
+  import { simulateAdBudget } from "../../utils/adBudgetCalculations";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.querySelector("[data-ad-budget-form]");
+    if (!(form instanceof HTMLFormElement)) return;
+
+    const error = form.querySelector("[data-ad-budget-error]");
+    const status = form.querySelector("[data-ad-budget-status]");
+    const result = form.querySelector("[data-ad-budget-result]");
+    const retryButton = form.querySelector("[data-ad-budget-retry]");
+    const resultTitle = form.querySelector("[data-result-title]");
+    const resultSummary = form.querySelector("[data-result-summary]");
+    const resultStatus = form.querySelector("[data-result-status]");
+    const primaryHeading = form.querySelector("[data-primary-heading]");
+    const referenceHeading = form.querySelector("[data-reference-heading]");
+    const secondaryHeading = form.querySelector("[data-secondary-heading]");
+    const formTitle = form.querySelector("[data-form-title]");
+    const formIntro = form.querySelector("[data-form-intro]");
+    const submitLabel = form.querySelector("[data-submit-label]");
+    const primaryMetrics = form.querySelector("[data-result-primary-metrics]");
+    const referenceCards = form.querySelector("[data-result-reference-cards]");
+    const referenceNote = form.querySelector("[data-result-reference-note]");
+    const secondaryMetrics = form.querySelector("[data-result-secondary-metrics]");
+    const referenceTable = form.querySelector("[data-result-reference-table]");
+    const referenceTableTitle = form.querySelector("[data-reference-table-title]");
+    const referenceTableHead = form.querySelector("[data-reference-table-head]");
+    const referenceTableBody = form.querySelector("[data-reference-table-body]");
+    const difference = form.querySelector("[data-result-difference]");
+    const priority = form.querySelector("[data-result-priority]");
+    const auditDetailGrid = form.querySelector("[data-audit-detail-grid]");
+    const insights = form.querySelector("[data-result-insights]");
+    const actions = form.querySelector("[data-result-actions]");
+    const ctaShell = document.querySelector("[data-ad-budget-cta-shell]");
+    const siteTypeInputs = Array.from(document.querySelectorAll('input[name="siteType"]')).filter(
+      (input) => input instanceof HTMLInputElement,
+    );
+    const modeInputs = Array.from(document.querySelectorAll('input[name="mode"]')).filter(
+      (input) => input instanceof HTMLInputElement,
+    );
+    const formatter = new Intl.NumberFormat("ja-JP");
+
+    const scrollToElement = (element) => {
+      if (!(element instanceof HTMLElement)) return;
+      const top = element.getBoundingClientRect().top + window.scrollY - 110;
+      window.scrollTo({ top, behavior: "smooth" });
+    };
+
+    const setStatus = (message, state = "") => {
+      if (!(status instanceof HTMLElement)) return;
+      status.textContent = message;
+      status.dataset.state = state;
+    };
+
+    const showError = (message) => {
+      if (!(error instanceof HTMLElement)) return;
+      error.hidden = false;
+      error.textContent = message;
+    };
+
+    const hideError = () => {
+      if (!(error instanceof HTMLElement)) return;
+      error.hidden = true;
+      error.textContent = "";
+    };
+
+    const getCurrentSiteType = () => {
+      const checked = siteTypeInputs.find((input) => input.checked);
+      return checked ? checked.value : "";
+    };
+
+    const getCurrentMode = () => {
+      const checked = modeInputs.find((input) => input.checked);
+      return checked ? checked.value : "";
+    };
+
+    const getSiteTypeConfig = (siteTypeKey) =>
+      adBudgetSiteTypes.find((siteType) => siteType.key === siteTypeKey) ?? adBudgetSiteTypes[0];
+
+    const getModeConfig = (siteTypeKey, modeKey) => getSiteTypeConfig(siteTypeKey).modes[modeKey];
+
+    const updateActivePanel = (siteTypeKey, modeKey) => {
+      const panels = Array.from(document.querySelectorAll("[data-site-form][data-mode-form]"));
+      panels.forEach((panel) => {
+        if (!(panel instanceof HTMLElement)) return;
+        const isActive =
+          panel.dataset.siteForm === siteTypeKey && panel.dataset.modeForm === modeKey;
+        panel.hidden = !isActive;
+        panel.classList.toggle("is-active", isActive);
+      });
+
+      const modeConfig = getModeConfig(siteTypeKey, modeKey);
+      if (formTitle instanceof HTMLElement) formTitle.textContent = modeConfig.label;
+      if (formIntro instanceof HTMLElement) formIntro.textContent = modeConfig.intro;
+      if (submitLabel instanceof HTMLElement) submitLabel.textContent = modeConfig.submitLabel;
+    };
+
+    const parseNumber = (value) => {
+      const parsed = Number(value);
+      return Number.isFinite(parsed) ? parsed : NaN;
+    };
+
+    const buildValues = (siteTypeKey, modeKey) => {
+      const panel = form.querySelector(`[data-site-form="${siteTypeKey}"][data-mode-form="${modeKey}"]`);
+      const modeConfig = getModeConfig(siteTypeKey, modeKey);
+
+      if (!(panel instanceof HTMLElement)) {
+        return { values: {}, invalidMessage: "入力欄の表示に失敗しました。" };
+      }
+
+      const values = {};
+
+      for (const field of modeConfig.fields) {
+        const input = panel.querySelector(`[data-field-key="${field.key}"]`);
+        if (!(input instanceof HTMLInputElement)) continue;
+
+        const rawValue = input.value.trim();
+        if (!rawValue) {
+          if (field.required) {
+            return { values: {}, invalidMessage: `「${field.label}」を入力してください。` };
+          }
+          continue;
+        }
+
+        const parsedValue = parseNumber(rawValue);
+        const allowZero = input.dataset.allowZero === "true";
+        const isInvalid =
+          !Number.isFinite(parsedValue) || (allowZero ? parsedValue < 0 : parsedValue <= 0);
+        if (isInvalid) {
+          return {
+            values: {},
+            invalidMessage: allowZero
+              ? `「${field.label}」には0以上の数値を入力してください。`
+              : `「${field.label}」には0より大きい数値を入力してください。`,
+          };
+        }
+
+        if (field.kind === "percent" && parsedValue > 100) {
+          return {
+            values: {},
+            invalidMessage: `「${field.label}」は100以下の値で入力してください。`,
+          };
+        }
+
+        values[field.key] = parsedValue;
+      }
+
+      if (siteTypeKey === "recruit_site" && modeKey === "goal") {
+        const applications = values.applications ?? 0;
+        const interviewCount = values.interviewCount ?? 0;
+        const targetHires = values.targetHires ?? 0;
+
+        if (interviewCount > applications) {
+          return {
+            values: {},
+            invalidMessage: "「面接件数」は「月間エントリー数」以下で入力してください。",
+          };
+        }
+
+        if (targetHires > interviewCount) {
+          return {
+            values: {},
+            invalidMessage: "「採用目標人数」は「面接件数」以下で入力してください。",
+          };
+        }
+      }
+
+      if (siteTypeKey === "recruit_site" && modeKey === "audit") {
+        const applications = values.applications ?? 0;
+        const interviewCount = values.interviewCount ?? 0;
+        const hireCount = values.hireCount ?? 0;
+
+        if (interviewCount > applications) {
+          return {
+            values: {},
+            invalidMessage: "「面接件数」は「応募数」以下で入力してください。",
+          };
+        }
+
+        if (hireCount > interviewCount) {
+          return {
+            values: {},
+            invalidMessage: "「採用人数」は「面接件数」以下で入力してください。",
+          };
+        }
+      }
+
+      return { values, invalidMessage: "" };
+    };
+
+    const formatMetric = (metric) => {
+      if (metric.format === "currency") return `${formatter.format(Math.round(metric.value))}円`;
+      if (metric.format === "percent") return `${metric.value.toFixed(1)}%`;
+      if (metric.format === "ratio") return `${metric.value.toFixed(2)}倍`;
+      if (Number.isInteger(metric.value)) return `${formatter.format(metric.value)}`;
+      return `${metric.value.toFixed(1)}`;
+    };
+
+    const renderMetricCards = (container, metrics) => {
+      if (!(container instanceof HTMLElement)) return;
+      container.innerHTML = "";
+      metrics.forEach((metric) => {
+        const card = document.createElement("div");
+        card.className = "ad-budget-metric-card";
+        card.innerHTML = `<span>${metric.label}</span><strong>${formatMetric(metric)}</strong>`;
+        container.appendChild(card);
+      });
+    };
+
+    const renderReferenceCards = (cards) => {
+      if (!(referenceCards instanceof HTMLElement)) return;
+      if (!cards || cards.length === 0) {
+        referenceCards.hidden = true;
+        referenceCards.innerHTML = "";
+        return;
+      }
+
+      referenceCards.hidden = false;
+      referenceCards.innerHTML = "";
+      cards.forEach((cardData) => {
+        const card = document.createElement("article");
+        card.className = "ad-budget-reference-card";
+        card.innerHTML = `
+          <p class="ad-budget-reference-card__eyebrow">${cardData.title}</p>
+          <span class="ad-budget-reference-card__label">${cardData.valueLabel}</span>
+          <strong>${formatMetric({ value: cardData.value, format: cardData.format })}</strong>
+          <p class="ad-budget-reference-card__text">${cardData.description}</p>
+        `;
+        referenceCards.appendChild(card);
+      });
+    };
+
+    const renderReferenceTable = (simulation) => {
+      if (
+        !(referenceTable instanceof HTMLElement) ||
+        !(referenceTableTitle instanceof HTMLElement) ||
+        !(referenceTableHead instanceof HTMLElement) ||
+        !(referenceTableBody instanceof HTMLElement)
+      ) {
+        return;
+      }
+
+      if (
+        !simulation.referenceTableRows ||
+        simulation.referenceTableRows.length === 0 ||
+        !simulation.referenceTableColumns ||
+        simulation.referenceTableColumns.length === 0
+      ) {
+        referenceTable.hidden = true;
+        referenceTableTitle.textContent = "";
+        referenceTableHead.innerHTML = "";
+        referenceTableBody.innerHTML = "";
+        return;
+      }
+
+      referenceTable.hidden = false;
+      referenceTableTitle.textContent = simulation.referenceTableTitle ?? "";
+      referenceTableHead.innerHTML = "";
+      referenceTableBody.innerHTML = "";
+
+      simulation.referenceTableColumns.forEach((column, index) => {
+        const th = document.createElement("th");
+        const tooltipClass =
+          index >= simulation.referenceTableColumns.length - 2
+            ? "ad-budget-tooltip ad-budget-tooltip--right"
+            : "ad-budget-tooltip";
+        th.innerHTML = `
+          <span class="ad-budget-tooltip-label">
+            ${column.label}
+            <span class="${tooltipClass}">
+              <button type="button" aria-label="${column.label}の説明">?</button>
+              <span>${column.tooltip}</span>
+            </span>
+          </span>
+        `;
+        referenceTableHead.appendChild(th);
+      });
+
+      simulation.referenceTableRows.forEach((row) => {
+        const tr = document.createElement("tr");
+        if (row.highlighted) {
+          tr.className = "is-highlighted";
+        }
+        const cellHtml = simulation.referenceTableColumns
+          .map((column) => {
+            if (column.key === "cvrLabel") return `<td>${row.cvrLabel}</td>`;
+            if (column.key === "cpc") return `<td>${formatMetric({ value: row.cpc, format: "currency" })}</td>`;
+            if (column.key === "clicks") return `<td>${formatMetric({ value: row.clicks, format: "count" })}</td>`;
+            if (column.key === "cvs") return `<td>${formatMetric({ value: row.cvs, format: "count" })}</td>`;
+            if (column.key === "cpa") return `<td>${formatMetric({ value: row.cpa, format: "currency" })}</td>`;
+            if (column.key === "revenue") return `<td>${formatMetric({ value: row.revenue, format: "currency" })}</td>`;
+            if (column.key === "grossProfit") return `<td>${formatMetric({ value: row.grossProfit, format: "currency" })}</td>`;
+            if (column.key === "roas") return `<td>${formatMetric({ value: row.roas, format: "ratio" })}</td>`;
+            if (column.key === "grossProfitRoas") return `<td>${formatMetric({ value: row.grossProfitRoas, format: "ratio" })}</td>`;
+            if (column.key === "interviews") return `<td>${formatMetric({ value: row.interviews ?? 0, format: "count" })}</td>`;
+            return `<td>${formatMetric({ value: row.hires ?? 0, format: "count" })}</td>`;
+          })
+          .join("");
+        tr.innerHTML = cellHtml;
+        referenceTableBody.appendChild(tr);
+      });
+    };
+
+    const renderList = (container, items) => {
+      if (!(container instanceof HTMLElement)) return;
+      container.innerHTML = "";
+      items.forEach((item) => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        container.appendChild(li);
+      });
+    };
+
+    const updateResultLabels = (modeKey, simulation) => {
+      if (!(primaryHeading instanceof HTMLElement)) return;
+      if (!(referenceHeading instanceof HTMLElement)) return;
+      if (!(secondaryHeading instanceof HTMLElement)) return;
+
+      if (simulation && typeof simulation === "object") {
+        primaryHeading.textContent = simulation.primaryHeading ?? "";
+        referenceHeading.textContent = simulation.referenceHeading ?? "";
+        secondaryHeading.textContent = simulation.secondaryHeading ?? "";
+        return;
+      }
+
+      if (modeKey === "goal") {
+        primaryHeading.textContent = "許容広告費の上限目安と主要指標";
+        referenceHeading.textContent = "CVR 1% / 2% / 3% の場合の許容CPC";
+        secondaryHeading.textContent = "補足指標";
+      } else {
+        primaryHeading.textContent = "現在の主要指標";
+        referenceHeading.textContent = "理想との比較";
+        secondaryHeading.textContent = "追加で見たい指標";
+      }
+    };
+
+    siteTypeInputs.forEach((input) => {
+      input.addEventListener("change", () => {
+        updateActivePanel(input.value, getCurrentMode());
+        hideError();
+        setStatus("");
+      });
+    });
+
+    modeInputs.forEach((input) => {
+      input.addEventListener("change", () => {
+        updateActivePanel(getCurrentSiteType(), input.value);
+        hideError();
+        setStatus("");
+      });
+    });
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      hideError();
+
+      const siteTypeKey = getCurrentSiteType();
+      const modeKey = getCurrentMode();
+      const { values, invalidMessage } = buildValues(siteTypeKey, modeKey);
+
+      if (invalidMessage) {
+        showError(invalidMessage);
+        setStatus("未入力または入力エラーがあります。", "error");
+        return;
+      }
+
+      const simulation = simulateAdBudget(siteTypeKey, modeKey, values);
+      updateResultLabels(modeKey, simulation);
+
+      if (resultTitle instanceof HTMLElement) resultTitle.textContent = simulation.resultTitle;
+      if (resultSummary instanceof HTMLElement) resultSummary.textContent = simulation.summary;
+
+      if (resultStatus instanceof HTMLElement) {
+        if (simulation.mode === "audit" && simulation.status && simulation.statusLabel) {
+          resultStatus.hidden = false;
+          resultStatus.textContent = simulation.statusLabel;
+          resultStatus.dataset.state = simulation.status;
+        } else {
+          resultStatus.hidden = true;
+          resultStatus.textContent = "";
+          delete resultStatus.dataset.state;
+        }
+      }
+
+      renderMetricCards(primaryMetrics, simulation.primaryMetrics);
+      renderMetricCards(secondaryMetrics, simulation.secondaryMetrics);
+      renderReferenceCards(simulation.referenceCards);
+      if (referenceNote instanceof HTMLElement) {
+        if (simulation.referenceNote) {
+          referenceNote.hidden = false;
+          referenceNote.textContent = simulation.referenceNote;
+        } else {
+          referenceNote.hidden = true;
+          referenceNote.textContent = "";
+        }
+      }
+      renderReferenceTable(simulation);
+      renderList(insights, simulation.insightPoints);
+      renderList(actions, simulation.recommendedActions);
+
+      if (auditDetailGrid instanceof HTMLElement) {
+        auditDetailGrid.hidden = simulation.mode !== "audit";
+      }
+      if (difference instanceof HTMLElement) difference.textContent = simulation.differenceText ?? "";
+      if (priority instanceof HTMLElement) priority.textContent = simulation.priorityText ?? "";
+
+      if (result instanceof HTMLElement) result.hidden = false;
+      if (ctaShell instanceof HTMLElement) ctaShell.hidden = false;
+
+      setStatus("シミュレーション結果を表示しました。", "success");
+      history.replaceState({}, "", window.location.pathname);
+      scrollToElement(result);
+    });
+
+    form.addEventListener("reset", () => {
+      window.setTimeout(() => {
+        const resetSiteType = getCurrentSiteType() || defaultSiteType;
+        const resetMode = getCurrentMode() || defaultMode;
+        updateActivePanel(resetSiteType, resetMode);
+        hideError();
+        setStatus("入力内容をクリアしました。", "warning");
+        if (result instanceof HTMLElement) result.hidden = true;
+        if (ctaShell instanceof HTMLElement) ctaShell.hidden = true;
+        scrollToElement(form);
+      }, 0);
+    });
+
+    if (retryButton instanceof HTMLButtonElement) {
+      retryButton.addEventListener("click", () => {
+        form.reset();
+      });
+    }
+
+    updateActivePanel(defaultSiteType, defaultMode);
+    updateResultLabels(defaultMode);
+  });
+</script>

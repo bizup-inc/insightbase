@@ -1,0 +1,62 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Footer from "../../components/Footer.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import AdBudgetSimulator from "../../components/tools/AdBudgetSimulator.astro";
+
+const breadcrumbItems = [
+  { label: "TOP", href: "https://insightbase.jp/" },
+  { label: "無料ツール", href: "https://insightbase.jp/tools/" },
+  {
+    label: "サイトタイプ別広告費シミュレーター",
+    href: "https://insightbase.jp/tools/ad-budget-simulator/",
+  },
+];
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: breadcrumbItems.map((item, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    name: item.label,
+    item: item.href,
+  })),
+};
+---
+
+<Layout
+  title="広告費シミュレーター｜サイトタイプごとの目安と診断を確認｜InsightBase"
+  description="リード獲得、サービスサイト、ECサイト、採用サイトごとに、広告費・CPC・CVRなどから想定成果と適正広告費の目安を試算できる無料ツールです。"
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
+  </Fragment>
+
+  <div class="ad-budget-page">
+    <section class="ad-budget-hero ad-budget-fullbleed is-visible">
+      <div class="content__inner ad-budget-hero__inner">
+        <Breadcrumbs
+          items={[
+            { label: "TOP", href: "/" },
+            { label: "無料ツール", href: "/tools/" },
+            { label: "サイトタイプ別広告費シミュレーター" },
+          ]}
+        />
+        <div class="ad-budget-hero__eyebrow">FREE TOOL</div>
+        <h1>サイトタイプ別広告費シミュレーター</h1>
+        <p>
+          広告費をいくら使うべきかは、サイトの目的によって変わります。
+          リード獲得、EC、採用などのサイト種別ごとに、想定成果や適正広告費の目安を試算できます。
+        </p>
+        
+      </div>
+    </section>
+
+    <AdBudgetSimulator />
+
+    <div class="ad-budget-fullbleed">
+      <Footer />
+    </div>
+  </div>
+</Layout>
