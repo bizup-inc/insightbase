@@ -24,8 +24,8 @@ export const POST: APIRoute = async ({ request }) => {
   const serviceDomain = import.meta.env.MICROCMS_SERVICE_DOMAIN;
   const apiKey = import.meta.env.MICROCMS_API_KEY;
   const recaptchaSecret = import.meta.env.RECAPTCHA_SECRET;
-  const resendApiKey = import.meta.env.RESEND_API_KEY;
-  const resendFrom = import.meta.env.RESEND_FROM;
+  const resendApiKey = import.meta.env.RESEND_NEW_API_KEY || import.meta.env.RESEND_API_KEY;
+  const resendFrom = import.meta.env.RESEND_INQUIRY_FROM || import.meta.env.RESEND_FROM;
   const resendTo = import.meta.env.RESEND_TO;
   const resendReplyTo = import.meta.env.RESEND_REPLY_TO;
 

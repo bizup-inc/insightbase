@@ -6,7 +6,7 @@ const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2026-01-28.clover",
 });
 
-const resend = new Resend(import.meta.env.RESEND_API_KEY);
+const resendApiKey = import.meta.env.RESEND_NEW_API_KEY || import.meta.env.RESEND_API_KEY;
 const PURCHASE_NOTICE_EMAIL = "suzuki@bizup-inc.co.jp";
 
 const INQUIRY_URL = "https://insightbase.jp/inquiry";
@@ -159,13 +159,14 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response("ok", { status: 200 });
     }
 
-    const resendFrom = import.meta.env.RESEND_FROM; // 例: "ビザップ株式会社 <no-reply@bizup-inc.co.jp>"
+    const resendFrom = import.meta.env.RESEND_PURCHASE_FROM || import.meta.env.RESEND_FROM;
     const ga4Pass = import.meta.env.GA4_MANUAL_PASSWORD;
     const adsPass = import.meta.env.ADS_MANUAL_PASSWORD;
     const setPass = import.meta.env.SET_MANUAL_PASSWORD;
 
-    if (!resendFrom || !ga4Pass || !adsPass || !setPass) {
+    if (!resendApiKey || !resendFrom || !ga4Pass || !adsPass || !setPass) {
       console.log("⚠️ Missing env vars", {
+        resendApiKey: !!resendApiKey,
         resendFrom: !!resendFrom,
         ga4Pass: !!ga4Pass,
         adsPass: !!adsPass,
@@ -176,6 +177,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     try {
       const mail = buildMail({ productKey, ga4Pass, adsPass, setPass });
+      const resend = new Resend(resendApiKey);
 
       const result = await resend.emails.send({
         from: resendFrom,
